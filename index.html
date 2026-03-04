@@ -595,16 +595,33 @@
     border-radius: 2px;
     color: var(--text-dim);
   }
-  .exp-type-badge {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    font-size: 0.55rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.6rem;
-    border-radius: 1px;
-  }
+  .exp-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 1.5rem 2rem;
+}
+
+.exp-type-badge {
+  position: static;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 1px;
+  align-self: flex-start;
+}
+
+.exp-date {
+  flex-basis: 120px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.exp-content {
+  flex: 1;
+}
   .badge-dev { background: rgba(200,255,0,0.1); color: var(--accent1); }
   .badge-qa { background: rgba(255,59,110,0.1); color: var(--accent2); }
   .badge-content { background: rgba(0,212,255,0.1); color: var(--accent3); }
@@ -1123,32 +1140,29 @@
       </div>
     </div>
 
-    <div class="exp-timeline">
-      <div class="exp-item reveal">
-        <span class="exp-type-badge badge-dev">Engineering</span>
-         <div class="exp-item reveal">
-        <span class="exp-type-badge badge-qa">QA Testing</span>
-         </div>
-           <div class="exp-item reveal">
-        <span class="exp-type-badge badge-content">Content</span>
-           </div>
-        <div class="exp-date">
-          <span class="year">2026</span>
-          2026 — Present
-        </div>
-        <div class="exp-content">
-          <div class="exp-role">Associate Trainee</div>
-          <div class="exp-company">Tradesala Technologies</div>
-          <p class="exp-desc">Software Engineer specializing in Java development, automation testing, and data-driven eCommerce content creation to build scalable, high-quality, and user-focused digital solutions.</p>
-          <div class="exp-skills">
-            <span class="exp-skill">Java</span>
-            <span class="exp-skill">Angular</span>
-            <span class="exp-skill">Automation Testing</span>
-            <span class="exp-skill">Content writer</span>
-            <span class="exp-skill">PHP</span>
-          </div>
-        </div>
+   <div class="exp-timeline">
+  <div class="exp-item reveal">
+    <span class="exp-type-badge badge-dev">Engineering</span>
+    <span class="exp-type-badge badge-qa">QA Testing</span>
+    <span class="exp-type-badge badge-content">Content</span>
+    <div class="exp-date">
+      <span class="year">2026</span>
+      2026 — Present
+    </div>
+    <div class="exp-content">
+      <div class="exp-role">Associate Trainee</div>
+      <div class="exp-company">Tradesala Technologies</div>
+      <p class="exp-desc">Software Engineer specializing in Java development, automation testing, and data-driven eCommerce content creation to build scalable, high-quality, and user-focused digital solutions.</p>
+      <div class="exp-skills">
+        <span class="exp-skill">Java</span>
+        <span class="exp-skill">Angular</span>
+        <span class="exp-skill">Automation Testing</span>
+        <span class="exp-skill">Content writer</span>
+        <span class="exp-skill">PHP</span>
       </div>
+    </div>
+  </div>
+</div>
           
 
         <div class="exp-item reveal reveal-delay-3">
