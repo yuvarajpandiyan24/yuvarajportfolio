@@ -462,147 +462,111 @@
   .work-card.content:hover .work-arrow { background: var(--accent3); border-color: var(--accent3); }
 
   /* EXPERIENCE */
-  #experience { }
+ #experience { }
 
-  .exp-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 4rem;
-  }
-  .exp-sidebar {
-    position: sticky;
-    top: 120px;
-    height: fit-content;
-  }
-  .exp-filter {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .exp-filter-btn {
-    background: none;
-    border: none;
-    color: var(--text-dim);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-align: left;
-    padding: 0.75rem 1rem;
-    cursor: none;
-    border-left: 2px solid transparent;
-    transition: all 0.2s;
-  }
-  .exp-filter-btn.active, .exp-filter-btn:hover {
-    color: var(--text);
-    border-left-color: var(--accent1);
-    background: rgba(200,255,0,0.04);
-  }
-  .total-years {
-    margin-top: 3rem;
-    padding: 1.5rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-  }
-  .total-years .num {
-    font-family: 'Fraunces', serif;
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--accent1);
-    line-height: 1;
-  }
-  .total-years .label {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-top: 0.25rem;
-  }
+.exp-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+}
 
-  .exp-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-  .exp-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 2rem;
-    transition: border-color 0.3s, background 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-  .exp-item:hover { border-color: rgba(200,255,0,0.2); background: var(--surface2); }
-  .exp-item::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: var(--accent1);
-    transform: scaleY(0);
-    transition: transform 0.3s ease;
-    transform-origin: bottom;
-  }
-  .exp-item:hover::before { transform: scaleY(1); }
+.exp-sidebar {
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+}
 
-  .exp-date {
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    padding-top: 0.2rem;
-    line-height: 1.6;
-  }
-  .exp-date .year {
-    font-family: 'Fraunces', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text);
-    display: block;
-  }
-  .exp-content {}
-  .exp-role {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-  }
-  .exp-company {
-    font-size: 0.72rem;
-    color: var(--accent1);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-  .exp-desc {
-    font-size: 0.78rem;
-    color: var(--text-dim);
-    line-height: 1.7;
-    margin-bottom: 1rem;
-  }
-  .exp-skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-  .exp-skill {
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.2rem 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    color: var(--text-dim);
-  }
-  .exp-item {
+.exp-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.exp-filter-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  cursor: none;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.exp-filter-btn.active, .exp-filter-btn:hover {
+  color: var(--text);
+  border-left-color: var(--accent1);
+  background: rgba(200,255,0,0.04);
+}
+
+.total-years {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.total-years .num {
+  font-family: 'Fraunces', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent1);
+  line-height: 1;
+}
+
+.total-years .label {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 0.25rem;
+}
+
+.exp-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* ✅ Single merged .exp-item — no more conflict */
+.exp-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem 2rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   align-items: flex-start;
-  padding: 1.5rem 2rem;
+  transition: border-color 0.3s, background 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
+.exp-item:hover {
+  border-color: rgba(200,255,0,0.2);
+  background: var(--surface2);
+}
+
+.exp-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--accent1);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+  transform-origin: bottom;
+}
+
+.exp-item:hover::before {
+  transform: scaleY(1);
+}
+
+/* ✅ Badges row at top, static not absolute */
 .exp-type-badge {
   position: static;
   font-size: 0.55rem;
@@ -611,20 +575,77 @@
   padding: 0.25rem 0.6rem;
   border-radius: 1px;
   align-self: flex-start;
+  flex-shrink: 0;
 }
 
+.badge-dev     { background: rgba(200,255,0,0.1);  color: var(--accent1); }
+.badge-qa      { background: rgba(255,59,110,0.1); color: var(--accent2); }
+.badge-content { background: rgba(0,212,255,0.1);  color: var(--accent3); }
+
+/* ✅ Force date and content onto their own full row below the badges */
 .exp-date {
   flex-basis: 120px;
   flex-grow: 0;
   flex-shrink: 0;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  padding-top: 0.2rem;
+  line-height: 1.6;
+  /* push onto new row after badges */
+  margin-top: 0.5rem;
+}
+
+.exp-date .year {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
 }
 
 .exp-content {
   flex: 1;
+  min-width: 0;
+  margin-top: 0.5rem;
 }
-  .badge-dev { background: rgba(200,255,0,0.1); color: var(--accent1); }
-  .badge-qa { background: rgba(255,59,110,0.1); color: var(--accent2); }
-  .badge-content { background: rgba(0,212,255,0.1); color: var(--accent3); }
+
+.exp-role {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.exp-company {
+  font-size: 0.72rem;
+  color: var(--accent1);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.exp-desc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.exp-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.exp-skill {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-dim);
+}
 
   /* STUDY */
   #study { background: var(--surface); }
@@ -1141,6 +1162,8 @@
     </div>
 
    <div class="exp-timeline">
+
+  <!-- Card 1: Tradesala Technologies -->
   <div class="exp-item reveal">
     <span class="exp-type-badge badge-dev">Engineering</span>
     <span class="exp-type-badge badge-qa">QA Testing</span>
@@ -1162,30 +1185,28 @@
       </div>
     </div>
   </div>
-</div>
-          
 
-        <div class="exp-item reveal reveal-delay-3">
-        <span class="exp-type-badge badge-dev">Engineering</span>
-        <div class="exp-date">
-          <span class="year">2023</span>
-          2023 — 2023
-        </div>
-        <div class="exp-content">
-          <div class="exp-role">Java Software Developer</div>
-          <div class="exp-company">Shiash Info Solutions</div>
-          <p class="exp-desc">Java Developer specializing in building scalable backend systems, RESTful APIs, and high-performance applications with a focus on clean architecture and robust code quality.</p>
-          <div class="exp-skills">
-            <span class="exp-skill">Java</span>
-            <span class="exp-skill">JavaScript</span>
-            <span class="exp-skill">MySQL</span>
-            <span class="exp-skill">HTML & CSS</span>
-          </div>
-        </div>
+  <!-- Card 2: Shiash Info Solutions -->
+  <div class="exp-item reveal reveal-delay-3">
+    <span class="exp-type-badge badge-dev">Engineering</span>
+    <div class="exp-date">
+      <span class="year">2023</span>
+      2023 — 2023
+    </div>
+    <div class="exp-content">
+      <div class="exp-role">Java Software Developer</div>
+      <div class="exp-company">Shiash Info Solutions</div>
+      <p class="exp-desc">Java Developer specializing in building scalable backend systems, RESTful APIs, and high-performance applications with a focus on clean architecture and robust code quality.</p>
+      <div class="exp-skills">
+        <span class="exp-skill">Java</span>
+        <span class="exp-skill">JavaScript</span>
+        <span class="exp-skill">MySQL</span>
+        <span class="exp-skill">HTML & CSS</span>
       </div>
     </div>
   </div>
-</section>
+
+</div>
 
 <!-- STUDY -->
 <section id="study">
