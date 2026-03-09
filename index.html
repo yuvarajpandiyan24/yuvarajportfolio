@@ -617,9 +617,9 @@ footer {
 
 <!-- ═══ NAV ═══ -->
 <nav>
-  <a href="yuvaraj-about.html" class="nav-logo">Yuvaraj<span>.</span>Pandian</a>
+  <a href="#home" class="nav-logo">Yuvaraj<span>.</span>Pandian</a>
   <ul class="nav-links">
-    <li><a href="yuvaraj-about.html">Home</a></li>
+    <li><a href="#home">Home</a></li>
     <li><a href="#works">Works</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#study">Study</a></li>
@@ -636,7 +636,7 @@ footer {
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="yuvaraj-about.html" class="mobile-nav-link">Home</a>
+  <a href="#home"       class="mobile-nav-link">Home</a>
   <a href="#works"      class="mobile-nav-link">Works</a>
   <a href="#experience" class="mobile-nav-link">Experience</a>
   <a href="#study"      class="mobile-nav-link">Study</a>
@@ -947,7 +947,7 @@ footer {
           <div class="contact-detail-icon">📬</div>
           <div>
             <div class="contact-detail-label">Email</div>
-            <div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="99e0eceff8ebf8f3e9f8f7fdf0f8f7abadaad9fef4f8f0f5b7faf6f4">[email&#160;protected]</a></div>
+            <div class="contact-detail-value">yuvarajpandian243@gmail.com</div>
           </div>
         </div>
         <div class="contact-detail">
@@ -1018,7 +1018,7 @@ footer {
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ── Custom cursor ── */
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursorRing');
@@ -1076,4 +1076,11 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 /* ── Contact form ── */
 document.getElementById('submitBtn').addEventListener('click', () => {
-  const btn = document.g
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Message Sent! ✓';
+  btn.style.background = 'var(--accent3)';
+  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+});
+</script>
+</body>
+</html>
