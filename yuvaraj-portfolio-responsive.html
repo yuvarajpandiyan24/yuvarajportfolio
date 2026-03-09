@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuvaraj Pandian — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════ */
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --accent1: #c8ff00;
+  --accent2: #ff3b6e;
+  --accent3: #00d4ff;
+  --text: #e8e8f0;
+  --text-dim: #7a7a99;
+  --border: rgba(255,255,255,0.07);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  cursor: none;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 9997;
+}
+
+/* ═══════════════════════════════════════════
+   CUSTOM CURSOR (desktop only)
+═══════════════════════════════════════════ */
+.cursor, .cursor-ring {
+  position: fixed; pointer-events: none; border-radius: 50%;
+  z-index: 9999; display: none;
+}
+@media (hover: hover) {
+  .cursor { display: block; width: 10px; height: 10px; background: var(--accent1); z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s ease; }
+  .cursor-ring { display: block; width: 36px; height: 36px; border: 1.5px solid var(--accent1); z-index: 9998; mix-blend-mode: difference; transition: left 0.1s ease, top 0.1s ease, transform 0.3s ease; }
+  body { cursor: none; }
+  a, button { cursor: none; }
+}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 3rem;
+  background: rgba(10,10,15,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem;
+  letter-spacing: -0.02em; color: var(--text); text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-logo span { color: var(--accent1); }
+
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 0.72rem;
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 0.45rem 0.9rem;
+  position: relative; transition: color 0.2s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0.9rem; right: 0.9rem;
+  height: 1px; background: var(--accent1); transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-status {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.68rem; color: var(--text-dim); flex-shrink: 0;
+}
+.status-dot {
+  width: 6px; height: 6px; background: var(--accent1);
+  border-radius: 50%; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Hamburger */
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; padding: 4px; cursor: pointer;
+}
+.hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--text); border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+/* Mobile menu overlay */
+.mobile-menu {
+  display: none; position: fixed; inset: 0; z-index: 190;
+  background: rgba(10,10,15,0.98); backdrop-filter: blur(20px);
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.5rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: clamp(1.8rem, 8vw, 2.5rem);
+  color: var(--text-dim); text-decoration: none; letter-spacing: -0.02em;
+  text-transform: uppercase; padding: 0.4rem 1rem;
+  transition: color 0.2s;
+}
+.mobile-menu a:hover { color: var(--accent1); }
+.mobile-menu-footer {
+  position: absolute; bottom: 2rem;
+  font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em;
+}
+
+/* ═══════════════════════════════════════════
+   SECTIONS
+═══════════════════════════════════════════ */
+section {
+  min-height: 100vh; padding: 120px 3rem 80px; position: relative;
+}
+
+/* ═══════════════════════════════════════════
+   HOME
+═══════════════════════════════════════════ */
+#home { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+.hero-eyebrow {
+  font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent1); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.hero-eyebrow::before { content: ''; width: 36px; height: 1px; background: var(--accent1); }
+.hero-name {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(3.2rem, 9vw, 8rem);
+  font-weight: 700; line-height: 0.9; letter-spacing: -0.03em; margin-bottom: 1rem;
+}
+.hero-name .line2 { font-style: italic; font-weight: 300; color: var(--text-dim); }
+.hero-name .accent { color: var(--accent1); }
+
+.hero-roles { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.75rem 0; }
+.role-tag {
+  padding: 0.35rem 0.9rem; border: 1px solid;
+  font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 2px; font-family: 'DM Mono', monospace;
+}
+.role-tag:nth-child(1) { border-color: var(--accent1); color: var(--accent1); }
+.role-tag:nth-child(2) { border-color: var(--accent2); color: var(--accent2); }
+.role-tag:nth-child(3) { border-color: var(--accent3); color: var(--accent3); }
+
+.hero-desc {
+  max-width: 460px; color: var(--text-dim);
+  font-size: 0.83rem; line-height: 1.85; margin-bottom: 2.5rem;
+}
+.hero-cta { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--accent1); color: #0a0a0f;
+  padding: 0.8rem 1.8rem; font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase;
+  text-decoration: none; border-radius: 2px; transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,255,0,0.3); }
+.btn-secondary {
+  color: var(--text-dim); font-size: 0.75rem; text-decoration: none;
+  letter-spacing: 0.1em; display: inline-flex; align-items: center; gap: 0.5rem;
+  transition: color 0.2s;
+}
+.btn-secondary:hover { color: var(--text); }
+.btn-secondary .arrow { transition: transform 0.2s; }
+.btn-secondary:hover .arrow { transform: translateX(4px); }
+
+/* Hero decoration box */
+.hero-decoration {
+  position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+}
+.deco-box {
+  width: 280px; height: 280px; border: 1px solid var(--border);
+  border-radius: 3px; position: relative; overflow: hidden; background: var(--surface);
+}
+.deco-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(200,255,0,0.08), transparent 60%);
+}
+.deco-box-inner {
+  padding: 1.5rem; height: 100%; display: flex;
+  flex-direction: column; justify-content: flex-end;
+}
+.deco-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.4rem; }
+.deco-number { font-family: 'Fraunces', serif; font-size: 3.8rem; font-weight: 700; line-height: 1; color: var(--accent1); }
+.deco-sub { font-size: 0.72rem; color: var(--text-dim); }
+.deco-line { position: absolute; background: var(--border); }
+.deco-line.h { height: 1px; left: 0; right: 0; top: 50%; }
+.deco-line.v { width: 1px; top: 0; bottom: 0; left: 50%; }
+.corner { position: absolute; width: 12px; height: 12px; }
+.corner::before, .corner::after { content: ''; position: absolute; background: var(--accent1); }
+.corner::before { width: 100%; height: 1px; top: 0; }
+.corner::after { width: 1px; height: 100%; left: 0; }
+.corner.tl { top: 1rem; left: 1rem; }
+.corner.br { bottom: 1rem; right: 1rem; transform: rotate(180deg); }
+
+.stats-row { display: flex; gap: 2px; width: 280px; }
+.stat-item { flex: 1; background: var(--surface2); padding: 0.9rem; text-align: center; }
+.stat-num { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; color: var(--accent1); }
+.stat-label { font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+
+/* ═══════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════ */
+.marquee-strip {
+  width: 100%; overflow: hidden; background: var(--accent1);
+  padding: 0.7rem 0; position: relative; z-index: 10;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.marquee-inner {
+  display: flex; width: max-content;
+  animation: marquee 22s linear infinite;
+}
+.marquee-strip:hover .marquee-inner { animation-play-state: paused; }
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-item {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  padding: 0 1.4rem; font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #0a0a0f; white-space: nowrap;
+}
+.marquee-dot {
+  display: inline-block; width: 4px; height: 4px;
+  background: rgba(0,0,0,0.3); border-radius: 50%;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION HEADERS
+═══════════════════════════════════════════ */
+.section-header { margin-bottom: 3.5rem; }
+.section-eyebrow {
+  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.section-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--text-dim); }
+.section-title {
+  font-family: 'Fraunces', serif; font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 700; line-height: 1; letter-spacing: -0.02em;
+}
+.section-title .italic { font-style: italic; font-weight: 300; color: var(--text-dim); }
+
+/* ═══════════════════════════════════════════
+   WORKS
+═══════════════════════════════════════════ */
+#works { background: var(--surface); }
+.works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.work-card {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 1.75rem; position: relative; overflow: hidden;
+  transition: border-color 0.3s;
+}
+.work-card::before {
+  content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s;
+}
+.work-card.dev::before     { background: radial-gradient(circle at 0 0, rgba(200,255,0,0.06), transparent 60%); }
+.work-card.qa::before      { background: radial-gradient(circle at 0 0, rgba(255,59,110,0.06), transparent 60%); }
+.work-card.content::before { background: radial-gradient(circle at 0 0, rgba(0,212,255,0.06), transparent 60%); }
+.work-card:hover::before { opacity: 1; }
+.work-card.dev:hover     { border-color: rgba(200,255,0,0.3); }
+.work-card.qa:hover      { border-color: rgba(255,59,110,0.3); }
+.work-card.content:hover { border-color: rgba(0,212,255,0.3); }
+.work-num { font-family: 'Fraunces', serif; font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.9rem; }
+.work-type { font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.65rem; }
+.work-card.dev .work-type     { color: var(--accent1); }
+.work-card.qa .work-type      { color: var(--accent2); }
+.work-card.content .work-type { color: var(--accent3); }
+.work-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.65rem; line-height: 1.25; }
+.work-desc { font-size: 0.75rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 1.25rem; }
+.work-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.work-tag {
+  font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 0.2rem 0.55rem; background: var(--surface2); border-radius: 2px; color: var(--text-dim);
+}
+.work-arrow {
+  position: absolute; bottom: 1.75rem; right: 1.75rem;
+  width: 30px; height: 30px; border: 1px solid var(--border);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; color: var(--text-dim); transition: all 0.3s;
+}
+.work-card:hover .work-arrow         { background: var(--accent1); border-color: var(--accent1); color: var(--bg); transform: rotate(45deg); }
+.work-card.qa:hover .work-arrow      { background: var(--accent2); border-color: var(--accent2); color: white; }
+.work-card.content:hover .work-arrow { background: var(--accent3); border-color: var(--accent3); color: var(--bg); }
+
+/* ═══════════════════════════════════════════
+   EXPERIENCE
+═══════════════════════════════════════════ */
+#experience { }
+.exp-layout { display: grid; grid-template-columns: 200px 1fr; gap: 4rem; }
+.exp-sidebar { position: sticky; top: 120px; height: fit-content; }
+.total-years {
+  padding: 1.5rem; background: var(--surface); border: 1px solid var(--border);
+}
+.total-years .num {
+  font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 700;
+  color: var(--accent1); line-height: 1;
+}
+.total-years .label {
+  font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 0.25rem;
+}
+.exp-timeline { display: flex; flex-direction: column; gap: 1px; }
+
+.exp-item {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 1.5rem 1.75rem;
+  display: grid; grid-template-columns: 110px 1fr auto;
+  gap: 0.5rem 1.25rem; align-items: start;
+  transition: border-color 0.3s, background 0.3s;
+  position: relative; overflow: hidden;
+}
+.exp-item:hover { border-color: rgba(200,255,0,0.2); background: var(--surface2); }
+.exp-item::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: var(--accent1); transform: scaleY(0);
+  transition: transform 0.3s ease; transform-origin: bottom;
+}
+.exp-item:hover::before { transform: scaleY(1); }
+
+.exp-badges {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  align-items: flex-end; grid-column: 3; grid-row: 1 / 3;
+}
+.exp-type-badge {
+  font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.22rem 0.55rem; border-radius: 1px; white-space: nowrap;
+}
+.badge-dev     { background: rgba(200,255,0,0.1);  color: var(--accent1); }
+.badge-qa      { background: rgba(255,59,110,0.1); color: var(--accent2); }
+.badge-content { background: rgba(0,212,255,0.1);  color: var(--accent3); }
+
+.exp-date { grid-column: 1; grid-row: 1; font-size: 0.68rem; color: var(--text-dim); line-height: 1.6; padding-top: 0.1rem; }
+.exp-date .year { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: var(--text); display: block; }
+.exp-content { grid-column: 2; grid-row: 1; min-width: 0; }
+.exp-role { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.exp-company { font-size: 0.68rem; color: var(--accent1); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.65rem; }
+.exp-desc { font-size: 0.75rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 0.9rem; }
+.exp-skills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.exp-skill {
+  font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 0.18rem 0.55rem; border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim);
+}
+
+/* ═══════════════════════════════════════════
+   STUDY
+═══════════════════════════════════════════ */
+#study { background: var(--surface); }
+.study-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+.study-card {
+  background: var(--bg); padding: 2.25rem; border: 1px solid var(--border);
+  position: relative; overflow: hidden; transition: border-color 0.3s;
+}
+.study-card:hover { border-color: rgba(200,255,0,0.25); }
+.study-card::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 100px; height: 100px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,255,0,0.06), transparent 70%);
+  transform: translate(30%, -30%); transition: transform 0.4s ease;
+}
+.study-card:hover::after { transform: translate(20%, -20%) scale(1.3); }
+.study-icon {
+  width: 40px; height: 40px; border: 1px solid var(--border);
+  border-radius: 4px; display: flex; align-items: center;
+  justify-content: center; font-size: 1.1rem; margin-bottom: 1.25rem;
+}
+.study-degree { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.study-school { font-size: 0.68rem; color: var(--accent1); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.study-period { font-size: 0.65rem; color: var(--text-dim); margin-bottom: 0.9rem; }
+.study-desc { font-size: 0.75rem; color: var(--text-dim); line-height: 1.7; }
+
+.certs-section { margin-top: 3.5rem; }
+.cert-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 1.75rem; }
+.cert-item {
+  background: var(--bg); padding: 1.25rem; border: 1px solid var(--border);
+  display: flex; gap: 0.9rem; align-items: flex-start;
+  transition: border-color 0.3s, background 0.3s;
+}
+.cert-item:hover { border-color: rgba(200,255,0,0.2); background: var(--surface2); }
+.cert-num { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 700; color: var(--text-dim); line-height: 1; flex-shrink: 0; }
+.cert-name { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.15rem; }
+.cert-issuer { font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.07em; }
+
+/* ═══════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════ */
+#contact { }
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.contact-tagline {
+  font-family: 'Fraunces', serif; font-size: clamp(1.6rem, 3vw, 2.6rem);
+  font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.25rem;
+}
+.contact-tagline .italic { font-style: italic; font-weight: 300; color: var(--text-dim); }
+.contact-text { font-size: 0.8rem; color: var(--text-dim); line-height: 1.85; margin-bottom: 2.25rem; }
+.contact-details { display: flex; flex-direction: column; gap: 0.85rem; }
+.contact-detail {
+  display: flex; align-items: center; gap: 0.9rem; padding: 0.9rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 2px;
+}
+.contact-detail-icon {
+  width: 34px; height: 34px; background: var(--surface2); border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; flex-shrink: 0;
+}
+.contact-detail-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+.contact-detail-value { font-size: 0.78rem; color: var(--text); }
+
+.contact-form { display: flex; flex-direction: column; gap: 1px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+.form-group {
+  background: var(--surface); padding: 1.15rem;
+  border: 1px solid var(--border); transition: border-color 0.3s;
+}
+.form-group:focus-within { border-color: rgba(200,255,0,0.4); }
+.form-label { font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); display: block; margin-bottom: 0.45rem; }
+.form-input, .form-textarea {
+  background: none; border: none; outline: none;
+  color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.82rem; width: 100%; resize: none;
+}
+.form-textarea { min-height: 90px; }
+.form-submit {
+  background: var(--accent1); color: var(--bg); border: none;
+  padding: 1.15rem 2rem; font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+  width: 100%; transition: box-shadow 0.2s, transform 0.2s;
+}
+.form-submit:hover { box-shadow: 0 8px 30px rgba(200,255,0,0.3); transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: var(--surface2); border-top: 1px solid var(--border); padding: 2.5rem 3rem;
+}
+.footer-inner {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: 2rem;
+}
+.footer-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.01em; }
+.footer-brand span { color: var(--accent1); }
+.footer-copy { font-size: 0.62rem; color: var(--text-dim); margin-top: 0.2rem; }
+.social-links { display: flex; gap: 0.5rem; justify-content: center; }
+.social-link {
+  width: 44px; height: 44px; border: 1px solid var(--border); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; color: var(--text-dim); transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.social-link::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s; }
+.social-link.instagram::before { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.social-link.twitter::before   { background: #000; }
+.social-link.linkedin::before  { background: #0077b5; }
+.social-link.github::before    { background: #333; }
+.social-link:hover::before { opacity: 1; }
+.social-link:hover { border-color: transparent; color: white; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+.social-link svg { width: 17px; height: 17px; position: relative; z-index: 1; fill: currentColor; }
+.footer-right { text-align: right; font-size: 0.62rem; color: var(--text-dim); line-height: 1.85; }
+.footer-right a { color: var(--accent1); text-decoration: none; }
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — TABLET (≤1100px)
+═══════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  nav { padding: 1rem 1.75rem; }
+  section { padding: 110px 1.75rem 70px; }
+  .hero-decoration { display: none; }
+  .works-grid { grid-template-columns: repeat(2, 1fr); }
+  .exp-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .exp-sidebar { position: static; display: flex; gap: 1rem; align-items: stretch; }
+  .total-years { flex: 1; }
+  .cert-list { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: 1fr auto; }
+  .footer-right { display: none; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤768px)
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Nav */
+  nav { padding: 0.9rem 1.1rem; }
+  .nav-links { display: none; }
+  .nav-status { display: none; }
+  .hamburger { display: flex; }
+
+  section { padding: 80px 1.1rem 50px; }
+
+  /* Home */
+  .hero-eyebrow { font-size: 0.6rem; margin-bottom: 1rem; }
+  .hero-name { font-size: clamp(2.8rem, 13vw, 5rem); }
+  .hero-roles { gap: 0.5rem; margin: 1.25rem 0; }
+  .role-tag { font-size: 0.6rem; padding: 0.28rem 0.7rem; }
+  .hero-desc { font-size: 0.78rem; max-width: 100%; margin-bottom: 2rem; }
+  .hero-cta { gap: 0.75rem; }
+  .btn-primary { padding: 0.75rem 1.5rem; font-size: 0.75rem; }
+
+  /* Marquee */
+  .marquee-item { font-size: 0.65rem; padding: 0 1rem; }
+
+  /* Works */
+  .works-grid { grid-template-columns: 1fr; }
+  .work-card { padding: 1.4rem; }
+  .work-title { font-size: 0.95rem; }
+  .work-desc { font-size: 0.73rem; }
+
+  /* Experience */
+  .exp-sidebar { flex-direction: column; gap: 0.5rem; }
+  .exp-item {
+    grid-template-columns: 1fr;
+    padding: 1.1rem;
+    gap: 0.6rem;
+  }
+  .exp-badges {
+    grid-column: 1; grid-row: 1;
+    flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 0.35rem;
+  }
+  .exp-date    { grid-column: 1; grid-row: 2; }
+  .exp-content { grid-column: 1; grid-row: 3; }
+
+  /* Study */
+  .study-grid { grid-template-columns: 1fr; }
+  .study-card { padding: 1.5rem; }
+  .cert-list  { grid-template-columns: 1fr; }
+
+  /* Contact */
+  .contact-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-tagline { font-size: clamp(1.4rem, 7vw, 2rem); }
+  .form-row { grid-template-columns: 1fr; }
+
+  /* Footer */
+  footer { padding: 2rem 1.1rem; }
+  .footer-inner { grid-template-columns: 1fr; text-align: center; gap: 1.25rem; }
+  .social-links { justify-content: center; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (≤480px)
+═══════════════════════════════════════════ */
+@media (max-width: 480px) {
+  nav { padding: 0.75rem 0.85rem; }
+  section { padding: 75px 0.85rem 40px; }
+
+  .hero-name { font-size: clamp(2.4rem, 16vw, 4rem); }
+  .hero-desc { font-size: 0.74rem; }
+  .hero-cta { flex-direction: column; align-items: stretch; }
+  .btn-primary { text-align: center; padding: 0.85rem; }
+  .btn-secondary { justify-content: center; }
+
+  .section-title { font-size: clamp(1.9rem, 9vw, 2.8rem); }
+
+  .work-card { padding: 1.1rem; }
+  .exp-item  { padding: 0.9rem; }
+  .study-card { padding: 1.1rem; }
+  .cert-item  { padding: 0.9rem; }
+
+  .contact-detail { padding: 0.75rem; }
+  .form-group { padding: 0.9rem; }
+  .form-submit { padding: 1rem; font-size: 0.72rem; }
+
+  footer { padding: 1.5rem 0.85rem; }
+  .social-link { width: 40px; height: 40px; }
+  .social-link svg { width: 15px; height: 15px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="yuvaraj-about.html" class="nav-logo">Yuvaraj<span>.</span>Pandian</a>
+  <ul class="nav-links">
+    <li><a href="yuvaraj-about.html">Home</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#study">Study</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    Eager to Contribute &amp; Grow
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="yuvaraj-about.html" class="mobile-nav-link">Home</a>
+  <a href="#works"      class="mobile-nav-link">Works</a>
+  <a href="#experience" class="mobile-nav-link">Experience</a>
+  <a href="#study"      class="mobile-nav-link">Study</a>
+  <a href="#contact"    class="mobile-nav-link">Contact</a>
+  <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<section id="home">
+  <div class="grid-bg"></div>
+  <div class="hero-eyebrow">Portfolio 2026</div>
+  <h1 class="hero-name reveal">
+    <div>Yuvaraj</div>
+    <div class="line2">Pandian<span class="accent">.</span></div>
+  </h1>
+  <div class="hero-roles reveal reveal-delay-1">
+    <span class="role-tag">Software Engineer</span>
+    <span class="role-tag">QA / Software Tester</span>
+    <span class="role-tag">Content Creator</span>
+  </div>
+  <p class="hero-desc reveal reveal-delay-2">
+    I build robust software, break it deliberately to make it bulletproof, then write about the whole experience for the world to learn from. A triple-threat in the digital space.
+  </p>
+  <div class="hero-cta reveal reveal-delay-3">
+    <a href="#works" class="btn-primary">View My Work</a>
+    <a href="#contact" class="btn-secondary">Let's talk <span class="arrow">→</span></a>
+  </div>
+
+  <div class="hero-decoration">
+    <div class="deco-box">
+      <div class="deco-line h"></div>
+      <div class="deco-line v"></div>
+      <div class="corner tl"></div>
+      <div class="corner br"></div>
+      <div class="deco-box-inner">
+        <div class="deco-label">Projects shipped</div>
+        <div class="deco-number">6+</div>
+        <div class="deco-sub">Across 3 disciplines</div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">6 mo</div>
+        <div class="stat-label">Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">MCA</div>
+        <div class="stat-label">Degree</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">99%</div>
+        <div class="stat-label">Bug Catch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item">Java <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Angular <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Selenium <span class="marquee-dot"></span></span>
+    <span class="marquee-item">PHP <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Automation Testing <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Firebase <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Content Strategy <span class="marquee-dot"></span></span>
+    <span class="marquee-item">MySQL <span class="marquee-dot"></span></span>
+    <span class="marquee-item">TestNG <span class="marquee-dot"></span></span>
+    <span class="marquee-item">SEO <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Java <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Angular <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Selenium <span class="marquee-dot"></span></span>
+    <span class="marquee-item">PHP <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Automation Testing <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Firebase <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Content Strategy <span class="marquee-dot"></span></span>
+    <span class="marquee-item">MySQL <span class="marquee-dot"></span></span>
+    <span class="marquee-item">TestNG <span class="marquee-dot"></span></span>
+    <span class="marquee-item">SEO <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- ═══ WORKS ═══ -->
+<section id="works">
+  <div class="section-header">
+    <div class="section-eyebrow">Selected Projects</div>
+    <h2 class="section-title reveal">Featured <span class="italic">Works</span></h2>
+  </div>
+  <div class="works-grid">
+
+    <div class="work-card dev reveal">
+      <div class="work-num">01</div>
+      <div class="work-type">Software Engineering</div>
+      <h3 class="work-title">Revolutionizing Education With Interactive Augmented Reality</h3>
+      <p class="work-desc">Android-based interactive AR learning application built with Java backend and Firebase Cloud, delivering immersive real-time educational experiences with scalable and secure cloud integration.</p>
+      <div class="work-tags">
+        <span class="work-tag">Java</span><span class="work-tag">Google AR Core</span>
+        <span class="work-tag">Android</span><span class="work-tag">Firebase</span>
+      </div>
+      <div class="work-arrow">↗</div>
+    </div>
+
+    <div class="work-card dev reveal reveal-delay-1">
+      <div class="work-num">02</div>
+      <div class="work-type">Software Engineering</div>
+      <h3 class="work-title">Contemporary Guidelines Based AEGIS Mechanism for Gateway</h3>
+      <p class="work-desc">A guidelines-based Aegis mechanism for gateway security designed to ensure robust protection, real-time threat detection, and compliance-driven access control across network systems.</p>
+      <div class="work-tags">
+        <span class="work-tag">Java</span><span class="work-tag">J2EE</span>
+        <span class="work-tag">MySQL</span><span class="work-tag">Encryption</span>
+      </div>
+      <div class="work-arrow">↗</div>
+    </div>
+
+    <div class="work-card qa reveal reveal-delay-2">
+      <div class="work-num">03</div>
+      <div class="work-type">QA / Testing</div>
+      <h3 class="work-title">E-Commerce Website Automation Testing</h3>
+      <p class="work-desc">Automation testing on an eCommerce website to validate functionality, ensure seamless UX, and maintain high quality across critical workflows — product search, cart, checkout, and payment.</p>
+      <div class="work-tags">
+        <span class="work-tag">Selenium</span><span class="work-tag">TestNG</span>
+        <span class="work-tag">Gradle</span><span class="work-tag">Git</span>
+      </div>
+      <div class="work-arrow">↗</div>
+    </div>
+
+    <div class="work-card qa reveal reveal-delay-1">
+      <div class="work-num">04</div>
+      <div class="work-type">QA / Testing</div>
+      <h3 class="work-title">Security Audit Suite</h3>
+      <p class="work-desc">Penetration testing toolkit for web applications. Identified 200+ vulnerabilities across client projects, leading to OWASP compliance certifications.</p>
+      <div class="work-tags">
+        <span class="work-tag">OWASP</span><span class="work-tag">Burp Suite</span>
+        <span class="work-tag">Python</span><span class="work-tag">Postman</span>
+      </div>
+      <div class="work-arrow">↗</div>
+    </div>
+
+    <div class="work-card content reveal reveal-delay-2">
+      <div class="work-num">05</div>
+      <div class="work-type">Content Creation</div>
+      <h3 class="work-title">E-Commerce Content Strategy</h3>
+      <p class="work-desc">Creating and managing high-quality eCommerce content focused on product descriptions, discount campaigns, SEO optimization, and customer engagement strategies to improve conversions.</p>
+      <div class="work-tags">
+        <span class="work-tag">E-Commerce</span><span class="work-tag">Product Content</span>
+        <span class="work-tag">SEO</span><span class="work-tag">Analytics</span>
+      </div>
+      <div class="work-arrow">↗</div>
+    </div>
+
+    <div class="work-card content reveal reveal-delay-3">
+      <div class="work-num">06</div>
+      <div class="work-type">Content Creation</div>
+      <h3 class="work-title">India-Focused E-Commerce Content Development</h3>
+      <p class="work-desc">Crafting data-driven and culturally relevant content for Indian eCommerce products, highlighting local preferences, pricing strategies, seasonal demand, and trust-building elements.</p>
+      <div class="work-tags">
+        <span class="work-tag">Indian Consumer Insights</span>
+        <span class="work-tag">Sales Optimization</span><span class="work-tag">Content Strategy</span>
+      </div>
+      <div class="work-arrow">↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ EXPERIENCE ═══ -->
+<section id="experience">
+  <div class="section-header">
+    <div class="section-eyebrow">Career Journey</div>
+    <h2 class="section-title reveal">Work <span class="italic">Experience</span></h2>
+  </div>
+  <div class="exp-layout">
+    <div class="exp-sidebar reveal">
+      <div class="total-years">
+        <div class="num">6+</div>
+        <div class="label">Months of combined experience</div>
+      </div>
+    </div>
+    <div class="exp-timeline">
+
+      <div class="exp-item reveal">
+        <div class="exp-date">
+          <span class="year">2026</span>
+          2026 — Present
+        </div>
+        <div class="exp-content">
+          <div class="exp-role">Associate Trainee</div>
+          <div class="exp-company">Tradesala Technologies</div>
+          <p class="exp-desc">Software Engineer specializing in Java development, automation testing, and data-driven eCommerce content creation to build scalable, high-quality, and user-focused digital solutions.</p>
+          <div class="exp-skills">
+            <span class="exp-skill">Java</span><span class="exp-skill">Angular</span>
+            <span class="exp-skill">Automation Testing</span><span class="exp-skill">Content Writer</span>
+            <span class="exp-skill">PHP</span>
+          </div>
+        </div>
+        <div class="exp-badges">
+          <span class="exp-type-badge badge-dev">Engineering</span>
+          <span class="exp-type-badge badge-qa">QA Testing</span>
+          <span class="exp-type-badge badge-content">Content</span>
+        </div>
+      </div>
+
+      <div class="exp-item reveal reveal-delay-2">
+        <div class="exp-date">
+          <span class="year">2023</span>
+          2023 — 2023
+        </div>
+        <div class="exp-content">
+          <div class="exp-role">Java Software Developer</div>
+          <div class="exp-company">Shiash Info Solutions</div>
+          <p class="exp-desc">Java Developer specializing in building scalable backend systems, RESTful APIs, and high-performance applications with a focus on clean architecture and robust code quality.</p>
+          <div class="exp-skills">
+            <span class="exp-skill">Java</span><span class="exp-skill">JavaScript</span>
+            <span class="exp-skill">MySQL</span><span class="exp-skill">HTML &amp; CSS</span>
+          </div>
+        </div>
+        <div class="exp-badges">
+          <span class="exp-type-badge badge-dev">Engineering</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STUDY ═══ -->
+<section id="study">
+  <div class="section-header">
+    <div class="section-eyebrow">Academic Background</div>
+    <h2 class="section-title reveal">Education &amp; <span class="italic">Study</span></h2>
+  </div>
+  <div class="study-grid">
+    <div class="study-card reveal">
+      <div class="study-icon">🎓</div>
+      <div class="study-degree">Master in Computer Applications (MCA)</div>
+      <div class="study-school">Anna University</div>
+      <div class="study-period">2023 — 2025 · CGPA 7.6/10</div>
+      <p class="study-desc">Specialized in software development, database management, and problem-solving, passionate about building innovative and scalable technology solutions.</p>
+    </div>
+    <div class="study-card reveal reveal-delay-1">
+      <div class="study-icon">📐</div>
+      <div class="study-degree">Bachelor in Computer Applications (BCA)</div>
+      <div class="study-school">DR MGR Educational and Research Institute</div>
+      <div class="study-period">2020 — 2023 · Graduated with Distinction</div>
+      <p class="study-desc">Solid foundation in programming, web development, and database management, eager to apply technical skills to build efficient and scalable software solutions.</p>
+    </div>
+  </div>
+
+  <div class="certs-section">
+    <div class="section-eyebrow reveal">Licenses &amp; Certifications</div>
+    <div class="cert-list">
+      <div class="cert-item reveal">
+        <div class="cert-num">01</div>
+        <div>
+          <div class="cert-name">Core Java Certified</div>
+          <div class="cert-issuer">Apollo Computers · 2021</div>
+        </div>
+      </div>
+      <div class="cert-item reveal reveal-delay-1">
+        <div class="cert-num">02</div>
+        <div>
+          <div class="cert-name">AI Tools</div>
+          <div class="cert-issuer">Be10X · 2025</div>
+        </div>
+      </div>
+      <div class="cert-item reveal reveal-delay-2">
+        <div class="cert-num">03</div>
+        <div>
+          <div class="cert-name">Multimodal AI</div>
+          <div class="cert-issuer">Global Techno Solutions · 2025</div>
+        </div>
+      </div>
+      <div class="cert-item reveal reveal-delay-3">
+        <div class="cert-num">04</div>
+        <div>
+          <div class="cert-name">Java Software Developer</div>
+          <div class="cert-issuer">Shiash Info Solutions · 2023</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-eyebrow">Get in Touch</div>
+    <h2 class="section-title reveal">Let's <span class="italic">Connect</span></h2>
+  </div>
+  <div class="contact-layout">
+    <div class="contact-info reveal">
+      <h3 class="contact-tagline">
+        Open to new<br><span class="italic">opportunities</span><br>&amp; collaborations
+      </h3>
+      <p class="contact-text">
+        Whether you need a software engineer, a quality assurance specialist, or a technical content partner — I'd love to hear about your project. Let's build something great together.
+      </p>
+      <div class="contact-details">
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div>
+            <div class="contact-detail-label">Location</div>
+            <div class="contact-detail-value">Chennai, Tamil Nadu</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📬</div>
+          <div>
+            <div class="contact-detail-label">Email</div>
+            <div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="99e0eceff8ebf8f3e9f8f7fdf0f8f7abadaad9fef4f8f0f5b7faf6f4">[email&#160;protected]</a></div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">🕐</div>
+          <div>
+            <div class="contact-detail-label">Response Time</div>
+            <div class="contact-detail-value">Within 24 hours</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-input" placeholder="First Name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-input" placeholder="Last Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input type="text" class="form-input" placeholder="Project collaboration / Job offer / ...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea form-input" placeholder="Tell me about your project or opportunity..."></textarea>
+        </div>
+        <button class="form-submit" id="submitBtn">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Yuvaraj<span>.</span>Pandian</div>
+      <div class="footer-copy">© 2026 Yuvaraj Pandian. All rights reserved.</div>
+    </div>
+    <div class="social-links">
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="social-link instagram" title="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://www.x.com" target="_blank" rel="noopener noreferrer" class="social-link twitter" title="X">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://www.github.com" target="_blank" rel="noopener noreferrer" class="social-link github" title="GitHub">
+        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+    </div>
+    <div class="footer-right">
+      <div>Designed &amp; built with ♥</div>
+      <div>by <a href="#home">Yuvaraj Pandian</a></div>
+      <div style="margin-top:0.4rem;font-size:0.58rem;">v2026.03</div>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ── Custom cursor ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+if (window.matchMedia('(hover: hover)').matches) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = (e.clientX - 5)  + 'px';
+    cursor.style.top  = (e.clientY - 5)  + 'px';
+    ring.style.left   = (e.clientX - 18) + 'px';
+    ring.style.top    = (e.clientY - 18) + 'px';
+  });
+  document.querySelectorAll('a, button, .work-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; ring.style.transform = 'scale(1.5)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.transform = 'scale(1)'; });
+  });
+}
+
+/* ── Hamburger / Mobile menu ── */
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ── Scroll reveal ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── Nav active state ── */
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(l => { l.style.color = l.getAttribute('href') === '#' + current ? 'var(--text)' : ''; });
+}, { passive: true });
+
+/* ── Smooth scroll ── */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+/* ── Contact form ── */
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const btn = document.g
