@@ -234,10 +234,9 @@ section {
 .stat-label { font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
 
 /* ═══════════════════════════════════════════
-   MARQUEE
+   MARQUEE  ← FIXED: was <marquee-strip> (invalid element), now .marquee-strip div
 ═══════════════════════════════════════════ */
-
-marquee-strip {
+.marquee-strip {
   width: 100%; overflow: hidden; background: var(--accent1);
   padding: 0.7rem 0; position: relative; z-index: 10;
   border-top: 1px solid rgba(0,0,0,0.1);
@@ -248,10 +247,13 @@ marquee-strip {
   animation: marquee-scroll 30s linear infinite;
   will-change: transform;
 }
+/* FIXED: pause on hover applied to track inside the strip */
 .marquee-strip:hover .marquee-track { animation-play-state: paused; }
+
+/* FIXED: animation now moves exactly 50% (two duplicate sets of items) for a perfect seamless loop */
 @keyframes marquee-scroll {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-25%); }
+  100% { transform: translateX(-50%); }
 }
 .marquee-item {
   display: inline-flex; align-items: center; gap: 0.7rem;
@@ -526,7 +528,6 @@ footer {
    RESPONSIVE — MOBILE (≤768px)
 ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  /* Nav */
   nav { padding: 0.9rem 1.1rem; }
   .nav-links { display: none; }
   .nav-status { display: none; }
@@ -534,7 +535,6 @@ footer {
 
   section { padding: 80px 1.1rem 50px; }
 
-  /* Home */
   .hero-eyebrow { font-size: 0.6rem; margin-bottom: 1rem; }
   .hero-name { font-size: clamp(2.8rem, 13vw, 5rem); }
   .hero-roles { gap: 0.5rem; margin: 1.25rem 0; }
@@ -543,16 +543,13 @@ footer {
   .hero-cta { gap: 0.75rem; }
   .btn-primary { padding: 0.75rem 1.5rem; font-size: 0.75rem; }
 
-  /* Marquee */
   .marquee-item { font-size: 0.65rem; padding: 0 1rem; }
 
-  /* Works */
   .works-grid { grid-template-columns: 1fr; }
   .work-card { padding: 1.4rem; }
   .work-title { font-size: 0.95rem; }
   .work-desc { font-size: 0.73rem; }
 
-  /* Experience */
   .exp-sidebar { flex-direction: column; gap: 0.5rem; }
   .exp-item {
     grid-template-columns: 1fr;
@@ -566,17 +563,14 @@ footer {
   .exp-date    { grid-column: 1; grid-row: 2; }
   .exp-content { grid-column: 1; grid-row: 3; }
 
-  /* Study */
   .study-grid { grid-template-columns: 1fr; }
   .study-card { padding: 1.5rem; }
   .cert-list  { grid-template-columns: 1fr; }
 
-  /* Contact */
   .contact-layout { grid-template-columns: 1fr; gap: 2rem; }
   .contact-tagline { font-size: clamp(1.4rem, 7vw, 2rem); }
   .form-row { grid-template-columns: 1fr; }
 
-  /* Footer */
   footer { padding: 2rem 1.1rem; }
   .footer-inner { grid-template-columns: 1fr; text-align: center; gap: 1.25rem; }
   .social-links { justify-content: center; }
@@ -696,9 +690,13 @@ footer {
   </div>
 </section>
 
-<!-- ═══ MARQUEE ═══ -->
+<!-- ═══ MARQUEE ═══
+     FIX: was <marquee-strip> (invalid custom element, styles didn't apply)
+     Now correctly uses <div class="marquee-strip">
+     FIX: items duplicated twice so the -50% translateX creates a perfect seamless loop -->
 <div class="marquee-strip">
   <div class="marquee-track">
+    <!-- Original set -->
     <span class="marquee-item">Java <span class="marquee-dot"></span></span>
     <span class="marquee-item">Angular <span class="marquee-dot"></span></span>
     <span class="marquee-item">Selenium <span class="marquee-dot"></span></span>
@@ -708,15 +706,24 @@ footer {
     <span class="marquee-item">Content Strategy <span class="marquee-dot"></span></span>
     <span class="marquee-item">MySQL <span class="marquee-dot"></span></span>
     <span class="marquee-item">Git <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Git Hub <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Java <span class="marquee-dot"></span></span>
+    <span class="marquee-item">GitHub <span class="marquee-dot"></span></span>
     <span class="marquee-item">JavaScript <span class="marquee-dot"></span></span>
     <span class="marquee-item">Azure <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Power Automate <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Android <span class="marquee-dot"></span></span>
+    <!-- Duplicate set for seamless loop -->
+    <span class="marquee-item">Java <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Angular <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Selenium <span class="marquee-dot"></span></span>
     <span class="marquee-item">PHP <span class="marquee-dot"></span></span>
     <span class="marquee-item">Automation Testing <span class="marquee-dot"></span></span>
     <span class="marquee-item">Firebase <span class="marquee-dot"></span></span>
     <span class="marquee-item">Content Strategy <span class="marquee-dot"></span></span>
     <span class="marquee-item">MySQL <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Git <span class="marquee-dot"></span></span>
+    <span class="marquee-item">GitHub <span class="marquee-dot"></span></span>
+    <span class="marquee-item">JavaScript <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Azure <span class="marquee-dot"></span></span>
     <span class="marquee-item">Power Automate <span class="marquee-dot"></span></span>
     <span class="marquee-item">Android <span class="marquee-dot"></span></span>
   </div>
@@ -966,26 +973,27 @@ footer {
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">First Name</label>
-            <input type="text" class="form-input" placeholder="First Name">
+            <input type="text" class="form-input" id="firstName" placeholder="First Name">
           </div>
           <div class="form-group">
             <label class="form-label">Last Name</label>
-            <input type="text" class="form-input" placeholder="Last Name">
+            <input type="text" class="form-input" id="lastName" placeholder="Last Name">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input type="email" class="form-input" placeholder="Email">
+          <input type="email" class="form-input" id="email" placeholder="Email">
         </div>
         <div class="form-group">
           <label class="form-label">Subject</label>
-          <input type="text" class="form-input" placeholder="Project collaboration / Job offer / ...">
+          <input type="text" class="form-input" id="subject" placeholder="Project collaboration / Job offer / ...">
         </div>
         <div class="form-group">
           <label class="form-label">Message</label>
-          <textarea class="form-textarea form-input" placeholder="Tell me about your project or opportunity..."></textarea>
+          <textarea class="form-textarea form-input" id="message" placeholder="Tell me about your project or opportunity..."></textarea>
         </div>
-        <button class="form-submit" id="submitBtn">Send Message →</button>
+        <!-- FIX: added type="button" to prevent default form submit behavior -->
+        <button type="button" class="form-submit" id="submitBtn">Send Message →</button>
       </div>
     </div>
   </div>
@@ -1032,8 +1040,14 @@ if (window.matchMedia('(hover: hover)').matches) {
     ring.style.top    = (e.clientY - 18) + 'px';
   });
   document.querySelectorAll('a, button, .work-card').forEach(el => {
-    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; ring.style.transform = 'scale(1.5)'; });
-    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.transform = 'scale(1)'; });
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'scale(2)';
+      ring.style.transform   = 'scale(1.5)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'scale(1)';
+      ring.style.transform   = 'scale(1)';
+    });
   });
 }
 
@@ -1065,7 +1079,9 @@ const navLinks = document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll', () => {
   let current = '';
   sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
-  navLinks.forEach(l => { l.style.color = l.getAttribute('href') === '#' + current ? 'var(--text)' : ''; });
+  navLinks.forEach(l => {
+    l.style.color = l.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+  });
 }, { passive: true });
 
 /* ── Smooth scroll ── */
@@ -1076,12 +1092,31 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
-/* ── Contact form ── */
+/* ── Contact form with basic validation ──
+   FIX: validates required fields before showing success state */
 document.getElementById('submitBtn').addEventListener('click', () => {
+  const firstName = document.getElementById('firstName').value.trim();
+  const email     = document.getElementById('email').value.trim();
+  const message   = document.getElementById('message').value.trim();
+
+  if (!firstName || !email || !message) {
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Please fill required fields ✗';
+    btn.style.background = 'var(--accent2)';
+    setTimeout(() => {
+      btn.textContent = 'Send Message →';
+      btn.style.background = '';
+    }, 2500);
+    return;
+  }
+
   const btn = document.getElementById('submitBtn');
   btn.textContent = 'Message Sent! ✓';
   btn.style.background = 'var(--accent3)';
-  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+  setTimeout(() => {
+    btn.textContent = 'Send Message →';
+    btn.style.background = '';
+  }, 3000);
 });
 </script>
 </body>
