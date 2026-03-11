@@ -236,31 +236,13 @@ section {
 /* ═══════════════════════════════════════════
    MARQUEE
 ═══════════════════════════════════════════ */
-.marquee-strip {
-  width: 100%; overflow: hidden; background: var(--accent1);
-  padding: 0.7rem 0; position: relative; z-index: 10;
-  border-top: 1px solid rgba(0,0,0,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-.marquee-inner {
-  display: flex; width: max-content;
-  animation: marquee 22s linear infinite;
-}
-.marquee-strip:hover .marquee-inner { animation-play-state: paused; }
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.marquee-item {
-  display: inline-flex; align-items: center; gap: 0.7rem;
-  padding: 0 1.4rem; font-family: 'Syne', sans-serif; font-weight: 700;
-  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
-  color: #0a0a0f; white-space: nowrap;
-}
-.marquee-dot {
-  display: inline-block; width: 4px; height: 4px;
-  background: rgba(0,0,0,0.3); border-radius: 50%;
-}
+
+.marquee-strip { width:100%; overflow:hidden; background:#c8ff00; padding:0.7rem 0; border-top:1px solid rgba(0,0,0,0.1); border-bottom:1px solid rgba(0,0,0,0.1); }
+.marquee-track { display:flex; width:max-content; animation:marquee-scroll 30s linear infinite; will-change:transform; }
+.marquee-strip:hover .marquee-track { animation-play-state:paused; }
+@keyframes marquee-scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-25%)} }
+.marquee-item { display:inline-flex; align-items:center; gap:0.7rem; padding:0 1.4rem; font-family:'Syne',sans-serif; font-weight:700; font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:#0a0a0f; white-space:nowrap; flex-shrink:0; }
+.marquee-dot { display:inline-block; width:4px; height:4px; background:rgba(0,0,0,0.3); border-radius:50%; }
 
 /* ═══════════════════════════════════════════
    SECTION HEADERS
@@ -696,7 +678,7 @@ footer {
 
 <!-- ═══ MARQUEE ═══ -->
 <div class="marquee-strip">
-  <div class="marquee-inner">
+  <div class="marquee-track">
     <span class="marquee-item">Java <span class="marquee-dot"></span></span>
     <span class="marquee-item">Angular <span class="marquee-dot"></span></span>
     <span class="marquee-item">Selenium <span class="marquee-dot"></span></span>
