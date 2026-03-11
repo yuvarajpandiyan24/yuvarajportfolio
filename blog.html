@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Yuvaraj Pandian</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════ */
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --accent1: #c8ff00;
+  --accent2: #ff3b6e;
+  --accent3: #00d4ff;
+  --text: #e8e8f0;
+  --text-dim: #7a7a99;
+  --border: rgba(255,255,255,0.07);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.6; cursor: none;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022; pointer-events: none; z-index: 9997;
+}
+
+/* CURSOR */
+.cursor, .cursor-ring { position: fixed; pointer-events: none; border-radius: 50%; z-index: 9999; display: none; }
+@media (hover: hover) {
+  .cursor { display: block; width: 10px; height: 10px; background: var(--accent1); mix-blend-mode: difference; transition: transform 0.1s ease; }
+  .cursor-ring { display: block; width: 36px; height: 36px; border: 1.5px solid var(--accent1); z-index: 9998; mix-blend-mode: difference; transition: left 0.1s ease, top 0.1s ease, transform 0.3s ease; }
+  body { cursor: none; } a, button { cursor: none; }
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 3rem; background: rgba(10,10,15,0.9);
+  backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; flex-shrink: 0; }
+.nav-logo span { color: var(--accent1); }
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.45rem 0.9rem; position: relative; transition: color 0.2s; }
+.nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0.9rem; right: 0.9rem; height: 1px; background: var(--accent1); transform: scaleX(0); transition: transform 0.3s ease; }
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.nav-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; color: var(--text-dim); flex-shrink: 0; }
+.status-dot { width: 6px; height: 6px; background: var(--accent1); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);} }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s ease; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.mobile-menu { display: none; position: fixed; inset: 0; z-index: 190; background: rgba(10,10,15,0.98); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(1.8rem,8vw,2.5rem); color: var(--text-dim); text-decoration: none; text-transform: uppercase; padding: 0.4rem 1rem; transition: color 0.2s; }
+.mobile-menu a:hover { color: var(--accent1); }
+.mobile-menu-footer { position: absolute; bottom: 2rem; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; }
+
+/* ═══════════════════════════════════════════
+   BLOG HERO
+═══════════════════════════════════════════ */
+.blog-hero {
+  padding: 160px 3rem 80px; position: relative;
+  background: var(--bg); overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.blog-hero .grid-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+.blog-hero-eyebrow { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent1); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.blog-hero-eyebrow::before { content: ''; width: 36px; height: 1px; background: var(--accent1); }
+.blog-hero-title { font-family: 'Fraunces', serif; font-size: clamp(3rem, 8vw, 7rem); font-weight: 700; line-height: 0.9; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+.blog-hero-title .italic { font-style: italic; font-weight: 300; color: var(--text-dim); }
+.blog-hero-title .accent { color: var(--accent1); }
+.blog-hero-desc { max-width: 500px; color: var(--text-dim); font-size: 0.83rem; line-height: 1.85; margin-bottom: 2.5rem; }
+
+/* Stats bar */
+.blog-stats { display: flex; gap: 2px; }
+.blog-stat { background: var(--surface); border: 1px solid var(--border); padding: 0.9rem 1.5rem; text-align: center; }
+.blog-stat-num { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 700; color: var(--accent1); }
+.blog-stat-label { font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.1rem; }
+
+/* Back link */
+.back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; margin-bottom: 2.5rem; transition: color 0.2s; }
+.back-link:hover { color: var(--accent1); }
+
+/* ═══════════════════════════════════════════
+   FILTER BAR
+═══════════════════════════════════════════ */
+.filter-bar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 3rem; position: sticky; top: 65px; z-index: 100;
+  display: flex; align-items: center; gap: 0; overflow-x: auto;
+}
+.filter-btn {
+  background: none; border: none; padding: 1rem 1.25rem;
+  font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-dim); cursor: pointer;
+  position: relative; white-space: nowrap; transition: color 0.2s;
+}
+.filter-btn::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--accent1); transform: scaleX(0); transition: transform 0.3s ease; }
+.filter-btn:hover, .filter-btn.active { color: var(--text); }
+.filter-btn.active::after { transform: scaleX(1); }
+.filter-count { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: var(--surface2); border-radius: 50%; font-size: 0.5rem; margin-left: 0.4rem; color: var(--text-dim); }
+.filter-btn.active .filter-count { background: var(--accent1); color: var(--bg); }
+
+/* ═══════════════════════════════════════════
+   MAIN CONTENT AREA
+═══════════════════════════════════════════ */
+.blog-body { padding: 4rem 3rem; display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; }
+
+/* ═══ POST LIST ═══ */
+.post-list { display: flex; flex-direction: column; gap: 2px; }
+
+.post-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 2rem 2.25rem; position: relative; overflow: hidden;
+  transition: border-color 0.3s, background 0.3s;
+  text-decoration: none; color: inherit; display: block;
+}
+.post-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent1); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: bottom; }
+.post-card:hover { border-color: rgba(200,255,0,0.2); background: var(--surface2); }
+.post-card:hover::before { transform: scaleY(1); }
+
+/* Category-specific accent lines */
+.post-card[data-cat="qa"]::before      { background: var(--accent2); }
+.post-card[data-cat="content"]::before { background: var(--accent3); }
+.post-card[data-cat="qa"]:hover      { border-color: rgba(255,59,110,0.25); }
+.post-card[data-cat="content"]:hover { border-color: rgba(0,212,255,0.25); }
+
+.post-card-inner { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start; }
+.post-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+.post-category { font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 1px; }
+.cat-dev     { background: rgba(200,255,0,0.1);  color: var(--accent1); }
+.cat-qa      { background: rgba(255,59,110,0.1); color: var(--accent2); }
+.cat-content { background: rgba(0,212,255,0.1);  color: var(--accent3); }
+.cat-career  { background: rgba(255,180,0,0.1);  color: #ffb400; }
+.post-date { font-size: 0.6rem; color: var(--text-dim); }
+.post-read-time { font-size: 0.6rem; color: var(--text-dim); }
+.post-read-time::before { content: '·'; margin-right: 0.6rem; }
+.post-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; line-height: 1.25; margin-bottom: 0.7rem; }
+.post-excerpt { font-size: 0.75rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 1.1rem; }
+.post-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.post-tag { font-size: 0.55rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.18rem 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); }
+.post-arrow-box { width: 44px; height: 44px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--text-dim); transition: all 0.3s; flex-shrink: 0; }
+.post-card:hover .post-arrow-box { border-color: var(--accent1); color: var(--accent1); }
+.post-card[data-cat="qa"]:hover .post-arrow-box { border-color: var(--accent2); color: var(--accent2); }
+.post-card[data-cat="content"]:hover .post-arrow-box { border-color: var(--accent3); color: var(--accent3); }
+.post-card[data-cat="career"]:hover .post-arrow-box { border-color: #ffb400; color: #ffb400; }
+
+/* Hidden by filter */
+.post-card.hidden { display: none; }
+
+/* ═══ SIDEBAR ═══ */
+.sidebar { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 120px; }
+
+.sidebar-widget { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; }
+.widget-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.6rem; }
+.widget-title::before { content: ''; width: 14px; height: 2px; background: var(--accent1); flex-shrink: 0; }
+
+/* About widget */
+.about-widget-avatar { width: 48px; height: 48px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1rem; }
+.about-widget-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; }
+.about-widget-role { font-size: 0.62rem; color: var(--accent1); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+.about-widget-bio { font-size: 0.72rem; color: var(--text-dim); line-height: 1.7; }
+
+/* Topics widget */
+.topic-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.topic-item { display: flex; align-items: center; justify-content: space-between; padding: 0.55rem 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 2px; text-decoration: none; color: var(--text-dim); font-size: 0.68rem; letter-spacing: 0.07em; transition: all 0.2s; cursor: pointer; background: none; width: 100%; text-align: left; }
+.topic-item:hover, .topic-item.active { color: var(--text); border-color: rgba(200,255,0,0.3); }
+.topic-badge { font-size: 0.55rem; padding: 0.15rem 0.45rem; border-radius: 1px; }
+
+/* Popular posts widget */
+.popular-list { display: flex; flex-direction: column; gap: 1px; }
+.popular-item { padding: 0.85rem 0; border-bottom: 1px solid var(--border); display: flex; gap: 0.75rem; align-items: flex-start; text-decoration: none; color: inherit; }
+.popular-item:last-child { border-bottom: none; padding-bottom: 0; }
+.popular-num { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dim); line-height: 1; flex-shrink: 0; }
+.popular-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; line-height: 1.3; color: var(--text-dim); transition: color 0.2s; }
+.popular-item:hover .popular-title { color: var(--accent1); }
+
+/* Newsletter widget */
+.newsletter-widget { background: var(--surface); border: 1px solid rgba(200,255,0,0.15); padding: 1.5rem; position: relative; overflow: hidden; }
+.newsletter-widget::before { content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 80px; background: radial-gradient(circle, rgba(200,255,0,0.08), transparent 70%); transform: translate(20%, -20%); }
+.newsletter-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; margin-bottom: 0.5rem; }
+.newsletter-desc { font-size: 0.68rem; color: var(--text-dim); line-height: 1.65; margin-bottom: 1rem; }
+.newsletter-input { background: var(--bg); border: 1px solid var(--border); padding: 0.75rem; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.75rem; width: 100%; outline: none; margin-bottom: 1px; transition: border-color 0.2s; }
+.newsletter-input:focus { border-color: rgba(200,255,0,0.4); }
+.newsletter-btn { background: var(--accent1); color: var(--bg); border: none; padding: 0.75rem; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; width: 100%; transition: box-shadow 0.2s; }
+.newsletter-btn:hover { box-shadow: 0 4px 20px rgba(200,255,0,0.25); }
+
+/* ═══════════════════════════════════════════
+   ARTICLE OVERLAY (full post view)
+═══════════════════════════════════════════ */
+.article-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: var(--bg); overflow-y: auto;
+}
+.article-overlay.open { display: block; }
+.article-nav {
+  position: sticky; top: 0; background: rgba(10,10,15,0.95);
+  backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+  padding: 1rem 3rem; display: flex; align-items: center; justify-content: space-between; z-index: 10;
+}
+.article-back { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; background: none; border: none; transition: color 0.2s; }
+.article-back:hover { color: var(--accent1); }
+.article-progress { height: 2px; background: var(--accent1); transition: width 0.1s; }
+.article-progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: var(--border); z-index: 600; }
+.article-progress-fill { height: 100%; background: var(--accent1); width: 0%; transition: width 0.1s; }
+
+.article-content { max-width: 760px; margin: 0 auto; padding: 4rem 3rem 6rem; }
+.article-header { margin-bottom: 3rem; }
+.article-meta-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.article-title { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+.article-excerpt { font-size: 0.9rem; color: var(--text-dim); line-height: 1.85; padding: 1.25rem; border-left: 3px solid var(--accent1); background: var(--surface); }
+
+/* Article body prose */
+.article-body { font-size: 0.85rem; line-height: 1.9; color: var(--text-dim); }
+.article-body h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; color: var(--text); margin: 2.5rem 0 1rem; line-height: 1.1; }
+.article-body h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin: 2rem 0 0.75rem; letter-spacing: 0.02em; }
+.article-body p { margin-bottom: 1.25rem; }
+.article-body strong { color: var(--text); font-weight: 600; }
+.article-body code {
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 0.15rem 0.45rem; border-radius: 2px; font-size: 0.8rem;
+  color: var(--accent1); font-family: 'DM Mono', monospace;
+}
+.article-body pre {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent1);
+  padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; border-radius: 2px;
+}
+.article-body pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 0.78rem; line-height: 1.7; }
+.article-body ul, .article-body ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.article-body li { margin-bottom: 0.5rem; }
+.article-body li::marker { color: var(--accent1); }
+.article-body blockquote {
+  border-left: 3px solid var(--accent3); padding: 1rem 1.5rem; margin: 1.5rem 0;
+  background: var(--surface); color: var(--text); font-style: italic; font-size: 0.88rem;
+}
+.article-body .callout {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2); padding: 1rem 1.25rem; margin: 1.5rem 0;
+  border-radius: 0 2px 2px 0;
+}
+.article-body .callout-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.4rem; }
+.article-body hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+/* Article footer */
+.article-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.article-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2rem; }
+.article-tag { font-size: 0.6rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.25rem 0.65rem; border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); }
+.article-author { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); }
+.article-author-avatar { width: 48px; height: 48px; background: var(--surface2); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+.article-author-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; }
+.article-author-bio { font-size: 0.68rem; color: var(--text-dim); line-height: 1.6; margin-top: 0.2rem; }
+
+/* ═══════════════════════════════════════════
+   NO RESULTS
+═══════════════════════════════════════════ */
+.no-results { padding: 4rem 2rem; text-align: center; color: var(--text-dim); font-size: 0.8rem; display: none; }
+.no-results.visible { display: block; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer { background: var(--surface2); border-top: 1px solid var(--border); padding: 2.5rem 3rem; }
+.footer-inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem; }
+.footer-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; }
+.footer-brand span { color: var(--accent1); }
+.footer-copy { font-size: 0.62rem; color: var(--text-dim); margin-top: 0.2rem; }
+.social-links { display: flex; gap: 0.5rem; justify-content: center; }
+.social-link { width: 44px; height: 44px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--text-dim); transition: all 0.3s; position: relative; overflow: hidden; }
+.social-link::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s; }
+.social-link.instagram::before { background: linear-gradient(135deg, #f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+.social-link.twitter::before { background: #000; }
+.social-link.linkedin::before { background: #0077b5; }
+.social-link.github::before { background: #333; }
+.social-link:hover::before { opacity: 1; }
+.social-link:hover { border-color: transparent; color: white; transform: translateY(-3px); }
+.social-link svg { width: 17px; height: 17px; position: relative; z-index: 1; fill: currentColor; }
+.footer-right { text-align: right; font-size: 0.62rem; color: var(--text-dim); line-height: 1.85; }
+.footer-right a { color: var(--accent1); text-decoration: none; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1100px) {
+  .blog-body { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+}
+@media (max-width: 768px) {
+  nav, .blog-hero, .filter-bar, .blog-body, footer { padding-left: 1.1rem; padding-right: 1.1rem; }
+  .nav-links { display: none; }
+  .nav-status { display: none; }
+  .hamburger { display: flex; }
+  .blog-hero { padding-top: 120px; }
+  .blog-hero-title { font-size: clamp(2.5rem, 12vw, 5rem); }
+  .blog-stats { flex-wrap: wrap; }
+  .post-card-inner { grid-template-columns: 1fr; }
+  .post-arrow-box { display: none; }
+  .article-content { padding: 2rem 1.25rem 4rem; }
+  .footer-inner { grid-template-columns: 1fr; text-align: center; gap: 1.25rem; }
+  .article-nav { padding: 1rem 1.25rem; }
+}
+@media (max-width: 480px) {
+  .blog-hero-title { font-size: clamp(2rem, 14vw, 3.5rem); }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Reading progress bar -->
+<div class="article-progress-bar"><div class="article-progress-fill" id="progressFill"></div></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Yuvaraj<span>.</span>Pandian</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#works">Works</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#study">Study</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>Eager to Contribute &amp; Grow</div>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="mobile-nav-link">Home</a>
+  <a href="index.html#works" class="mobile-nav-link">Works</a>
+  <a href="index.html#experience" class="mobile-nav-link">Experience</a>
+  <a href="index.html#study" class="mobile-nav-link">Study</a>
+  <a href="blog.html" class="mobile-nav-link">Blog</a>
+  <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+  <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
+</div>
+
+<!-- BLOG HERO -->
+<div class="blog-hero">
+  <div class="grid-bg"></div>
+  <a href="index.html" class="back-link reveal">← Back to Portfolio</a>
+  <div class="blog-hero-eyebrow reveal">Technical Writing &amp; Insights</div>
+  <h1 class="blog-hero-title reveal">
+    <div>Dev</div>
+    <div class="italic">Notes<span class="accent">.</span></div>
+  </h1>
+  <p class="blog-hero-desc reveal reveal-delay-1">
+    Engineering deep dives, QA learnings, content strategy playbooks — raw and honest writing from a developer who builds, tests, and documents everything.
+  </p>
+  <div class="blog-stats reveal reveal-delay-2">
+    <div class="blog-stat"><div class="blog-stat-num">6</div><div class="blog-stat-label">Articles</div></div>
+    <div class="blog-stat"><div class="blog-stat-num">3</div><div class="blog-stat-label">Topics</div></div>
+    <div class="blog-stat"><div class="blog-stat-num">~25</div><div class="blog-stat-label">Min Total</div></div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All Posts <span class="filter-count">6</span></button>
+  <button class="filter-btn" data-filter="dev">Engineering <span class="filter-count">2</span></button>
+  <button class="filter-btn" data-filter="qa">QA / Testing <span class="filter-count">2</span></button>
+  <button class="filter-btn" data-filter="content">Content <span class="filter-count">1</span></button>
+  <button class="filter-btn" data-filter="career">Career <span class="filter-count">1</span></button>
+</div>
+
+<!-- MAIN BODY -->
+<div class="blog-body">
+
+  <!-- POST LIST -->
+  <div class="post-list" id="postList">
+
+    <!-- Post 1 -->
+    <a href="#" class="post-card reveal" data-cat="dev" data-post="post-1" id="post-1">
+      <div class="post-card-inner">
+        <div>
+          <div class="post-meta">
+            <span class="post-category cat-dev">Engineering</span>
+            <span class="post-date">Mar 08, 2026</span>
+            <span class="post-read-time">6 min read</span>
+          </div>
+          <h2 class="post-title">How I Built an AR Learning App from Scratch Using Java &amp; Firebase</h2>
+          <p class="post-excerpt">A deep dive into the architecture decisions, pitfalls, and breakthroughs while building a real-time augmented reality educational application for Android — and what I'd do differently today.</p>
+          <div class="post-tags">
+            <span class="post-tag">Java</span><span class="post-tag">Firebase</span><span class="post-tag">AR Core</span><span class="post-tag">Android</span>
+          </div>
+        </div>
+        <div class="post-arrow-box">↗</div>
+      </div>
+    </a>
+
+    <!-- Post 2 -->
+    <a href="#" class="post-card reveal reveal-delay-1" data-cat="qa" data-post="post-2" id="post-2">
+      <div class="post-card-inner">
+        <div>
+          <div class="post-meta">
+            <span class="post-category cat-qa">QA / Testing</span>
+            <span class="post-date">Feb 22, 2026</span>
+            <span class="post-read-time">4 min read</span>
+          </div>
+          <h2 class="post-title">Selenium vs Manual Testing: When Automation Actually Saves Time</h2>
+          <p class="post-excerpt">Not every test case should be automated. After running hundreds of test scenarios on a live eCommerce platform, here's the honest decision framework I use to decide what to automate and what to leave manual.</p>
+          <div class="post-tags">
+            <span class="post-tag">Selenium</span><span class="post-tag">TestNG</span><span class="post-tag">Automation</span><span class="post-tag">Best Practices</span>
+          </div>
+        </div>
+        <div class="post-arrow-box">↗</div>
+      </div>
+    </a>
+
+    <!-- Post 3 -->
+    <a href="#" class="post-card reveal reveal-delay-2" data-cat="content" data-post="post-3" id="post-3">
+      <div class="post-card-inner">
+        <div>
+          <div class="post-meta">
+            <span class="post-category cat-content">Content</span>
+            <span class="post-date">Feb 10, 2026</span>
+            <span class="post-read-time">5 min read</span>
+          </div>
+          <h2 class="post-title">Writing Product Descriptions That Actually Convert — Lessons from Indian E-Commerce</h2>
+          <p class="post-excerpt">Cultural nuance, trust signals, and price psychology — what I learned writing hundreds of product descriptions for Indian consumers and the formulas that consistently moved the conversion needle.</p>
+          <div class="post-tags">
+            <span class="post-tag">E-Commerce</span><span class="post-tag">SEO</span><span class="post-tag">Copywriting</span><span class="post-tag">India Market</span>
+          </div>
+        </div>
+        <div class="post-arrow-box">↗</div>
+      </div>
+    </a>
+
+    <!-- Post 4 -->
+    <a href="#" class="post-card reveal" data-cat="dev" data-post="post-4" id="post-4">
+      <div class="post-card-inner">
+        <div>
+          <div class="post-meta">
+            <span class="post-category cat-dev">Engineering</span>
+            <span class="post-date">Jan 28, 2026</span>
+            <span class="post-read-time">7 min read</span>
+          </div>
+          <h2 class="post-title">Understanding OWASP Top 10: A Developer's Practical Guide</h2>
+          <p class="post-excerpt">Security isn't just a QA problem — it's a developer problem. Breaking down each OWASP vulnerability with real code examples, how to spot them in your own Java apps, and how to fix them before they become CVEs.</p>
+          <div class="post-tags">
+            <span class="post-tag">OWASP</span><span class="post-tag">Security</span><span class="post-tag">Java</span><span class="post-tag">Web Dev</span>
+          </div>
+        </div>
+        <div class="post-arrow-box">↗</div>
+      </div>
+    </a>
+
+    <!-- Post 5 -->
+    <a href="#" class="post-card reveal reveal-delay-1" data-cat="qa" data-post="post-5" id="post-5">
+      <div class="post-card-inner">
+        <div>
+          <div class="post-meta">
+            <span class="post-category cat-qa">QA / Testing</span>
+            <span class="post-date">Jan 15, 2026</span>
+            <span class="post-read-time">5 min read</span>
+          </div>
+          <h2 class="post-title">My First Bug Bash: What I Learned Running a 200-Issue Security Audit</h2>
+          <p class="post-excerpt">From setting up Burp Suite to writing the final vulnerability report — a candid walkthrough of my first full security audit engagement, including the embarrassing mistakes and the hard-won lessons.</p>
+          <div class="post-tags">
+            <span class="post-tag">Burp Suite</span><span class="post-tag">Penetration Testing</span><span class="post-tag">Postman</span>
+          </div>
+        </div>
+        <div class="post-arrow-box">↗</div>
+      </div>
+    </a>
+
+    <!-- Post 6 -->
+    <a href="#" class="post-card reveal reveal-delay-2" data-cat="career" data-post="post-6" id="post-6">
+      <div class="post-card-inner">
+        <div>
+          <div class="post-meta">
+            <span class="post-category cat-career">Career</span>
+            <span class="post-date">Dec 30, 2025</span>
+            <span class="post-read-time">4 min read</span>
+          </div>
+          <h2 class="post-title">From MCA Graduate to Associate Trainee: The First 90 Days</h2>
+          <p class="post-excerpt">The gap between university projects and real-world production code is enormous. Here's what I wish someone told me before my first day at a tech company — the tools, the culture, and the mindset shifts.</p>
+          <div class="post-tags">
+            <span class="post-tag">Career</span><span class="post-tag">Fresher</span><span class="post-tag">Advice</span><span class="post-tag">MCA</span>
+          </div>
+        </div>
+        <div class="post-arrow-box">↗</div>
+      </div>
+    </a>
+
+    <div class="no-results" id="noResults">No posts found in this category.</div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- About -->
+    <div class="sidebar-widget reveal">
+      <div class="widget-title">About the Author</div>
+      <div class="about-widget-avatar">👨‍💻</div>
+      <div class="about-widget-name">Yuvaraj Pandian</div>
+      <div class="about-widget-role">Engineer · QA · Writer</div>
+      <p class="about-widget-bio">I build things with Java, break them with Selenium, and write about what I learn. MCA grad from Anna University, currently working as Associate Trainee at Tradesala Technologies.</p>
+    </div>
+
+    <!-- Topics -->
+    <div class="sidebar-widget reveal reveal-delay-1">
+      <div class="widget-title">Browse Topics</div>
+      <div class="topic-list">
+        <button class="topic-item active" data-filter="all">
+          <span>All Posts</span>
+          <span class="topic-badge cat-dev" style="background:var(--surface2);color:var(--text-dim);">6</span>
+        </button>
+        <button class="topic-item" data-filter="dev">
+          <span>⚙️ Engineering</span>
+          <span class="topic-badge cat-dev">2</span>
+        </button>
+        <button class="topic-item" data-filter="qa">
+          <span>🐛 QA / Testing</span>
+          <span class="topic-badge cat-qa">2</span>
+        </button>
+        <button class="topic-item" data-filter="content">
+          <span>✍️ Content</span>
+          <span class="topic-badge cat-content">1</span>
+        </button>
+        <button class="topic-item" data-filter="career">
+          <span>🚀 Career</span>
+          <span class="topic-badge cat-career" style="background:rgba(255,180,0,0.1);color:#ffb400;">1</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Popular -->
+    <div class="sidebar-widget reveal reveal-delay-2">
+      <div class="widget-title">Most Read</div>
+      <div class="popular-list">
+        <a href="#" class="popular-item" data-post="post-1">
+          <div class="popular-num">01</div>
+          <div class="popular-title">How I Built an AR Learning App from Scratch Using Java &amp; Firebase</div>
+        </a>
+        <a href="#" class="popular-item" data-post="post-4">
+          <div class="popular-num">02</div>
+          <div class="popular-title">Understanding OWASP Top 10: A Developer's Practical Guide</div>
+        </a>
+        <a href="#" class="popular-item" data-post="post-6">
+          <div class="popular-num">03</div>
+          <div class="popular-title">From MCA Graduate to Associate Trainee: The First 90 Days</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="newsletter-widget reveal reveal-delay-2">
+      <div class="widget-title" style="border-bottom-color:rgba(200,255,0,0.15);">Stay Updated</div>
+      <p class="newsletter-desc">Get new articles and project updates delivered to your inbox. No spam, ever.</p>
+      <input type="email" class="newsletter-input" placeholder="your@email.com" id="newsletterEmail">
+      <button class="newsletter-btn" id="newsletterBtn" type="button">Subscribe →</button>
+    </div>
+
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Yuvaraj<span>.</span>Pandian</div>
+      <div class="footer-copy">© 2026 Yuvaraj Pandian. All rights reserved.</div>
+    </div>
+    <div class="social-links">
+      <a href="https://www.instagram.com/_yuviii_24?igsh=bW5mMjdrZ2lhbjRx" target="_blank" rel="noopener noreferrer" class="social-link instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://x.com/Yuvaraj241003" target="_blank" rel="noopener noreferrer" class="social-link twitter">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/yuvaraj-pandian24" target="_blank" rel="noopener noreferrer" class="social-link linkedin">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://github.com/yuvarajpandiyan24" target="_blank" rel="noopener noreferrer" class="social-link github">
+        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+    </div>
+    <div class="footer-right">
+      <div>Designed &amp; built with ♥</div>
+      <div>by <a href="index.html">Yuvaraj Pandian</a></div>
+      <div style="margin-top:0.4rem;font-size:0.58rem;">v2026.03</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ ARTICLE OVERLAY ═══ -->
+<div class="article-overlay" id="articleOverlay">
+  <nav class="article-nav">
+    <button class="article-back" id="articleBack">← Back to Blog</button>
+    <div class="nav-logo" style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;">Yuvaraj<span style="color:var(--accent1);">.</span>Pandian</div>
+  </nav>
+  <div class="article-content" id="articleContent"></div>
+</div>
+
+<!-- ═══ POST DATA ═══ -->
+<script>
+const POSTS = {
+  'post-1': {
+    category: 'Engineering', catClass: 'cat-dev',
+    date: 'Mar 08, 2026', readTime: '6 min read',
+    title: 'How I Built an AR Learning App from Scratch Using Java &amp; Firebase',
+    tags: ['Java','Firebase','AR Core','Android'],
+    content: `
+      <div class="article-header">
+        <div class="article-meta-row">
+          <span class="post-category cat-dev">Engineering</span>
+          <span class="post-date">Mar 08, 2026</span>
+          <span class="post-read-time">6 min read</span>
+        </div>
+        <h1 class="article-title">How I Built an AR Learning App from Scratch Using Java &amp; Firebase</h1>
+        <div class="article-excerpt">A deep dive into the architecture decisions, pitfalls, and breakthroughs while building a real-time augmented reality educational application for Android — and what I'd do differently today.</div>
+      </div>
+      <div class="article-body">
+        <h2>Why Augmented Reality for Education?</h2>
+        <p>The idea came during my final semester at Anna University. Most educational apps were glorified PDFs — static, boring, and completely ignoring the immersive potential of modern smartphones. I wanted to build something where a student could <strong>point their phone at a textbook page and watch a 3D model come to life</strong>.</p>
+        <p>The tech stack choice was straightforward: Java (I was comfortable with it), Google AR Core (the most mature Android AR framework), and Firebase for real-time data syncing without maintaining a backend server.</p>
+
+        <h2>Architecture Overview</h2>
+        <p>The app is split into three layers:</p>
+        <ul>
+          <li><strong>AR Layer</strong> — Google AR Core handles plane detection and anchor placement</li>
+          <li><strong>Content Layer</strong> — Firebase Realtime Database stores 3D model references and lesson metadata</li>
+          <li><strong>UI Layer</strong> — Standard Android Views + custom AR overlays rendered via OpenGL ES</li>
+        </ul>
+
+        <h3>Setting Up AR Core</h3>
+        <p>The first real challenge was configuring the AR session correctly. AR Core requires specific permissions and a device compatibility check before you can even open a camera feed:</p>
+        <pre><code>ArSession session = new ArSession(this);
+Config config = new Config(session);
+config.setUpdateMode(Config.UpdateMode.LATEST_CAMERA_IMAGE);
+session.configure(config);</code></pre>
+
+        <div class="callout">
+          <div class="callout-title">⚠️ Common Mistake</div>
+          Don't forget to handle <code>UnavailableArcoreNotInstalledException</code> — AR Core needs to be installed separately on older Android versions. I lost two days debugging this on a test device.
+        </div>
+
+        <h2>Firebase Integration</h2>
+        <p>I chose Firebase Realtime Database over Firestore for one reason: <strong>latency</strong>. When a student scans a marker, the content needs to appear within 300ms or the illusion breaks. Firestore's document model adds overhead for simple key-value lookups.</p>
+        <pre><code>DatabaseReference modelRef = FirebaseDatabase
+    .getInstance()
+    .getReference("models")
+    .child(markerId);
+
+modelRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    @Override
+    public void onDataChange(DataSnapshot snapshot) {
+        String modelUrl = snapshot.child("url").getValue(String.class);
+        loadArModel(modelUrl);
+    }
+});</code></pre>
+
+        <h2>The Biggest Lesson</h2>
+        <p>I over-engineered the initial architecture. I built a full MVC pattern with repository layers before writing a single line of AR code. If I were starting over, I'd prototype the AR interaction first — get the camera rendering a 3D cube — then add the database layer once the core experience works.</p>
+
+        <blockquote>"Make it work, then make it right, then make it fast. In that order." — Kent Beck</blockquote>
+
+        <h2>What I'd Do Differently</h2>
+        <p>Looking back with 6+ months of professional experience, three things stand out:</p>
+        <ul>
+          <li>Use <strong>Kotlin</strong> instead of Java — null safety alone would have prevented at least 5 crashes</li>
+          <li>Add <strong>offline caching</strong> for 3D models — loading from Firebase on every session is too slow on 4G</li>
+          <li>Write <strong>instrumented tests</strong> for the AR session lifecycle — I had zero test coverage on the most critical code path</li>
+        </ul>
+        <p>The app works, students used it, and I learned more building it than in any classroom. That's the real metric.</p>
+      </div>
+      <div class="article-footer">
+        <div class="article-tags">
+          <span class="article-tag">Java</span><span class="article-tag">Firebase</span><span class="article-tag">AR Core</span><span class="article-tag">Android</span><span class="article-tag">Architecture</span>
+        </div>
+        <div class="article-author">
+          <div class="article-author-avatar">👨‍💻</div>
+          <div>
+            <div class="article-author-name">Yuvaraj Pandian</div>
+            <div class="article-author-bio">Software Engineer · QA Specialist · Content Creator. Currently building scalable systems at Tradesala Technologies, Chennai.</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  'post-2': {
+    category: 'QA / Testing', catClass: 'cat-qa',
+    date: 'Feb 22, 2026', readTime: '4 min read',
+    title: 'Selenium vs Manual Testing: When Automation Actually Saves Time',
+    tags: ['Selenium','TestNG','Automation','Best Practices'],
+    content: `
+      <div class="article-header">
+        <div class="article-meta-row">
+          <span class="post-category cat-qa">QA / Testing</span>
+          <span class="post-date">Feb 22, 2026</span>
+          <span class="post-read-time">4 min read</span>
+        </div>
+        <h1 class="article-title">Selenium vs Manual Testing: When Automation Actually Saves Time</h1>
+        <div class="article-excerpt">Not every test case should be automated. After running hundreds of test scenarios on a live eCommerce platform, here's the honest decision framework I use.</div>
+      </div>
+      <div class="article-body">
+        <h2>The Automation Trap</h2>
+        <p>Every junior QA engineer (myself included) falls into the same trap: automate everything. It sounds right. Automation is faster, repeatable, consistent. So why not run every test through Selenium?</p>
+        <p>Because <strong>automation has a cost</strong>. Writing a robust Selenium test for a checkout flow can take 4-6 hours. If that flow only changes once a month, you're better off with a 20-minute manual regression.</p>
+
+        <h2>The 3-Question Framework</h2>
+        <p>Before writing any automation, I ask three questions:</p>
+        <ul>
+          <li><strong>How often will this test run?</strong> Daily regression? Automate. Monthly sanity check? Manual.</li>
+          <li><strong>How stable is the UI?</strong> Locators break. If the team redesigns the checkout page every sprint, your automation will cost more to maintain than it saves.</li>
+          <li><strong>Is the test data-driven?</strong> Testing 50 different product SKUs through the same flow? That's a perfect automation candidate.</li>
+        </ul>
+
+        <h3>What I Automate</h3>
+        <pre><code>// Product search → cart → checkout → payment
+// Regression suite: runs on every deployment
+@Test(groups = "regression")
+public void checkoutFlow() {
+    driver.get(BASE_URL);
+    searchProduct("laptop");
+    addFirstResultToCart();
+    proceedToCheckout();
+    Assert.assertTrue(isOrderConfirmationVisible());
+}</code></pre>
+
+        <h3>What I Keep Manual</h3>
+        <ul>
+          <li>Visual/layout checks — "does this look right?" questions</li>
+          <li>New features still in flux</li>
+          <li>Exploratory testing to find edge cases</li>
+          <li>One-time migrations or data validation</li>
+        </ul>
+
+        <h2>The Honest Numbers</h2>
+        <p>On my current eCommerce project, I automate approximately <strong>40% of test cases</strong>. That 40% covers 80% of the regression risk (payment flows, cart logic, search). The remaining 60% stays manual — but those tests run infrequently enough that the automation investment wouldn't pay off.</p>
+
+        <blockquote>Automation doesn't replace QA thinking. It amplifies it.</blockquote>
+      </div>
+      <div class="article-footer">
+        <div class="article-tags">
+          <span class="article-tag">Selenium</span><span class="article-tag">TestNG</span><span class="article-tag">Automation</span><span class="article-tag">QA Strategy</span>
+        </div>
+        <div class="article-author">
+          <div class="article-author-avatar">👨‍💻</div>
+          <div>
+            <div class="article-author-name">Yuvaraj Pandian</div>
+            <div class="article-author-bio">Software Engineer · QA Specialist · Content Creator. Currently building scalable systems at Tradesala Technologies, Chennai.</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  'post-3': {
+    category: 'Content', catClass: 'cat-content',
+    date: 'Feb 10, 2026', readTime: '5 min read',
+    title: 'Writing Product Descriptions That Actually Convert — Lessons from Indian E-Commerce',
+    tags: ['E-Commerce','SEO','Copywriting','India Market'],
+    content: `
+      <div class="article-header">
+        <div class="article-meta-row">
+          <span class="post-category cat-content">Content</span>
+          <span class="post-date">Feb 10, 2026</span>
+          <span class="post-read-time">5 min read</span>
+        </div>
+        <h1 class="article-title">Writing Product Descriptions That Actually Convert — Lessons from Indian E-Commerce</h1>
+        <div class="article-excerpt">Cultural nuance, trust signals, and price psychology — what I learned writing hundreds of product descriptions for Indian consumers.</div>
+      </div>
+      <div class="article-body">
+        <h2>The Indian Consumer Is Different</h2>
+        <p>After writing hundreds of product descriptions for an Indian eCommerce platform, one thing became clear: <strong>generic copy doesn't work here</strong>. The average Indian online shopper is value-conscious, comparison-savvy, and deeply influenced by social proof and trust signals.</p>
+
+        <h2>The 5 Elements That Move Conversions</h2>
+        <h3>1. Lead with Value, Not Features</h3>
+        <p>Bad: "This phone has a 5000mAh battery."<br>Good: "Lasts 2 full days on a single charge — no power bank anxiety."</p>
+
+        <h3>2. Address the Price Anxiety Directly</h3>
+        <p>Indian consumers are trained to look for the catch. If your product is priced higher than competitors, explain why in the description. Don't hide from it.</p>
+
+        <h3>3. Use Localized Social Proof</h3>
+        <p>Mentioning city-specific popularity ("bestseller in Chennai") or festival relevance ("perfect for Diwali gifting") consistently outperforms generic global testimonials.</p>
+
+        <h3>4. Include ISI / BIS Certifications Prominently</h3>
+        <p>Indian consumers trust certifications more than brand names for categories like electronics and home appliances. Put them early — not buried in specs.</p>
+
+        <h3>5. EMI Mention in the Description Itself</h3>
+        <p>Don't rely on the checkout page to surface EMI options. Mentioning "₹499/month on No-Cost EMI" in the product description reduces cart abandonment by making the price feel smaller upfront.</p>
+
+        <h2>SEO That Actually Works for India</h2>
+        <p>Indian search queries are often in <strong>Hinglish or regional English</strong>. Terms like "best smartphone under 15000" or "washing machine price India" are high-intent and high-volume. Optimize for these naturally — not stuffed.</p>
+
+        <blockquote>The best product description reads like advice from a friend who already owns the product.</blockquote>
+      </div>
+      <div class="article-footer">
+        <div class="article-tags">
+          <span class="article-tag">E-Commerce</span><span class="article-tag">SEO</span><span class="article-tag">Copywriting</span><span class="article-tag">India</span>
+        </div>
+        <div class="article-author">
+          <div class="article-author-avatar">👨‍💻</div>
+          <div>
+            <div class="article-author-name">Yuvaraj Pandian</div>
+            <div class="article-author-bio">Software Engineer · QA Specialist · Content Creator. Currently building scalable systems at Tradesala Technologies, Chennai.</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  'post-4': {
+    category: 'Engineering', catClass: 'cat-dev',
+    date: 'Jan 28, 2026', readTime: '7 min read',
+    title: 'Understanding OWASP Top 10: A Developer\'s Practical Guide',
+    tags: ['OWASP','Security','Java','Web Dev'],
+    content: `
+      <div class="article-header">
+        <div class="article-meta-row">
+          <span class="post-category cat-dev">Engineering</span>
+          <span class="post-date">Jan 28, 2026</span>
+          <span class="post-read-time">7 min read</span>
+        </div>
+        <h1 class="article-title">Understanding OWASP Top 10: A Developer's Practical Guide</h1>
+        <div class="article-excerpt">Security isn't just a QA problem — it's a developer problem. Breaking down each OWASP vulnerability with real code examples.</div>
+      </div>
+      <div class="article-body">
+        <h2>Why Developers Need to Own Security</h2>
+        <p>During my security audit work, the most common finding wasn't sophisticated zero-day exploits — it was <strong>basic vulnerabilities that a developer could have prevented</strong> in 10 minutes. SQL injection in a login form. Hardcoded credentials in source code. Unvalidated redirects.</p>
+        <p>Security teams can catch these in testing, but the cheapest place to fix them is in the code review, before they ever deploy.</p>
+
+        <h2>The 3 Most Common Findings (In My Experience)</h2>
+        <h3>A03: Injection</h3>
+        <p>Still number one in real-world exploits. The fix is always the same — use parameterized queries:</p>
+        <pre><code>// VULNERABLE
+String query = "SELECT * FROM users WHERE id = " + userId;
+
+// SAFE — Parameterized query
+PreparedStatement stmt = conn.prepareStatement(
+    "SELECT * FROM users WHERE id = ?"
+);
+stmt.setInt(1, userId);</code></pre>
+
+        <h3>A01: Broken Access Control</h3>
+        <p>I found this in nearly every audit. An admin API endpoint was accessible just by knowing the URL — no role check. Always validate permissions server-side, not just in the UI.</p>
+
+        <h3>A07: Identification &amp; Authentication Failures</h3>
+        <p>Weak session management, missing rate limiting on login endpoints, and passwords stored with MD5 (still happens in 2026). Use bcrypt. Always. No exceptions.</p>
+
+        <div class="callout">
+          <div class="callout-title">Quick Win Checklist</div>
+          Run OWASP ZAP against your staging environment before every release. It takes 15 minutes and catches the low-hanging fruit automatically.
+        </div>
+
+        <h2>Building a Security Mindset</h2>
+        <p>The shift isn't about memorizing the OWASP list. It's about asking "how could this be abused?" for every feature you build. The developer who thinks like an attacker while writing code is worth ten security scanners.</p>
+      </div>
+      <div class="article-footer">
+        <div class="article-tags">
+          <span class="article-tag">OWASP</span><span class="article-tag">Security</span><span class="article-tag">Java</span><span class="article-tag">Penetration Testing</span>
+        </div>
+        <div class="article-author">
+          <div class="article-author-avatar">👨‍💻</div>
+          <div>
+            <div class="article-author-name">Yuvaraj Pandian</div>
+            <div class="article-author-bio">Software Engineer · QA Specialist · Content Creator. Currently building scalable systems at Tradesala Technologies, Chennai.</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  'post-5': {
+    category: 'QA / Testing', catClass: 'cat-qa',
+    date: 'Jan 15, 2026', readTime: '5 min read',
+    title: 'My First Bug Bash: What I Learned Running a 200-Issue Security Audit',
+    tags: ['Burp Suite','Penetration Testing','Postman'],
+    content: `
+      <div class="article-header">
+        <div class="article-meta-row">
+          <span class="post-category cat-qa">QA / Testing</span>
+          <span class="post-date">Jan 15, 2026</span>
+          <span class="post-read-time">5 min read</span>
+        </div>
+        <h1 class="article-title">My First Bug Bash: What I Learned Running a 200-Issue Security Audit</h1>
+        <div class="article-excerpt">From setting up Burp Suite to writing the final vulnerability report — a candid walkthrough of my first full security audit engagement.</div>
+      </div>
+      <div class="article-body">
+        <h2>How It Started</h2>
+        <p>The brief was simple: "Find everything wrong with this web application before we launch." Three weeks, one application, and one very new QA engineer (me) with a freshly installed copy of Burp Suite Pro.</p>
+        <p>I ended up filing <strong>214 issues</strong>. Here's what I actually learned.</p>
+
+        <h2>The Tool Stack</h2>
+        <ul>
+          <li><strong>Burp Suite</strong> — Intercepted and replayed every HTTP request. The Scanner found 60% of issues automatically</li>
+          <li><strong>Postman</strong> — Manually tested every API endpoint for auth bypass and parameter tampering</li>
+          <li><strong>OWASP ZAP</strong> — Secondary automated scanner to cross-validate Burp findings</li>
+          <li><strong>Browser DevTools</strong> — Checked for sensitive data in JS source, localStorage, cookies</li>
+        </ul>
+
+        <h2>The Embarrassing Mistakes</h2>
+        <p>I spent an entire day chasing a false positive. Burp flagged an "XSS vulnerability" on a page that was actually rendering server-side — the payload never executed in a browser context. I filed the issue anyway. My lead caught it in 30 seconds.</p>
+        <p>Lesson: <strong>Always reproduce a vulnerability in a real browser before filing it.</strong> Static scanner findings need human validation.</p>
+
+        <h2>Writing the Report</h2>
+        <p>The hardest part wasn't finding vulnerabilities — it was communicating them. Developers don't read CVE descriptions. They need:</p>
+        <ul>
+          <li>A one-line summary of the impact ("An attacker can view any user's order history")</li>
+          <li>A step-by-step reproduction case</li>
+          <li>A specific fix recommendation, not just "sanitize your inputs"</li>
+        </ul>
+
+        <blockquote>A vulnerability that can't be communicated clearly might as well not be found. The report is half the work.</blockquote>
+      </div>
+      <div class="article-footer">
+        <div class="article-tags">
+          <span class="article-tag">Burp Suite</span><span class="article-tag">Security Audit</span><span class="article-tag">Postman</span><span class="article-tag">QA</span>
+        </div>
+        <div class="article-author">
+          <div class="article-author-avatar">👨‍💻</div>
+          <div>
+            <div class="article-author-name">Yuvaraj Pandian</div>
+            <div class="article-author-bio">Software Engineer · QA Specialist · Content Creator. Currently building scalable systems at Tradesala Technologies, Chennai.</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  'post-6': {
+    category: 'Career', catClass: 'cat-career',
+    date: 'Dec 30, 2025', readTime: '4 min read',
+    title: 'From MCA Graduate to Associate Trainee: The First 90 Days',
+    tags: ['Career','Fresher','Advice','MCA'],
+    content: `
+      <div class="article-header">
+        <div class="article-meta-row">
+          <span class="post-category cat-career">Career</span>
+          <span class="post-date">Dec 30, 2025</span>
+          <span class="post-read-time">4 min read</span>
+        </div>
+        <h1 class="article-title">From MCA Graduate to Associate Trainee: The First 90 Days</h1>
+        <div class="article-excerpt">The gap between university projects and real-world production code is enormous. Here's what I wish someone told me before day one.</div>
+      </div>
+      <div class="article-body">
+        <h2>The Reality Gap</h2>
+        <p>University teaches you Java. Your job expects you to understand Git workflows, CI/CD pipelines, code review culture, ticket management, and production deployment procedures — none of which appear in a textbook. The first two weeks felt like drinking from a firehose.</p>
+
+        <h2>Week 1–2: Orientation Chaos</h2>
+        <p>My first task was to set up a local development environment from a README that hadn't been updated in 8 months. It took three days. I asked too few questions (imposter syndrome is real) and wasted time I could have saved by just asking a colleague.</p>
+        <p><strong>Lesson 1: Ask early, ask often.</strong> Senior developers expect juniors to ask questions. Silence looks like overconfidence, not competence.</p>
+
+        <h2>Month 1: The Code Review Shock</h2>
+        <p>My first PR got 23 comments. I had written "working" code — but it had no error handling, variable names like <code>x</code> and <code>temp2</code>, and a method that did six different things. None of this was covered in any of my university assignments.</p>
+
+        <h2>Month 2–3: Finding My Role</h2>
+        <p>The best thing that happened was being given ownership of the automation testing pipeline. It needed work, I had the skills, and fixing it gave me visible, concrete impact. <strong>Find the thing no one else wants to fix, and fix it well.</strong></p>
+
+        <h2>What Actually Matters in Month 1</h2>
+        <ul>
+          <li>Learn the codebase architecture before writing any code</li>
+          <li>Understand the deployment process end-to-end, even if you're not deploying yet</li>
+          <li>Read old PR comments — they're a free education on what your team values</li>
+          <li>Ship something small in the first two weeks, even if it's tiny</li>
+        </ul>
+
+        <blockquote>Nobody expects you to be brilliant on day one. They expect you to be curious, reliable, and willing to learn. That's it.</blockquote>
+      </div>
+      <div class="article-footer">
+        <div class="article-tags">
+          <span class="article-tag">Career</span><span class="article-tag">Fresher</span><span class="article-tag">Java</span><span class="article-tag">First Job</span>
+        </div>
+        <div class="article-author">
+          <div class="article-author-avatar">👨‍💻</div>
+          <div>
+            <div class="article-author-name">Yuvaraj Pandian</div>
+            <div class="article-author-bio">Software Engineer · QA Specialist · Content Creator. Currently building scalable systems at Tradesala Technologies, Chennai.</div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+};
+
+/* ── Cursor ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+if (window.matchMedia('(hover: hover)').matches) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = (e.clientX-5)+'px'; cursor.style.top=(e.clientY-5)+'px';
+    ring.style.left=(e.clientX-18)+'px'; ring.style.top=(e.clientY-18)+'px';
+  });
+  document.querySelectorAll('a, button, .post-card, .popular-item, .blog-mini-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; ring.style.transform='scale(1.5)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; ring.style.transform='scale(1)'; });
+  });
+}
+
+/* ── Hamburger ── */
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open'); mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-nav-link').forEach(l => {
+  l.addEventListener('click', () => { hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow=''; });
+});
+
+/* ── Reveal ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── Filter ── */
+function applyFilter(filter) {
+  const cards = document.querySelectorAll('.post-card');
+  let visible = 0;
+  cards.forEach(card => {
+    const match = filter === 'all' || card.dataset.cat === filter;
+    card.classList.toggle('hidden', !match);
+    if (match) visible++;
+  });
+  document.getElementById('noResults').classList.toggle('visible', visible === 0);
+
+  // sync filter bar buttons
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+  // sync sidebar topic items
+  document.querySelectorAll('.topic-item').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+}
+
+document.querySelectorAll('[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
+});
+
+/* ── Article Overlay ── */
+const overlay     = document.getElementById('articleOverlay');
+const articleContent = document.getElementById('articleContent');
+const progressFill   = document.getElementById('progressFill');
+
+function openArticle(postId) {
+  const post = POSTS[postId];
+  if (!post) return;
+  articleContent.innerHTML = post.content;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  overlay.scrollTop = 0;
+  progressFill.style.width = '0%';
+  history.pushState({ overlay: postId }, '', '#' + postId);
+}
+
+function closeArticle() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  history.pushState({}, '', window.location.pathname);
+}
+
+document.querySelectorAll('.post-card, .popular-item').forEach(card => {
+  card.addEventListener('click', e => {
+    e.preventDefault();
+    const postId = card.dataset.post;
+    if (postId) openArticle(postId);
+  });
+});
+
+document.getElementById('articleBack').addEventListener('click', closeArticle);
+
+// Escape key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
+
+// Handle direct URL hash
+if (window.location.hash) {
+  const hash = window.location.hash.slice(1);
+  if (POSTS[hash]) setTimeout(() => openArticle(hash), 300);
+}
+
+// Browser back button
+window.addEventListener('popstate', e => {
+  if (!e.state || !e.state.overlay) closeArticle();
+});
+
+// Reading progress
+overlay.addEventListener('scroll', () => {
+  const scrollable = overlay.scrollHeight - overlay.clientHeight;
+  const pct = scrollable > 0 ? (overlay.scrollTop / scrollable) * 100 : 0;
+  progressFill.style.width = pct + '%';
+});
+
+/* ── Newsletter ── */
+document.getElementById('newsletterBtn').addEventListener('click', () => {
+  const email = document.getElementById('newsletterEmail').value.trim();
+  const btn = document.getElementById('newsletterBtn');
+  if (!email || !email.includes('@')) {
+    btn.textContent = 'Enter a valid email ✗';
+    btn.style.background = 'var(--accent2)'; btn.style.color = 'white';
+    setTimeout(() => { btn.textContent = 'Subscribe →'; btn.style.background=''; btn.style.color=''; }, 2500);
+    return;
+  }
+  btn.textContent = 'Subscribed! ✓';
+  btn.style.background = 'var(--accent3)'; btn.style.color = 'var(--bg)';
+  document.getElementById('newsletterEmail').value = '';
+  setTimeout(() => { btn.textContent = 'Subscribe →'; btn.style.background=''; btn.style.color=''; }, 3000);
+});
+</script>
+</body>
+</html>
