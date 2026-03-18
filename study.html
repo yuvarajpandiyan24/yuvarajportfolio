@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study — Yuvaraj Pandian</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════
+   ROOT & RESET
+════════════════════════════════ */
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --accent1: #c8ff00;
+  --accent2: #ff3b6e;
+  --accent3: #00d4ff;
+  --purple: #a855f7;
+  --text: #e8e8f0;
+  --text-dim: #7a7a99;
+  --border: rgba(255,255,255,0.07);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.6; cursor: none;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022; pointer-events: none; z-index: 9997;
+}
+
+/* ════════════════════════════════
+   CURSOR
+════════════════════════════════ */
+.cursor, .cursor-ring { position: fixed; pointer-events: none; border-radius: 50%; z-index: 9999; display: none; }
+@media (hover: hover) {
+  .cursor { display: block; width: 10px; height: 10px; background: var(--accent1); mix-blend-mode: difference; transition: transform .15s ease; }
+  .cursor-ring { display: block; width: 36px; height: 36px; border: 1.5px solid var(--accent1); z-index: 9998; mix-blend-mode: difference; transition: left .1s ease, top .1s ease, transform .3s ease; }
+  body, a, button { cursor: none; }
+}
+
+/* ════════════════════════════════
+   NAV
+════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 3rem;
+  background: rgba(10,10,15,.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -.02em; color: var(--text); text-decoration: none; flex-shrink: 0; }
+.nav-logo span { color: var(--accent1); }
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a { color: var(--text-dim); text-decoration: none; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; padding: .45rem .9rem; position: relative; transition: color .2s; }
+.nav-links a::after { content: ''; position: absolute; bottom: 0; left: .9rem; right: .9rem; height: 1px; background: var(--accent1); transform: scaleX(0); transition: transform .3s ease; }
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.nav-status { display: flex; align-items: center; gap: .5rem; font-size: .68rem; color: var(--text-dim); flex-shrink: 0; }
+.status-dot { width: 6px; height: 6px; background: var(--accent1); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);} }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.mobile-menu { display: none; position: fixed; inset: 0; z-index: 290; background: rgba(10,10,15,.98); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; gap: .5rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(1.8rem,8vw,2.5rem); color: var(--text-dim); text-decoration: none; text-transform: uppercase; padding: .4rem 1rem; transition: color .2s; }
+.mobile-menu a:hover { color: var(--accent1); }
+.mobile-menu-footer { position: absolute; bottom: 2rem; font-size: .65rem; color: var(--text-dim); letter-spacing: .15em; }
+
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
+.study-hero {
+  padding: 160px 3rem 80px;
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+/* Dotted grid bg */
+.hero-dot-bg {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(ellipse at 75% 50%, black 20%, transparent 65%);
+}
+/* Floating graduation cap silhouettes */
+.hero-deco {
+  position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 2rem; pointer-events: none;
+}
+.hero-deco-block {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: .6rem 1rem;
+  font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--text-dim); white-space: nowrap;
+  animation: slideblock 5s ease-in-out infinite;
+}
+.hero-deco-block:nth-child(1) { animation-delay: 0s; border-left: 2px solid var(--accent1); }
+.hero-deco-block:nth-child(2) { animation-delay: 1.2s; border-left: 2px solid var(--accent3); margin-left: 1.5rem; }
+.hero-deco-block:nth-child(3) { animation-delay: 2.4s; border-left: 2px solid var(--accent2); }
+.hero-deco-block:nth-child(4) { animation-delay: 3.6s; border-left: 2px solid var(--purple); margin-left: 1rem; }
+@keyframes slideblock { 0%,100%{transform:translateX(0);opacity:.5;} 50%{transform:translateX(-6px);opacity:1;} }
+
+.back-link { display: inline-flex; align-items: center; gap: .5rem; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; margin-bottom: 2.5rem; transition: color .2s; }
+.back-link:hover { color: var(--accent1); }
+.hero-eyebrow { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent1); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.hero-eyebrow::before { content: ''; width: 36px; height: 1px; background: var(--accent1); }
+.hero-title { font-family: 'Fraunces', serif; font-size: clamp(3rem,8vw,7.5rem); font-weight: 700; line-height: .9; letter-spacing: -.03em; margin-bottom: 1.5rem; }
+.hero-title .italic { font-style: italic; font-weight: 300; color: var(--text-dim); }
+.hero-title .dot { color: var(--accent1); }
+.hero-desc { max-width: 480px; color: var(--text-dim); font-size: .83rem; line-height: 1.85; margin-bottom: 2.5rem; }
+
+/* Stats */
+.study-stats { display: flex; gap: 2px; flex-wrap: wrap; }
+.study-stat { padding: 1rem 1.5rem; border: 1px solid var(--border); background: var(--surface); }
+.study-stat-num { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; line-height: 1; }
+.study-stat-num.c1 { color: var(--accent1); }
+.study-stat-num.c2 { color: var(--accent3); }
+.study-stat-num.c3 { color: var(--accent2); }
+.study-stat-num.c4 { color: var(--purple); }
+.study-stat-label { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-top: .3rem; }
+
+/* ════════════════════════════════
+   TAB BAR
+════════════════════════════════ */
+.tab-bar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 3rem; position: sticky; top: 65px; z-index: 100;
+  display: flex; align-items: center; overflow-x: auto;
+}
+.tab-btn {
+  background: none; border: none; padding: 1rem 1.25rem;
+  font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-dim);
+  position: relative; white-space: nowrap; transition: color .2s;
+}
+.tab-btn::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--accent1); transform: scaleX(0); transition: transform .3s ease; }
+.tab-btn.cert-tab::after { background: var(--accent2); }
+.tab-btn.course-tab::after { background: var(--accent3); }
+.tab-btn:hover, .tab-btn.active { color: var(--text); }
+.tab-btn.active::after { transform: scaleX(1); }
+
+/* ════════════════════════════════
+   PAGE BODY
+════════════════════════════════ */
+.page-body { padding: 3rem; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ════════════════════════════════
+   EDUCATION TAB
+════════════════════════════════ */
+.edu-layout { display: grid; grid-template-columns: 260px 1fr; gap: 0; }
+
+/* Left sidebar */
+.edu-sidebar-inner {
+  position: sticky; top: 130px;
+  padding-right: 2.5rem;
+}
+.edu-summary-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 1.75rem; margin-bottom: 1.5rem;
+}
+.edu-summary-years { font-family: 'Fraunces', serif; font-size: 3.5rem; font-weight: 700; line-height: 1; color: var(--accent1); }
+.edu-summary-label { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-top: .3rem; margin-bottom: 1.25rem; }
+.edu-summary-divider { height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+.edu-summary-row { display: flex; justify-content: space-between; margin-bottom: .6rem; }
+.edu-summary-key { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); }
+.edu-summary-val { font-size: .6rem; color: var(--text); }
+
+.edu-path-legend { display: flex; flex-direction: column; gap: .5rem; }
+.edu-path-item { display: flex; align-items: center; gap: .65rem; font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); }
+.edu-path-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* Education entries */
+.edu-entries { position: relative; padding-left: 2.5rem; }
+.edu-entries::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent1) 0%, var(--purple) 50%, var(--border) 100%);
+}
+
+.edu-entry { position: relative; padding-bottom: 3rem; }
+.edu-entry:last-child { padding-bottom: 0; }
+
+.edu-node {
+  position: absolute; left: -2.5rem;
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--bg); margin-left: -7px; top: 4px;
+  transition: transform .3s, box-shadow .3s;
+}
+.edu-entry:hover .edu-node { transform: scale(1.5); }
+.edu-node.mca { background: var(--accent1); box-shadow: 0 0 12px var(--accent1); }
+.edu-node.bca { background: var(--purple); box-shadow: 0 0 12px var(--purple); }
+
+.edu-connector {
+  position: absolute; left: calc(-2.5rem + 7px); top: 18px; bottom: 0;
+  width: 1px; background: var(--border);
+}
+.edu-entry:last-child .edu-connector { display: none; }
+
+/* Education card */
+.edu-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 2rem; position: relative; overflow: hidden;
+  transition: border-color .3s, background .3s;
+}
+.edu-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  transform: scaleX(0); transform-origin: left; transition: transform .4s ease;
+}
+.edu-entry.mca .edu-card::before { background: var(--accent1); }
+.edu-entry.bca .edu-card::before { background: var(--purple); }
+.edu-entry:hover .edu-card::before { transform: scaleX(1); }
+.edu-entry.mca:hover .edu-card { border-color: rgba(200,255,0,.3); background: var(--surface2); }
+.edu-entry.bca:hover .edu-card { border-color: rgba(168,85,247,.3); background: var(--surface2); }
+
+.edu-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; }
+.edu-period-badge { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; padding: .25rem .65rem; border: 1px solid var(--border); color: var(--text-dim); white-space: nowrap; flex-shrink: 0; }
+.edu-type-badges { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: flex-end; }
+.edu-badge { font-size: .5rem; letter-spacing: .1em; text-transform: uppercase; padding: .18rem .55rem; border-radius: 1px; }
+.badge-pg { background: rgba(200,255,0,.1); color: var(--accent1); }
+.badge-ug { background: rgba(168,85,247,.1); color: var(--purple); }
+.badge-dist { background: rgba(0,212,255,.1); color: var(--accent3); }
+
+.edu-icon-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.edu-icon-box {
+  width: 52px; height: 52px; border: 1px solid var(--border);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; background: var(--surface2); flex-shrink: 0;
+  transition: transform .3s, border-color .3s;
+}
+.edu-entry:hover .edu-icon-box { transform: scale(1.05); }
+.edu-entry.mca:hover .edu-icon-box { border-color: rgba(200,255,0,.3); }
+.edu-entry.bca:hover .edu-icon-box { border-color: rgba(168,85,247,.3); }
+.edu-gpa-display { text-align: right; }
+.edu-gpa-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700; line-height: 1; }
+.edu-entry.mca .edu-gpa-num { color: var(--accent1); }
+.edu-entry.bca .edu-gpa-num { color: var(--purple); }
+.edu-gpa-label { font-size: .52rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); }
+
+.edu-degree-name { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; line-height: 1.2; margin-bottom: .25rem; }
+.edu-school-name { font-size: .78rem; color: var(--accent3); margin-bottom: .1rem; }
+.edu-location { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+.edu-desc-text { font-size: .78rem; color: var(--text-dim); line-height: 1.8; margin-bottom: 1.25rem; }
+
+/* Subject chips */
+.edu-subjects { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: 1.25rem; }
+.edu-subject { font-size: .56rem; letter-spacing: .07em; text-transform: uppercase; padding: .18rem .55rem; background: var(--bg); border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); transition: all .2s; }
+.edu-entry.mca:hover .edu-subject { border-color: rgba(200,255,0,.15); }
+.edu-entry.bca:hover .edu-subject { border-color: rgba(168,85,247,.15); }
+
+.edu-card-footer { display: flex; align-items: center; justify-content: space-between; }
+.edu-highlights { display: flex; gap: 1.5rem; }
+.edu-hl { text-align: center; }
+.edu-hl-num { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; }
+.edu-entry.mca .edu-hl-num { color: var(--accent1); }
+.edu-entry.bca .edu-hl-num { color: var(--purple); }
+.edu-hl-label { font-size: .52rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); }
+
+.edu-cta {
+  background: none; border: 1px solid var(--border);
+  padding: .5rem 1rem; font-family: 'DM Mono', monospace;
+  font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-dim); transition: all .3s;
+}
+.edu-entry.mca:hover .edu-cta { border-color: var(--accent1); color: var(--accent1); }
+.edu-entry.bca:hover .edu-cta { border-color: var(--purple); color: var(--purple); }
+
+/* ════════════════════════════════
+   CERTIFICATIONS TAB
+════════════════════════════════ */
+.cert-section-intro {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 3rem;
+}
+.cert-intro-stat {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1.25rem;
+}
+.cert-intro-icon { font-size: 1.5rem; flex-shrink: 0; }
+.cert-intro-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700; color: var(--accent2); line-height: 1; }
+.cert-intro-label { font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin-top: .15rem; }
+
+.cert-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+
+.cert-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 2rem; position: relative; overflow: hidden;
+  transition: border-color .3s, background .3s;
+}
+.cert-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  transform: scaleX(0); transform-origin: left; transition: transform .4s;
+}
+.cert-card.c1::before { background: var(--accent1); }
+.cert-card.c2::before { background: var(--accent3); }
+.cert-card.c3::before { background: var(--accent2); }
+.cert-card.c4::before { background: var(--purple); }
+.cert-card:hover::before { transform: scaleX(1); }
+.cert-card.c1:hover { border-color: rgba(200,255,0,.3); background: var(--surface2); }
+.cert-card.c2:hover { border-color: rgba(0,212,255,.3); background: var(--surface2); }
+.cert-card.c3:hover { border-color: rgba(255,59,110,.3); background: var(--surface2); }
+.cert-card.c4:hover { border-color: rgba(168,85,247,.3); background: var(--surface2); }
+
+.cert-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
+.cert-big-num { font-family: 'Fraunces', serif; font-size: 3.5rem; font-weight: 700; line-height: 1; }
+.cert-card.c1 .cert-big-num { color: rgba(200,255,0,.5); }
+.cert-card.c2 .cert-big-num { color: rgba(0,212,255,.5); }
+.cert-card.c3 .cert-big-num { color: rgba(255,59,110,.5); }
+.cert-card.c4 .cert-big-num { color: rgba(168,85,247,.5); }
+.cert-card:hover .cert-big-num { filter: brightness(1.4); }
+
+.cert-year-badge { font-size: .56rem; letter-spacing: .12em; text-transform: uppercase; padding: .22rem .65rem; border: 1px solid var(--border); color: var(--text-dim); }
+.cert-card.c1 .cert-year-badge { border-color: rgba(200,255,0,.25); color: var(--accent1); }
+.cert-card.c2 .cert-year-badge { border-color: rgba(0,212,255,.25); color: var(--accent3); }
+.cert-card.c3 .cert-year-badge { border-color: rgba(255,59,110,.25); color: var(--accent2); }
+.cert-card.c4 .cert-year-badge { border-color: rgba(168,85,247,.25); color: var(--purple); }
+
+.cert-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; line-height: 1.2; margin-bottom: .4rem; }
+.cert-issuer { font-size: .72rem; color: var(--text-dim); margin-bottom: 1rem; }
+.cert-desc { font-size: .72rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 1.25rem; }
+.cert-skills { display: flex; flex-wrap: wrap; gap: .3rem; }
+.cert-skill { font-size: .54rem; letter-spacing: .07em; text-transform: uppercase; padding: .15rem .45rem; background: var(--bg); border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); }
+
+/* ════════════════════════════════
+   COURSEWORK TAB
+════════════════════════════════ */
+.course-intro { display: grid; grid-template-columns: 1fr 280px; gap: 2px; margin-bottom: 3rem; }
+.course-intro-text {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 2rem; border-left: 3px solid var(--accent3);
+}
+.course-intro-title { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: .6rem; }
+.course-intro-desc { font-size: .78rem; color: var(--text-dim); line-height: 1.8; }
+.course-intro-meta { background: var(--surface); border: 1px solid var(--border); padding: 2rem; }
+.course-meta-item { margin-bottom: .85rem; }
+.course-meta-item:last-child { margin-bottom: 0; }
+.course-meta-key { font-size: .55rem; letter-spacing: .15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: .2rem; }
+.course-meta-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .82rem; }
+
+/* Subject groups */
+.subject-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.subject-group { background: var(--surface); border: 1px solid var(--border); padding: 1.75rem 2rem; }
+.sg-header { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+.sg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.sg-title { font-family: 'Syne', sans-serif; font-size: .85rem; font-weight: 700; }
+.sg-count { font-size: .58rem; color: var(--text-dim); margin-left: auto; }
+.sg-subjects { display: flex; flex-direction: column; gap: 0; }
+.sg-subject-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .65rem 0; border-bottom: 1px solid var(--border);
+  transition: padding-left .2s;
+}
+.sg-subject-row:last-child { border-bottom: none; }
+.sg-subject-row:hover { padding-left: .5rem; }
+.sg-subject-name { font-size: .72rem; color: var(--text); }
+.sg-subject-sem { font-size: .56rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); }
+
+/* ════════════════════════════════
+   DEGREE DETAIL OVERLAY
+════════════════════════════════ */
+.degree-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: var(--bg); overflow-y: auto;
+  animation: overlayIn .35s ease;
+}
+.degree-overlay.open { display: block; }
+@keyframes overlayIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:none;} }
+
+.read-progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: var(--border); z-index: 600; }
+.read-progress-fill { height: 100%; background: var(--accent1); width: 0%; transition: width .1s; }
+
+.overlay-nav {
+  position: sticky; top: 0; background: rgba(10,10,15,.95);
+  backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+  padding: 1rem 3rem; display: flex; align-items: center;
+  justify-content: space-between; z-index: 10;
+}
+.overlay-back {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-dim); background: none; border: none; transition: color .2s;
+}
+.overlay-back:hover { color: var(--accent1); }
+.overlay-nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: .9rem; text-decoration: none; color: var(--text); }
+.overlay-nav-brand span { color: var(--accent1); }
+
+.degree-detail { max-width: 900px; margin: 0 auto; padding: 4rem 3rem 6rem; }
+
+.degree-header-area {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 2rem; align-items: start; margin-bottom: 3rem;
+}
+.degree-badge-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .75rem; }
+.degree-cat-badge { font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; padding: .22rem .65rem; border-radius: 1px; }
+.degree-title-large {
+  font-family: 'Fraunces', serif; font-size: clamp(1.8rem,4vw,3rem);
+  font-weight: 700; line-height: 1.05; letter-spacing: -.02em; margin-bottom: .35rem;
+}
+.degree-school-large { font-size: 1rem; color: var(--accent3); margin-bottom: .25rem; }
+.degree-period-large { font-size: .7rem; color: var(--text-dim); letter-spacing: .08em; margin-bottom: 1.25rem; }
+.degree-lead {
+  font-size: .88rem; color: var(--text-dim); line-height: 1.85;
+  padding: 1.25rem; border-left: 3px solid var(--accent1);
+  background: var(--surface);
+}
+
+.degree-meta-box { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; min-width: 200px; }
+.meta-item { margin-bottom: 1.1rem; }
+.meta-item:last-child { margin-bottom: 0; }
+.meta-label { font-size: .55rem; letter-spacing: .15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: .3rem; }
+.meta-value { font-family: 'Syne', sans-serif; font-weight: 600; font-size: .82rem; }
+.meta-tags { display: flex; flex-direction: column; gap: .3rem; }
+.meta-tag { font-size: .6rem; letter-spacing: .07em; padding: .22rem .6rem; border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); }
+
+.degree-body { font-size: .84rem; line-height: 1.9; color: var(--text-dim); }
+.degree-body h2 { font-family: 'Fraunces', serif; font-size: 1.55rem; font-weight: 700; color: var(--text); margin: 2.5rem 0 .9rem; line-height: 1.1; }
+.degree-body h3 { font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 700; color: var(--text); margin: 1.75rem 0 .65rem; letter-spacing: .03em; text-transform: uppercase; }
+.degree-body p { margin-bottom: 1.1rem; }
+.degree-body strong { color: var(--text); font-weight: 600; }
+.degree-body ul, .degree-body ol { padding-left: 1.5rem; margin-bottom: 1.1rem; }
+.degree-body li { margin-bottom: .45rem; }
+.degree-body li::marker { color: var(--accent1); }
+.degree-body blockquote { border-left: 3px solid var(--accent3); padding: .9rem 1.4rem; margin: 1.5rem 0; background: var(--surface); color: var(--text); font-style: italic; }
+
+.highlight-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin: 2rem 0; }
+.highlight-item { background: var(--surface); padding: 1.25rem; border: 1px solid var(--border); text-align: center; }
+.highlight-num { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 700; color: var(--accent1); line-height: 1; }
+.highlight-label { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin-top: .3rem; }
+
+.callout { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--accent2); padding: 1rem 1.25rem; margin: 1.5rem 0; border-radius: 0 2px 2px 0; }
+.callout-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent2); margin-bottom: .35rem; }
+
+.degree-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.degree-footer-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.degree-footer-tag { font-size: .58rem; letter-spacing: .07em; text-transform: uppercase; padding: .25rem .65rem; border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); }
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+footer { background: var(--surface2); border-top: 1px solid var(--border); padding: 2.5rem 3rem; }
+.footer-inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem; }
+.footer-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; }
+.footer-brand span { color: var(--accent1); }
+.footer-copy { font-size: .62rem; color: var(--text-dim); margin-top: .2rem; }
+.social-links { display: flex; gap: .5rem; justify-content: center; }
+.social-link { width: 44px; height: 44px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--text-dim); transition: all .3s; position: relative; overflow: hidden; }
+.social-link::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .3s; }
+.social-link.instagram::before { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+.social-link.twitter::before { background: #000; }
+.social-link.linkedin::before { background: #0077b5; }
+.social-link.github::before { background: #333; }
+.social-link:hover::before { opacity: 1; }
+.social-link:hover { border-color: transparent; color: white; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.3); }
+.social-link svg { width: 17px; height: 17px; position: relative; z-index: 1; fill: currentColor; }
+.footer-right { text-align: right; font-size: .62rem; color: var(--text-dim); line-height: 1.85; }
+.footer-right a { color: var(--accent1); text-decoration: none; }
+
+/* ════════════════════════════════
+   SCROLL REVEAL
+════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media (max-width: 1100px) {
+  .edu-layout { grid-template-columns: 1fr; }
+  .edu-sidebar { display: none; }
+  .cert-section-intro { grid-template-columns: 1fr 1fr; }
+  .course-intro { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr auto; }
+  .footer-right { display: none; }
+}
+@media (max-width: 768px) {
+  nav, .study-hero, .tab-bar, .page-body, footer { padding-left: 1.1rem; padding-right: 1.1rem; }
+  .nav-links, .nav-status { display: none; }
+  .hamburger { display: flex; }
+  .study-hero { padding-top: 120px; padding-bottom: 50px; }
+  .hero-title { font-size: clamp(2.5rem,12vw,5rem); }
+  .hero-deco { display: none; }
+  .study-stats { flex-wrap: wrap; }
+  .edu-entries { padding-left: 1.5rem; }
+  .cert-section-intro { grid-template-columns: 1fr; }
+  .cert-grid { grid-template-columns: 1fr; }
+  .subject-groups { grid-template-columns: 1fr; }
+  .degree-header-area { grid-template-columns: 1fr; }
+  .degree-meta-box { min-width: unset; }
+  .highlight-box { grid-template-columns: repeat(2,1fr); }
+  .overlay-nav { padding: 1rem 1.25rem; }
+  .degree-detail { padding: 2rem 1.25rem 4rem; }
+  .footer-inner { grid-template-columns: 1fr; text-align: center; gap: 1.25rem; }
+}
+@media (max-width: 480px) {
+  .highlight-box { grid-template-columns: 1fr; }
+  .cert-section-intro { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="read-progress"><div class="read-progress-fill" id="progressFill"></div></div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="index.html" class="nav-logo">Yuvaraj<span>.</span>Pandian</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="works.html">Works</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="study.html" class="active">Study</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>Eager to Contribute &amp; Grow</div>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="works.html">Works</a>
+  <a href="experience.html">Experience</a>
+  <a href="study.html">Study</a>
+  <a href="blog.html">Blog</a>
+  <a href="index.html#contact">Contact</a>
+  <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="study-hero">
+  <div class="hero-dot-bg"></div>
+
+  <!-- Animated deco blocks -->
+  <div class="hero-deco">
+    <div class="hero-deco-block">MCA · Anna University · 2025</div>
+    <div class="hero-deco-block">CGPA 7.6 / 10</div>
+    <div class="hero-deco-block">BCA · DR MGR · 2023</div>
+    <div class="hero-deco-block">Graduated with Distinction</div>
+  </div>
+
+  <a href="index.html" class="back-link reveal">← Back to Portfolio</a>
+  <div class="hero-eyebrow reveal">Academic Background</div>
+  <h1 class="hero-title reveal">
+    <div>Education</div>
+    <div class="italic">&amp; Study<span class="dot">.</span></div>
+  </h1>
+  <p class="hero-desc reveal reveal-delay-1">
+    Five years of formal education across two degrees — from BCA foundations to MCA specialisation — shaped by curiosity, code, and a conviction that learning never really stops.
+  </p>
+  <div class="study-stats reveal reveal-delay-2">
+    <div class="study-stat">
+      <div class="study-stat-num c1">5</div>
+      <div class="study-stat-label">Years Studied</div>
+    </div>
+    <div class="study-stat">
+      <div class="study-stat-num c2">2</div>
+      <div class="study-stat-label">Degrees</div>
+    </div>
+    <div class="study-stat">
+      <div class="study-stat-num c3">4</div>
+      <div class="study-stat-label">Certifications</div>
+    </div>
+    <div class="study-stat">
+      <div class="study-stat-num c4">7.6</div>
+      <div class="study-stat-label">MCA CGPA</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB BAR ══ -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="education">Degrees</button>
+  <button class="tab-btn cert-tab" data-tab="certifications">Certifications</button>
+  <button class="tab-btn course-tab" data-tab="coursework">Coursework</button>
+</div>
+
+<!-- ══ PAGE BODY ══ -->
+<div class="page-body">
+
+  <!-- ─────────────────────────
+       DEGREES TAB
+  ─────────────────────────── -->
+  <div class="tab-panel active" id="panel-education">
+    <div class="edu-layout">
+
+      <!-- Left sidebar -->
+      <div class="edu-sidebar">
+        <div class="edu-sidebar-inner">
+          <div class="edu-summary-card reveal">
+            <div class="edu-summary-years">5</div>
+            <div class="edu-summary-label">Years of Education</div>
+            <div class="edu-summary-divider"></div>
+            <div class="edu-summary-row">
+              <span class="edu-summary-key">PG Degree</span>
+              <span class="edu-summary-val">MCA</span>
+            </div>
+            <div class="edu-summary-row">
+              <span class="edu-summary-key">UG Degree</span>
+              <span class="edu-summary-val">BCA</span>
+            </div>
+            <div class="edu-summary-row">
+              <span class="edu-summary-key">PG CGPA</span>
+              <span class="edu-summary-val">7.6 / 10</span>
+            </div>
+            <div class="edu-summary-row">
+              <span class="edu-summary-key">UG Result</span>
+              <span class="edu-summary-val">Distinction</span>
+            </div>
+          </div>
+          <div class="edu-path-legend reveal reveal-delay-1">
+            <div class="edu-path-item">
+              <div class="edu-path-dot" style="background:var(--accent1)"></div>
+              MCA — Postgraduate
+            </div>
+            <div class="edu-path-item">
+              <div class="edu-path-dot" style="background:var(--purple)"></div>
+              BCA — Undergraduate
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right entries -->
+      <div class="edu-entries">
+
+        <!-- MCA -->
+        <div class="edu-entry mca" data-degree="deg-mca">
+          <div class="edu-node mca"></div>
+          <div class="edu-connector"></div>
+          <div class="edu-card reveal">
+            <div class="edu-card-top">
+              <div class="edu-period-badge">2023 — 2025</div>
+              <div class="edu-type-badges">
+                <span class="edu-badge badge-pg">Postgraduate</span>
+                <span class="edu-badge badge-dist">7.6 CGPA</span>
+              </div>
+            </div>
+            <div class="edu-icon-row">
+              <div class="edu-icon-box">🎓</div>
+              <div style="flex:1;">
+                <div class="edu-degree-name">Master in Computer Applications</div>
+                <div class="edu-school-name">Anna University</div>
+                <div class="edu-location">Chennai, Tamil Nadu · Full-time</div>
+              </div>
+              <div class="edu-gpa-display">
+                <div class="edu-gpa-num">7.6</div>
+                <div class="edu-gpa-label">CGPA / 10</div>
+              </div>
+            </div>
+            <p class="edu-desc-text">
+              Specialised in advanced software engineering, distributed systems, and database architecture. Completed an AR-based capstone project using Google AR Core and Firebase — the most technically demanding work of the degree.
+            </p>
+            <div class="edu-subjects">
+              <span class="edu-subject">Advanced Java</span>
+              <span class="edu-subject">Distributed Systems</span>
+              <span class="edu-subject">Algorithm Design</span>
+              <span class="edu-subject">Database Management</span>
+              <span class="edu-subject">Software Engineering</span>
+              <span class="edu-subject">Cloud Computing</span>
+              <span class="edu-subject">Mobile Development</span>
+              <span class="edu-subject">Network Security</span>
+            </div>
+            <div class="edu-card-footer">
+              <div class="edu-highlights">
+                <div class="edu-hl">
+                  <div class="edu-hl-num">2</div>
+                  <div class="edu-hl-label">Years</div>
+                </div>
+                <div class="edu-hl">
+                  <div class="edu-hl-num">7.6</div>
+                  <div class="edu-hl-label">CGPA</div>
+                </div>
+                <div class="edu-hl">
+                  <div class="edu-hl-num">1</div>
+                  <div class="edu-hl-label">AR Project</div>
+                </div>
+              </div>
+              <button class="edu-cta" data-degree="deg-mca">View Details →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BCA -->
+        <div class="edu-entry bca" data-degree="deg-bca">
+          <div class="edu-node bca"></div>
+          <div class="edu-connector"></div>
+          <div class="edu-card reveal reveal-delay-1">
+            <div class="edu-card-top">
+              <div class="edu-period-badge">2020 — 2023</div>
+              <div class="edu-type-badges">
+                <span class="edu-badge badge-ug">Undergraduate</span>
+                <span class="edu-badge badge-dist">Distinction</span>
+              </div>
+            </div>
+            <div class="edu-icon-row">
+              <div class="edu-icon-box">📐</div>
+              <div style="flex:1;">
+                <div class="edu-degree-name">Bachelor in Computer Applications</div>
+                <div class="edu-school-name">DR MGR Educational and Research Institute</div>
+                <div class="edu-location">Chennai, Tamil Nadu · Full-time</div>
+              </div>
+              <div class="edu-gpa-display">
+                <div class="edu-gpa-num">Dist.</div>
+                <div class="edu-gpa-label">Graduated</div>
+              </div>
+            </div>
+            <p class="edu-desc-text">
+              Three-year foundation degree covering programming fundamentals, web development, database systems, and software methodology. Graduated with Distinction — first serious exposure to Java led directly to the Apollo Computers certification.
+            </p>
+            <div class="edu-subjects">
+              <span class="edu-subject">Core Java</span>
+              <span class="edu-subject">Web Development</span>
+              <span class="edu-subject">Database Systems</span>
+              <span class="edu-subject">Data Structures</span>
+              <span class="edu-subject">OOP Concepts</span>
+              <span class="edu-subject">Computer Networks</span>
+              <span class="edu-subject">Operating Systems</span>
+              <span class="edu-subject">Mathematics</span>
+            </div>
+            <div class="edu-card-footer">
+              <div class="edu-highlights">
+                <div class="edu-hl">
+                  <div class="edu-hl-num">3</div>
+                  <div class="edu-hl-label">Years</div>
+                </div>
+                <div class="edu-hl">
+                  <div class="edu-hl-num">1st</div>
+                  <div class="edu-hl-label">Class</div>
+                </div>
+                <div class="edu-hl">
+                  <div class="edu-hl-num">1</div>
+                  <div class="edu-hl-label">Cert Earned</div>
+                </div>
+              </div>
+              <button class="edu-cta" data-degree="deg-bca">View Details →</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /edu-entries -->
+    </div><!-- /edu-layout -->
+  </div><!-- /panel-education -->
+
+  <!-- ─────────────────────────
+       CERTIFICATIONS TAB
+  ─────────────────────────── -->
+  <div class="tab-panel" id="panel-certifications">
+
+    <div class="cert-section-intro reveal">
+      <div class="cert-intro-stat">
+        <div class="cert-intro-icon">🏆</div>
+        <div>
+          <div class="cert-intro-num">4</div>
+          <div class="cert-intro-label">Certifications Earned</div>
+        </div>
+      </div>
+      <div class="cert-intro-stat">
+        <div class="cert-intro-icon">📅</div>
+        <div>
+          <div class="cert-intro-num" style="color:var(--accent3);">2021–25</div>
+          <div class="cert-intro-label">Span of Learning</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cert-grid">
+
+      <!-- Cert 01 -->
+      <div class="cert-card c1 reveal">
+        <div class="cert-card-top">
+          <div class="cert-big-num">01</div>
+          <div class="cert-year-badge">2021</div>
+        </div>
+        <div class="cert-name">Core Java Certified</div>
+        <div class="cert-issuer">Apollo Computers · Chennai</div>
+        <p class="cert-desc">Formal certification in Core Java covering OOP principles, exception handling, collections framework, multithreading, and file I/O. The foundation that enabled all subsequent Java work.</p>
+        <div class="cert-skills">
+          <span class="cert-skill">OOP</span>
+          <span class="cert-skill">Collections</span>
+          <span class="cert-skill">Multithreading</span>
+          <span class="cert-skill">Exception Handling</span>
+          <span class="cert-skill">File I/O</span>
+        </div>
+      </div>
+
+      <!-- Cert 02 -->
+      <div class="cert-card c2 reveal reveal-delay-1">
+        <div class="cert-card-top">
+          <div class="cert-big-num">02</div>
+          <div class="cert-year-badge">2025</div>
+        </div>
+        <div class="cert-name">AI Tools Certification</div>
+        <div class="cert-issuer">Be10X · Online</div>
+        <p class="cert-desc">Practical certification covering AI productivity tools, prompt engineering fundamentals, and integrating AI assistants into development and content workflows for measurable efficiency gains.</p>
+        <div class="cert-skills">
+          <span class="cert-skill">Prompt Engineering</span>
+          <span class="cert-skill">AI Workflows</span>
+          <span class="cert-skill">ChatGPT</span>
+          <span class="cert-skill">Productivity Tools</span>
+        </div>
+      </div>
+
+      <!-- Cert 03 -->
+      <div class="cert-card c3 reveal">
+        <div class="cert-card-top">
+          <div class="cert-big-num">03</div>
+          <div class="cert-year-badge">2025</div>
+        </div>
+        <div class="cert-name">Multimodal AI</div>
+        <div class="cert-issuer">Global Techno Solutions · Chennai</div>
+        <p class="cert-desc">Advanced certification on multimodal AI systems — covering vision-language models, combining text, image, and audio modalities, and practical applications in product development and analysis.</p>
+        <div class="cert-skills">
+          <span class="cert-skill">Vision-Language Models</span>
+          <span class="cert-skill">Multimodal AI</span>
+          <span class="cert-skill">Model Evaluation</span>
+          <span class="cert-skill">AI Applications</span>
+        </div>
+      </div>
+
+      <!-- Cert 04 -->
+      <div class="cert-card c4 reveal reveal-delay-1">
+        <div class="cert-card-top">
+          <div class="cert-big-num">04</div>
+          <div class="cert-year-badge">2023</div>
+        </div>
+        <div class="cert-name">Java Software Developer</div>
+        <div class="cert-issuer">Shiash Info Solutions · Chennai</div>
+        <p class="cert-desc">Industry certification awarded on completion of the Java developer internship at Shiash Info Solutions. Validates production-level Java development experience including J2EE, REST API design, and MVC architecture.</p>
+        <div class="cert-skills">
+          <span class="cert-skill">Java EE</span>
+          <span class="cert-skill">REST APIs</span>
+          <span class="cert-skill">MVC Pattern</span>
+          <span class="cert-skill">MySQL</span>
+          <span class="cert-skill">Servlet / JSP</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /panel-certifications -->
+
+  <!-- ─────────────────────────
+       COURSEWORK TAB
+  ─────────────────────────── -->
+  <div class="tab-panel" id="panel-coursework">
+
+    <div class="course-intro reveal">
+      <div class="course-intro-text">
+        <div class="course-intro-title">5 Years of Structured Learning</div>
+        <p class="course-intro-desc">From BCA fundamentals to MCA advanced topics — the full picture of academic coursework that underpins the skills applied professionally. Each subject below was completed as part of a formal university curriculum.</p>
+      </div>
+      <div class="course-intro-meta">
+        <div class="course-meta-item">
+          <div class="course-meta-key">Total Duration</div>
+          <div class="course-meta-val">5 Years (2020–2025)</div>
+        </div>
+        <div class="course-meta-item">
+          <div class="course-meta-key">PG Institution</div>
+          <div class="course-meta-val">Anna University</div>
+        </div>
+        <div class="course-meta-item">
+          <div class="course-meta-key">UG Institution</div>
+          <div class="course-meta-val">DR MGR Institute</div>
+        </div>
+        <div class="course-meta-item">
+          <div class="course-meta-key">Core Focus</div>
+          <div class="course-meta-val">Computer Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subject-groups">
+
+      <!-- MCA Core -->
+      <div class="subject-group reveal">
+        <div class="sg-header">
+          <div class="sg-dot" style="background:var(--accent1)"></div>
+          <div class="sg-title">MCA Core Subjects</div>
+          <div class="sg-count">Anna University · 2023–25</div>
+        </div>
+        <div class="sg-subjects">
+          <div class="sg-subject-row"><span class="sg-subject-name">Advanced Java Programming</span><span class="sg-subject-sem">Sem 1</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Design & Analysis of Algorithms</span><span class="sg-subject-sem">Sem 1</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Advanced Database Management</span><span class="sg-subject-sem">Sem 1</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Software Engineering & Testing</span><span class="sg-subject-sem">Sem 2</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Distributed Systems</span><span class="sg-subject-sem">Sem 2</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Cloud Computing</span><span class="sg-subject-sem">Sem 2</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Mobile Application Development</span><span class="sg-subject-sem">Sem 3</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Network Security & Cryptography</span><span class="sg-subject-sem">Sem 3</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Project Work (AR Application)</span><span class="sg-subject-sem">Sem 4</span></div>
+        </div>
+      </div>
+
+      <!-- BCA Core -->
+      <div class="subject-group reveal reveal-delay-1">
+        <div class="sg-header">
+          <div class="sg-dot" style="background:var(--purple)"></div>
+          <div class="sg-title">BCA Core Subjects</div>
+          <div class="sg-count">DR MGR Institute · 2020–23</div>
+        </div>
+        <div class="sg-subjects">
+          <div class="sg-subject-row"><span class="sg-subject-name">Programming in C &amp; C++</span><span class="sg-subject-sem">Year 1</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Core Java Programming</span><span class="sg-subject-sem">Year 1</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Data Structures &amp; Algorithms</span><span class="sg-subject-sem">Year 1</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Database Management Systems</span><span class="sg-subject-sem">Year 2</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Web Technologies (HTML/CSS/JS)</span><span class="sg-subject-sem">Year 2</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Operating Systems</span><span class="sg-subject-sem">Year 2</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Computer Networks</span><span class="sg-subject-sem">Year 3</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Software Engineering</span><span class="sg-subject-sem">Year 3</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Project Work</span><span class="sg-subject-sem">Year 3</span></div>
+        </div>
+      </div>
+
+      <!-- Electives / Labs -->
+      <div class="subject-group reveal">
+        <div class="sg-header">
+          <div class="sg-dot" style="background:var(--accent3)"></div>
+          <div class="sg-title">Electives &amp; Lab Work</div>
+          <div class="sg-count">Both Degrees</div>
+        </div>
+        <div class="sg-subjects">
+          <div class="sg-subject-row"><span class="sg-subject-name">Artificial Intelligence Elective</span><span class="sg-subject-sem">MCA</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Machine Learning Fundamentals</span><span class="sg-subject-sem">MCA</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Advanced Java Lab</span><span class="sg-subject-sem">MCA</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Mobile Dev Lab (Android)</span><span class="sg-subject-sem">MCA</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Internet of Things</span><span class="sg-subject-sem">MCA</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Java Programming Lab</span><span class="sg-subject-sem">BCA</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Web Development Lab</span><span class="sg-subject-sem">BCA</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">DBMS Lab</span><span class="sg-subject-sem">BCA</span></div>
+        </div>
+      </div>
+
+      <!-- Self-Learning -->
+      <div class="subject-group reveal reveal-delay-1">
+        <div class="sg-header">
+          <div class="sg-dot" style="background:var(--accent2)"></div>
+          <div class="sg-title">Self-Directed Learning</div>
+          <div class="sg-count">Ongoing</div>
+        </div>
+        <div class="sg-subjects">
+          <div class="sg-subject-row"><span class="sg-subject-name">Selenium WebDriver &amp; TestNG</span><span class="sg-subject-sem">2026</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">OWASP Top 10 Security</span><span class="sg-subject-sem">2026</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">eCommerce SEO &amp; Content</span><span class="sg-subject-sem">2026</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Angular Framework</span><span class="sg-subject-sem">2026</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Prompt Engineering</span><span class="sg-subject-sem">2025</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Multimodal AI Systems</span><span class="sg-subject-sem">2025</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Firebase &amp; Cloud Backend</span><span class="sg-subject-sem">2024</span></div>
+          <div class="sg-subject-row"><span class="sg-subject-name">Google AR Core</span><span class="sg-subject-sem">2024</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /panel-coursework -->
+
+</div><!-- /page-body -->
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Yuvaraj<span>.</span>Pandian</div>
+      <div class="footer-copy">© 2026 Yuvaraj Pandian. All rights reserved.</div>
+    </div>
+    <div class="social-links">
+      <a href="https://www.instagram.com/_yuviii_24?igsh=bW5mMjdrZ2lhbjRx" target="_blank" rel="noopener" class="social-link instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://x.com/Yuvaraj241003" target="_blank" rel="noopener" class="social-link twitter">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/yuvaraj-pandian24" target="_blank" rel="noopener" class="social-link linkedin">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://github.com/yuvarajpandiyan24" target="_blank" rel="noopener" class="social-link github">
+        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+    </div>
+    <div class="footer-right">
+      <div>Designed &amp; built with ♥</div>
+      <div>by <a href="index.html">Yuvaraj Pandian</a></div>
+      <div style="margin-top:.4rem;font-size:.58rem;">v2026.03</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ DEGREE DETAIL OVERLAY ══ -->
+<div class="degree-overlay" id="degreeOverlay">
+  <div class="overlay-nav">
+    <button class="overlay-back" id="overlayBack">← Back to Study</button>
+    <a href="index.html" class="overlay-nav-brand">Yuvaraj<span>.</span>Pandian</a>
+  </div>
+  <div class="degree-detail" id="degreeDetail"></div>
+</div>
+
+<!-- ══ DEGREE DATA + JS ══ -->
+<script>
+const DEGREES = {
+  'deg-mca': {
+    title: 'Master in Computer Applications',
+    short: 'MCA',
+    school: 'Anna University',
+    period: '2023 — 2025',
+    type: 'Postgraduate · Full-time · Chennai, Tamil Nadu',
+    badges: [
+      { label: 'Postgraduate', cls: 'badge-pg' },
+      { label: '7.6 CGPA',    cls: 'badge-dist' }
+    ],
+    tags: ['Java','Android','AR Core','Firebase','Distributed Systems','Cloud','Network Security','Algorithms'],
+    lead: 'A two-year postgraduate degree at Anna University that pushed beyond undergraduate foundations into advanced software engineering, distributed systems, and mobile development — culminating in an AR-based capstone that became the most technically demanding work of the degree.',
+    meta: { Institution: 'Anna University', Duration: '2 Years', Result: '7.6 CGPA / 10', Mode: 'Full-time' },
+    body: `
+      <h2>Why MCA After BCA?</h2>
+      <p>A BCA gives you the vocabulary. An MCA gives you the depth. The decision to pursue a postgraduate degree was driven by a specific ambition: to move from knowing how to write Java code to understanding <strong>why software systems are designed the way they are</strong>, what breaks them at scale, and how to build things that survive production.</p>
+      <p>Anna University's MCA programme delivered exactly that — a curriculum that treated software not as a collection of syntax rules but as an engineering discipline with real tradeoffs.</p>
+
+      <div class="highlight-box">
+        <div class="highlight-item"><div class="highlight-num">7.6</div><div class="highlight-label">CGPA / 10</div></div>
+        <div class="highlight-item"><div class="highlight-num">4</div><div class="highlight-label">Semesters</div></div>
+        <div class="highlight-item"><div class="highlight-num">1</div><div class="highlight-label">AR Capstone</div></div>
+      </div>
+
+      <h2>Academic Focus Areas</h2>
+
+      <h3>Advanced Software Engineering</h3>
+      <p>Formal treatment of software development lifecycle models, design patterns (GoF), architecture styles (microservices, layered, event-driven), and quality metrics. The SOLID principles stopped being a checklist and became a design instinct during this phase.</p>
+
+      <h3>Distributed Systems</h3>
+      <p>Covered CAP theorem, consensus algorithms, distributed databases, message queues, and fault tolerance design. The core insight that stayed: in distributed systems, <strong>failure is not an exception — it's a first-class design constraint</strong>.</p>
+
+      <h3>Network Security & Cryptography</h3>
+      <p>Formal academic grounding in the security concepts applied professionally — public key infrastructure, AES/RSA encryption, authentication protocols, and attack taxonomies. This course directly informed the AEGIS gateway security project.</p>
+
+      <h3>Capstone: AR Learning Application</h3>
+      <p>The final semester project — an Android AR application using Google AR Core and Firebase — was the most technically ambitious work of the degree. It combined three independent technical domains (AR rendering, cloud data delivery, Android lifecycle management) into a single working product.</p>
+
+      <div class="callout">
+        <div class="callout-title">📌 Most Valuable Lesson</div>
+        The seminar on software testing in Semester 2 introduced the concept of test coverage as a design metric, not just a quality gate. That shift in perspective directly led to the QA automation work at Tradesala.
+      </div>
+
+      <h2>Academic Outcome</h2>
+      <p>Graduated with a 7.6 CGPA. More importantly, graduated with a working mental model of how software systems fail and how to design against those failure modes — which is the thing that academic programmes are supposed to deliver but rarely do.</p>
+    `
+  },
+  'deg-bca': {
+    title: 'Bachelor in Computer Applications',
+    short: 'BCA',
+    school: 'DR MGR Educational and Research Institute',
+    period: '2020 — 2023',
+    type: 'Undergraduate · Full-time · Chennai, Tamil Nadu',
+    badges: [
+      { label: 'Undergraduate', cls: 'badge-ug' },
+      { label: 'Distinction',   cls: 'badge-dist' }
+    ],
+    tags: ['Java','C','C++','HTML/CSS','JavaScript','MySQL','Data Structures','OOP'],
+    lead: 'A three-year undergraduate degree that built the programming foundation — from first-principles C to object-oriented Java, from basic SQL to relational database design — graduating with Distinction and a Core Java certification earned mid-degree.',
+    meta: { Institution: 'DR MGR Institute', Duration: '3 Years', Result: 'Distinction', Mode: 'Full-time' },
+    body: `
+      <h2>Where It Started</h2>
+      <p>Every technical career has a starting point — a moment where "writing code" becomes something that feels like yours. For me, it was a first-year C programming lab at DR MGR Educational and Research Institute. The satisfying determinism of it: you write this, the machine does that, exactly, every time.</p>
+      <p>BCA was three years of building that instinct systematically — starting from procedural C, moving through object-oriented Java, adding data structures, databases, networking, and web fundamentals in layers until the picture started to cohere.</p>
+
+      <div class="highlight-box">
+        <div class="highlight-item"><div class="highlight-num">3</div><div class="highlight-label">Years</div></div>
+        <div class="highlight-item"><div class="highlight-num">Dist.</div><div class="highlight-label">Graduated</div></div>
+        <div class="highlight-item"><div class="highlight-num">1</div><div class="highlight-label">Certification</div></div>
+      </div>
+
+      <h2>Key Academic Threads</h2>
+
+      <h3>Programming Foundations (Year 1)</h3>
+      <p>C programming, then C++, then Core Java. Each language introduced a new level of abstraction — from manual memory management in C to inheritance hierarchies in Java. The transition from procedural to object-oriented thinking remains one of the most formative conceptual shifts of the degree.</p>
+
+      <h3>Data Structures & Algorithms (Year 1–2)</h3>
+      <p>The most practically durable content of the degree. Arrays, linked lists, trees, graphs, sorting algorithms, searching, dynamic programming. The ability to think about time and space complexity before writing a single line of code comes from here.</p>
+
+      <h3>Database Systems (Year 2)</h3>
+      <p>Relational model, normalisation, SQL, transactions, and indexing. The academic foundation that made production MySQL work at Shiash Info Solutions immediately comprehensible — joining tables in a real database feels different when you understand why joins work the way they do.</p>
+
+      <h3>Web Technologies (Year 2–3)</h3>
+      <p>HTML, CSS, JavaScript, and basic PHP. The web stack introduced a different kind of programming — event-driven, stateless, focused on user experience rather than computation. This was the first exposure to frontend thinking.</p>
+
+      <div class="callout">
+        <div class="callout-title">🏆 Highlight</div>
+        Mid-degree, the Java coursework motivated a Core Java certification with Apollo Computers. It was the first external validation of technical skills — and the first signal that the BCA was building something genuinely useful, not just academically sufficient.
+      </div>
+
+      <h2>Outcome</h2>
+      <p>Graduated with Distinction. The degree provided exactly what an undergraduate degree should: a wide foundation that makes specialisation possible. The MCA could not have been navigated without it.</p>
+    `
+  }
+};
+
+/* ── Cursor ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+if (window.matchMedia('(hover: hover)').matches) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = (e.clientX - 5) + 'px';
+    cursor.style.top  = (e.clientY - 5) + 'px';
+    ring.style.left   = (e.clientX - 18) + 'px';
+    ring.style.top    = (e.clientY - 18) + 'px';
+  });
+  document.querySelectorAll('a, button, .edu-entry, .cert-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; ring.style.transform = 'scale(1.5)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.transform = 'scale(1)'; });
+  });
+}
+
+/* ── Hamburger ── */
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-menu a').forEach(l => l.addEventListener('click', () => {
+  hamburger.classList.remove('open'); mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}));
+
+/* ── Scroll Reveal ── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ── Tabs ── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ── Degree Overlay ── */
+const overlay     = document.getElementById('degreeOverlay');
+const degDetail   = document.getElementById('degreeDetail');
+const progFill    = document.getElementById('progressFill');
+
+function buildDegreeHTML(deg) {
+  const badgesHTML   = deg.badges.map(b => `<span class="degree-cat-badge ${b.cls}">${b.label}</span>`).join('');
+  const tagsHTML     = deg.tags.map(t => `<span class="degree-footer-tag">${t}</span>`).join('');
+  const metaRowsHTML = Object.entries(deg.meta).map(([k,v]) =>
+    `<div class="meta-item"><div class="meta-label">${k}</div><div class="meta-value">${v}</div></div>`
+  ).join('');
+  const metaTagsHTML = deg.tags.map(t => `<div class="meta-tag">${t}</div>`).join('');
+
+  return `
+    <div class="degree-header-area">
+      <div>
+        <div class="degree-badge-row">${badgesHTML}</div>
+        <h1 class="degree-title-large">${deg.title}</h1>
+        <div class="degree-school-large">${deg.school}</div>
+        <div class="degree-period-large">${deg.period} · ${deg.type}</div>
+        <div class="degree-lead">${deg.lead}</div>
+      </div>
+      <div class="degree-meta-box">
+        ${metaRowsHTML}
+        <div class="meta-item">
+          <div class="meta-label">Key Topics</div>
+          <div class="meta-tags">${metaTagsHTML}</div>
+        </div>
+      </div>
+    </div>
+    <div class="degree-body">${deg.body}</div>
+    <div class="degree-footer">
+      <div class="degree-footer-tags">${tagsHTML}</div>
+    </div>
+  `;
+}
+
+function openDegree(degId) {
+  const deg = DEGREES[degId];
+  if (!deg) return;
+  degDetail.innerHTML = buildDegreeHTML(deg);
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  overlay.scrollTop = 0;
+  progFill.style.width = '0%';
+  history.pushState({ degree: degId }, '', '#' + degId);
+}
+
+function closeDegree() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  history.pushState({}, '', window.location.pathname);
+}
+
+// Open via button
+document.querySelectorAll('.edu-cta').forEach(btn => {
+  btn.addEventListener('click', () => openDegree(btn.dataset.degree));
+});
+// Open via card click
+document.querySelectorAll('.edu-entry').forEach(entry => {
+  entry.querySelector('.edu-card').addEventListener('click', e => {
+    if (e.target.classList.contains('edu-cta')) return;
+    openDegree(entry.dataset.degree);
+  });
+});
+
+document.getElementById('overlayBack').addEventListener('click', closeDegree);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDegree(); });
+window.addEventListener('popstate', e => { if (!e.state || !e.state.degree) closeDegree(); });
+
+// Reading progress
+overlay.addEventListener('scroll', () => {
+  const s = overlay.scrollHeight - overlay.clientHeight;
+  progFill.style.width = s > 0 ? (overlay.scrollTop / s * 100) + '%' : '0%';
+});
+
+// Direct URL hash
+if (window.location.hash) {
+  const hash = window.location.hash.slice(1);
+  if (DEGREES[hash]) setTimeout(() => openDegree(hash), 300);
+}
+</script>
+</body>
+</html>
