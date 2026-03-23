@@ -506,6 +506,71 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
   .highlight-box { grid-template-columns: 1fr; }
   .cert-section-intro { grid-template-columns: 1fr; }
 }
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 60px;
+  background: rgba(10,10,15,0.96);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 1.05rem; letter-spacing: -0.02em;
+  color: var(--text); text-decoration: none; flex-shrink: 0;
+}
+.nav-logo span { color: var(--accent1); }
+.nav-links {
+  display: flex; gap: 0; list-style: none;
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+.nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0 0.75rem; height: 60px;
+  display: flex; align-items: center;
+  position: relative; transition: color 0.2s;
+  white-space: nowrap;
+}
+.nav-links a::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0.75rem; right: 0.75rem;
+  height: 2px; background: var(--accent1);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--text); }
+.nav-links a.active::after { transform: scaleX(1); }
+.nav-status {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.1em;
+  color: var(--text-dim); flex-shrink: 0;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  background: var(--accent1); border-radius: 50%;
+  box-shadow: 0 0 6px var(--accent1);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);} }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.mobile-menu { display: none; position: fixed; inset: 0; z-index: 290; background: rgba(10,10,15,.98); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; gap: .5rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(1.6rem,7vw,2.2rem); color: var(--text-dim); text-decoration: none; text-transform: uppercase; padding: .4rem 1rem; transition: color .2s; letter-spacing: -.01em; }
+.mobile-menu a:hover, .mobile-menu a.active { color: var(--accent1); }
+.mobile-menu-footer { position: absolute; bottom: 2rem; font-size: .62rem; color: var(--text-dim); letter-spacing: .15em; }
+@media (max-width: 1200px) { .nav-status { display: none; } }
+@media (max-width: 960px)  { .nav-links { display: none; } .hamburger { display: flex; } }
 </style>
 </head>
 <body>
@@ -522,6 +587,9 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
     <li><a href="works.html">Works</a></li>
     <li><a href="experience.html">Experience</a></li>
     <li><a href="study.html" class="active">Study</a></li>
+    <li><a href="problemsolving.html">Problem Solving</a></li>
+    <li><a href="techstack.html">Tech Stack</a></li>
+    <li><a href="currentlybuilding.html">Under Development</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="index.html#contact">Contact</a></li>
   </ul>
@@ -533,7 +601,10 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
   <a href="index.html">Home</a>
   <a href="works.html">Works</a>
   <a href="experience.html">Experience</a>
-  <a href="study.html">Study</a>
+  <a href="study.html" class="active">Study</a>
+  <a href="problemsolving.html">Problem Solving</a>
+  <a href="techstack.html">Tech Stack</a>
+  <a href="currentlybuilding.html">Under Development</a>
   <a href="blog.html">Blog</a>
   <a href="index.html#contact">Contact</a>
   <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
@@ -802,14 +873,14 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
           <div class="cert-big-num">02</div>
           <div class="cert-year-badge">2025</div>
         </div>
-        <div class="cert-name">Java Software Developer</div>
-        <div class="cert-issuer">Shiash Info Solutions · Chennai</div>
-        <p class="cert-desc">Industry certification awarded on completion of the Java developer internship at Shiash Info Solutions. Validates production-level Java development experience including J2EE, REST API design, and MVC architecture.</p>
+        <div class="cert-name">AI Tools Certification</div>
+        <div class="cert-issuer">Be10X · Online</div>
+        <p class="cert-desc">Practical certification covering AI productivity tools, prompt engineering fundamentals, and integrating AI assistants into development and content workflows for measurable efficiency gains.</p>
         <div class="cert-skills">
-          <span class="cert-skill">Java EE</span>
-          <span class="cert-skill">REST APIs</span>
-          <span class="cert-skill">MySQL</span>
-          <span class="cert-skill">Servlet / JSP</span>
+          <span class="cert-skill">Prompt Engineering</span>
+          <span class="cert-skill">AI Workflows</span>
+          <span class="cert-skill">ChatGPT</span>
+          <span class="cert-skill">Productivity Tools</span>
         </div>
       </div>
 
@@ -836,15 +907,15 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
           <div class="cert-big-num">04</div>
           <div class="cert-year-badge">2023</div>
         </div>
-        <div class="cert-name">AI Tools Certification</div>
-        <div class="cert-issuer">Be10X · Online</div>
-        <p class="cert-desc">Practical certification covering AI productivity tools, prompt engineering fundamentals, and integrating AI assistants into development and content workflows for measurable efficiency gains.</p>
+        <div class="cert-name">Java Software Developer</div>
+        <div class="cert-issuer">Shiash Info Solutions · Chennai</div>
+        <p class="cert-desc">Industry certification awarded on completion of the Java developer internship at Shiash Info Solutions. Validates production-level Java development experience including J2EE, REST API design, and MVC architecture.</p>
         <div class="cert-skills">
-          <span class="cert-skill">Prompt Engineering</span>
-          <span class="cert-skill">AI Workflows</span>
+          <span class="cert-skill">Java EE</span>
+          <span class="cert-skill">REST APIs</span>
           <span class="cert-skill">MVC Pattern</span>
-          <span class="cert-skill">ChatGPT</span>
-          <span class="cert-skill">Productivity Tools</span>
+          <span class="cert-skill">MySQL</span>
+          <span class="cert-skill">Servlet / JSP</span>
         </div>
       </div>
 
