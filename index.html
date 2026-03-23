@@ -44,17 +44,17 @@ body::before {
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 1.2rem 3rem; background: rgba(10,10,15,0.9);
+  padding: 1rem 2rem; background: rgba(10,10,15,0.9);
   backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
 }
 .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; flex-shrink: 0; }
 .nav-logo span { color: var(--accent1); }
 .nav-links { display: flex; gap: 0; list-style: none; }
-.nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.45rem 0.9rem; position: relative; transition: color 0.2s; }
-.nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0.9rem; right: 0.9rem; height: 1px; background: var(--accent1); transform: scaleX(0); transition: transform 0.3s ease; }
+.nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.4rem 0.6rem; position: relative; transition: color 0.2s; }
+.nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0.6rem; right: 0.6rem; height: 1px; background: var(--accent1); transform: scaleX(0); transition: transform 0.3s ease; }
 .nav-links a:hover { color: var(--text); }
 .nav-links a:hover::after { transform: scaleX(1); }
-.nav-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; color: var(--text-dim); flex-shrink: 0; }
+.nav-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.62rem; color: var(--text-dim); flex-shrink: 0; }
 .status-dot { width: 6px; height: 6px; background: var(--accent1); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
 .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; cursor: pointer; }
@@ -69,7 +69,7 @@ nav {
 .mobile-menu-footer { position: absolute; bottom: 2rem; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; }
 
 /* SECTIONS */
-section { min-height: 100vh; padding: 120px 3rem 80px; position: relative; }
+section { min-height: 100vh; padding: 120px 3rem 80px; position: relative; } 
 
 /* HOME */
 #home { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
@@ -389,6 +389,9 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
 .reveal-delay-4 { transition-delay: 0.4s; }
 
 /* ═══ RESPONSIVE ═══ */
+@media (max-width: 1280px) {
+  .nav-status { display: none; }
+}
 @media (max-width: 1100px) {
   nav { padding: 1rem 1.75rem; }
   section { padding: 110px 1.75rem 70px; }
@@ -458,9 +461,9 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
     <li><a href="works.html">Works</a></li>
     <li><a href="experience.html">Experience</a></li>
     <li><a href="study.html">Study</a></li>
-     <li><a href="problemsolving.html">Problem Solving</a></li>
-     <li><a href="techstack.html">Tech Stack</a></li>
-     <li><a href="currentlybuilding.html">Under Development </a></li>
+    <li><a href="problem-solving.html">Problem-Solving</a></li>
+    <li><a href="tech-stack.html">Tech Stack</a></li>
+    <li><a href="currently-building.html">Building</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -479,9 +482,9 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
   <a href="works.html"      class="mobile-nav-link">Works</a>
   <a href="experience.html" class="mobile-nav-link">Experience</a>
   <a href="study.html"      class="mobile-nav-link">Study</a>
-  <a href="problemsolving.html"      class="mobile-nav-link">Problem Solving</a>
-  <a href="techstack.html"      class="mobile-nav-link">Tech Stack</a>
-  <a href="currentlybuilding.html"      class="mobile-nav-link">Under Development</a>
+  <a href="problem-solving.html" class="mobile-nav-link">Problem-Solving</a>
+  <a href="tech-stack.html"      class="mobile-nav-link">Tech Stack</a>
+  <a href="currently-building.html" class="mobile-nav-link">Building</a>
   <a href="blog.html"       class="mobile-nav-link">Blog</a>
   <a href="#contact"    class="mobile-nav-link">Contact</a>
   <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
@@ -504,7 +507,7 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
     I build robust software, break it deliberately to make it bulletproof, then write about the whole experience for the world to learn from. A triple-threat in the digital space.
   </p>
   <div class="hero-cta reveal reveal-delay-3">
-    <a href="#works" class="btn-primary">View My Work</a>
+    <a href="works.html" class="btn-primary">View My Work</a>
     <a href="#contact" class="btn-secondary">Let's talk <span class="arrow">→</span></a>
   </div>
   <div class="hero-decoration">
@@ -564,9 +567,12 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
 
 <!-- WORKS -->
 <section id="works">
-  <div class="section-header">
-    <div class="section-eyebrow">Selected Projects</div>
-    <h2 class="section-title reveal">Featured <span class="italic">Works</span></h2>
+  <div class="blog-header-row reveal" style="margin-bottom:3.5rem;">
+    <div class="section-header" style="margin-bottom:0;">
+      <div class="section-eyebrow">Selected Projects</div>
+      <h2 class="section-title">Featured <span class="italic">Works</span></h2>
+    </div>
+    <a href="works.html" class="blog-view-all">View All Works <span class="arrow">→</span></a>
   </div>
   <div class="works-grid">
     <div class="work-card dev reveal">
@@ -622,9 +628,12 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="section-header">
-    <div class="section-eyebrow">Career Journey</div>
-    <h2 class="section-title reveal">Work <span class="italic">Experience</span></h2>
+  <div class="blog-header-row reveal" style="margin-bottom:3.5rem;">
+    <div class="section-header" style="margin-bottom:0;">
+      <div class="section-eyebrow">Career Journey</div>
+      <h2 class="section-title">Work <span class="italic">Experience</span></h2>
+    </div>
+    <a href="experience.html" class="blog-view-all">View Full Experience <span class="arrow">→</span></a>
   </div>
   <div class="exp-layout">
     <div class="exp-sidebar reveal">
@@ -664,9 +673,12 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
 
 <!-- STUDY -->
 <section id="study">
-  <div class="section-header">
-    <div class="section-eyebrow">Academic Background</div>
-    <h2 class="section-title reveal">Education &amp; <span class="italic">Study</span></h2>
+  <div class="blog-header-row reveal" style="margin-bottom:3.5rem;">
+    <div class="section-header" style="margin-bottom:0;">
+      <div class="section-eyebrow">Academic Background</div>
+      <h2 class="section-title">Education &amp; <span class="italic">Study</span></h2>
+    </div>
+    <a href="study.html" class="blog-view-all">View Full Study <span class="arrow">→</span></a>
   </div>
   <div class="study-grid">
     <div class="study-card reveal">
@@ -688,9 +700,9 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
     <div class="section-eyebrow reveal">Licenses &amp; Certifications</div>
     <div class="cert-list">
       <div class="cert-item reveal"><div class="cert-num">01</div><div><div class="cert-name">Core Java Certified</div><div class="cert-issuer">Apollo Computers · 2021</div></div></div>
-      <div class="cert-item reveal reveal-delay-1"><div class="cert-num">02</div><div><div class="cert-name">Java Software Developer</div><div class="cert-issuer">Shiash Info Solutions · 2023</div></div></div>
+      <div class="cert-item reveal reveal-delay-1"><div class="cert-num">02</div><div><div class="cert-name">AI Tools</div><div class="cert-issuer">Be10X · 2025</div></div></div>
       <div class="cert-item reveal reveal-delay-2"><div class="cert-num">03</div><div><div class="cert-name">Multimodal AI</div><div class="cert-issuer">Global Techno Solutions · 2025</div></div></div>
-      <div class="cert-item reveal reveal-delay-3"><div class="cert-num">04</div><div><div class="cert-name">AI Tools</div><div class="cert-issuer">Be10X · 2025</div></div></div>
+      <div class="cert-item reveal reveal-delay-3"><div class="cert-num">04</div><div><div class="cert-name">Java Software Developer</div><div class="cert-issuer">Shiash Info Solutions · 2023</div></div></div>
     </div>
   </div>
 </section>
@@ -805,7 +817,7 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
       <p class="contact-text">Whether you need a software engineer, a quality assurance specialist, or a technical content partner — I'd love to hear about your project.</p>
       <div class="contact-details">
         <div class="contact-detail"><div class="contact-detail-icon">📍</div><div><div class="contact-detail-label">Location</div><div class="contact-detail-value">Chennai, Tamil Nadu</div></div></div>
-        <div class="contact-detail"><div class="contact-detail-icon">📬</div><div><div class="contact-detail-label">Email</div><div class="contact-detail-value">yuvarajpandian243@gmail.com</div></div></div>
+        <div class="contact-detail"><div class="contact-detail-icon">📬</div><div><div class="contact-detail-label">Email</div><div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="91e8e4e7f0e3f0fbe1f0fff5f8f0ffa3a5a2d1f6fcf0f8fdbff2fefc">[email&#160;protected]</a></div></div></div>
         <div class="contact-detail"><div class="contact-detail-icon">🕐</div><div><div class="contact-detail-label">Response Time</div><div class="contact-detail-value">Within 24 hours</div></div></div>
       </div>
     </div>
@@ -853,7 +865,7 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursorRing');
 if (window.matchMedia('(hover: hover)').matches) {
@@ -899,12 +911,4 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const btn = document.getElementById('submitBtn');
   if (!firstName || !email || !message) {
     btn.textContent = 'Please fill required fields ✗'; btn.style.background = 'var(--accent2)';
-    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 2500);
-    return;
-  }
-  btn.textContent = 'Message Sent! ✓'; btn.style.background = 'var(--accent3)';
-  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
-});
-</script>
-</body>
-</html>
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background =
