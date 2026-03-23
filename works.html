@@ -426,6 +426,71 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
   .works-hero-title { font-size: clamp(2rem, 14vw, 3.5rem); }
   .highlight-box { grid-template-columns: 1fr; }
 }
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 60px;
+  background: rgba(10,10,15,0.96);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 1.05rem; letter-spacing: -0.02em;
+  color: var(--text); text-decoration: none; flex-shrink: 0;
+}
+.nav-logo span { color: var(--accent1); }
+.nav-links {
+  display: flex; gap: 0; list-style: none;
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+.nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0 0.75rem; height: 60px;
+  display: flex; align-items: center;
+  position: relative; transition: color 0.2s;
+  white-space: nowrap;
+}
+.nav-links a::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0.75rem; right: 0.75rem;
+  height: 2px; background: var(--accent1);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--text); }
+.nav-links a.active::after { transform: scaleX(1); }
+.nav-status {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.1em;
+  color: var(--text-dim); flex-shrink: 0;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  background: var(--accent1); border-radius: 50%;
+  box-shadow: 0 0 6px var(--accent1);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);} }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.mobile-menu { display: none; position: fixed; inset: 0; z-index: 290; background: rgba(10,10,15,.98); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; gap: .5rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(1.6rem,7vw,2.2rem); color: var(--text-dim); text-decoration: none; text-transform: uppercase; padding: .4rem 1rem; transition: color .2s; letter-spacing: -.01em; }
+.mobile-menu a:hover, .mobile-menu a.active { color: var(--accent1); }
+.mobile-menu-footer { position: absolute; bottom: 2rem; font-size: .62rem; color: var(--text-dim); letter-spacing: .15em; }
+@media (max-width: 1200px) { .nav-status { display: none; } }
+@media (max-width: 960px)  { .nav-links { display: none; } .hamburger { display: flex; } }
 </style>
 </head>
 <body>
@@ -439,11 +504,14 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
 <!-- ═══ NAV ═══ -->
 <nav>
   <a href="index.html" class="nav-logo">Yuvaraj<span>.</span>Pandian</a>
-  <ul class="nav-links">
+    <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="works.html" class="active">Works</a></li>
     <li><a href="experience.html">Experience</a></li>
     <li><a href="study.html">Study</a></li>
+    <li><a href="problemsolving.html">Problem Solving</a></li>
+    <li><a href="techstack.html">Tech Stack</a></li>
+    <li><a href="currentlybuilding.html">Under Development</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="index.html#contact">Contact</a></li>
   </ul>
@@ -453,13 +521,17 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html" class="mobile-nav-link">Home</a>
-  <a href="works.html" class="mobile-nav-link">Works</a>
-  <a href="experience.html" class="mobile-nav-link">Experience</a>
-  <a href="study.html" class="mobile-nav-link">Study</a>
-  <a href="blog.html" class="mobile-nav-link">Blog</a>
-  <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+  <a href="index.html">Home</a>
+  <a href="works.html" class="active">Works</a>
+  <a href="experience.html">Experience</a>
+  <a href="study.html">Study</a>
+  <a href="problemsolving.html">Problem Solving</a>
+  <a href="techstack.html">Tech Stack</a>
+  <a href="currentlybuilding.html">Under Development</a>
+  <a href="blog.html">Blog</a>
+  <a href="index.html#contact">Contact</a>
   <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
+</div>
 </div>
 
 <!-- ═══ WORKS HERO ═══ -->
