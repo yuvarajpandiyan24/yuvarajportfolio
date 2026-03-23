@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problem-Solving — Yuvaraj Pandian</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--accent1:#c8ff00;--accent2:#ff3b6e;--accent3:#00d4ff;--purple:#a855f7;--text:#e8e8f0;--text-dim:#7a7a99;--border:rgba(255,255,255,0.07);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6;cursor:none;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.022;pointer-events:none;z-index:9997;}
+
+/* CURSOR */
+.cursor,.cursor-ring{position:fixed;pointer-events:none;border-radius:50%;z-index:9999;display:none;}
+@media(hover:hover){
+  .cursor{display:block;width:10px;height:10px;background:var(--accent2);mix-blend-mode:difference;transition:transform .15s ease;}
+  .cursor-ring{display:block;width:36px;height:36px;border:1.5px solid var(--accent2);z-index:9998;mix-blend-mode:difference;transition:left .1s ease,top .1s ease,transform .3s ease;}
+  body,a,button{cursor:none;}
+}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;background:rgba(10,10,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-.02em;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--accent1);}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;padding:.45rem .75rem;position:relative;transition:color .2s;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:.75rem;right:.75rem;height:1px;background:var(--accent2);transform:scaleX(0);transition:transform .3s ease;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+.nav-status{display:flex;align-items:center;gap:.5rem;font-size:.68rem;color:var(--text-dim);flex-shrink:0;}
+.status-dot{width:6px;height:6px;background:var(--accent1);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:290;background:rgba(10,10,15,.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:.5rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1.4rem,6vw,2rem);color:var(--text-dim);text-decoration:none;text-transform:uppercase;padding:.4rem 1rem;transition:color .2s;}
+.mobile-menu a:hover{color:var(--accent2);}
+.mobile-menu-footer{position:absolute;bottom:2rem;font-size:.65rem;color:var(--text-dim);letter-spacing:.15em;}
+
+/* HERO */
+.ps-hero{padding:160px 3rem 80px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.hero-scanlines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,59,110,.015) 2px,rgba(255,59,110,.015) 4px);pointer-events:none;}
+.hero-terminal{position:absolute;right:5%;top:50%;transform:translateY(-50%);font-size:.62rem;color:var(--text-dim);line-height:2;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--accent2);min-width:300px;}
+.terminal-line{display:flex;gap:.75rem;}
+.terminal-prompt{color:var(--accent2);}
+.terminal-cmd{color:var(--accent1);}
+.terminal-output{color:var(--text-dim);padding-left:1.5rem;}
+.terminal-cursor{display:inline-block;width:8px;height:12px;background:var(--accent2);animation:blink .8s infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.back-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;margin-bottom:2.5rem;transition:color .2s;}
+.back-link:hover{color:var(--accent2);}
+.hero-eyebrow{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;}
+.hero-eyebrow::before{content:'';width:36px;height:1px;background:var(--accent2);}
+.hero-title{font-family:'Fraunces',serif;font-size:clamp(3rem,8vw,7rem);font-weight:700;line-height:.9;letter-spacing:-.03em;margin-bottom:1.5rem;}
+.hero-title .italic{font-style:italic;font-weight:300;color:var(--text-dim);}
+.hero-title .dot{color:var(--accent2);}
+.hero-desc{max-width:480px;color:var(--text-dim);font-size:.83rem;line-height:1.85;margin-bottom:2.5rem;}
+.ps-stats{display:flex;gap:2px;flex-wrap:wrap;}
+.ps-stat{padding:1rem 1.5rem;border:1px solid var(--border);background:var(--surface);}
+.ps-stat-num{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;line-height:1;color:var(--accent2);}
+.ps-stat-num.c2{color:var(--accent3);}
+.ps-stat-num.c3{color:var(--accent1);}
+.ps-stat-label{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-top:.3rem;}
+
+/* FILTER BAR */
+.filter-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 3rem;position:sticky;top:65px;z-index:100;display:flex;align-items:center;gap:0;overflow-x:auto;}
+.filter-btn{background:none;border:none;padding:1rem 1.25rem;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);position:relative;white-space:nowrap;transition:color .2s;}
+.filter-btn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent2);transform:scaleX(0);transition:transform .3s ease;}
+.filter-btn:hover,.filter-btn.active{color:var(--text);}
+.filter-btn.active::after{transform:scaleX(1);}
+.filter-count{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:var(--surface2);border-radius:50%;font-size:.5rem;margin-left:.4rem;color:var(--text-dim);}
+.filter-btn.active .filter-count{background:var(--accent2);color:white;}
+
+/* PAGE BODY */
+.page-body{padding:3rem;}
+
+/* PROBLEM CARDS GRID */
+.problems-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+
+/* Problem Card */
+.problem-card{background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:border-color .3s,background .3s;display:flex;flex-direction:column;}
+.problem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
+.problem-card.security::before{background:var(--accent2);}
+.problem-card.debug::before{background:var(--accent1);}
+.problem-card.perf::before{background:var(--accent3);}
+.problem-card.security:hover{border-color:rgba(255,59,110,.35);}
+.problem-card.debug:hover{border-color:rgba(200,255,0,.35);}
+.problem-card.perf:hover{border-color:rgba(0,212,255,.35);}
+.problem-card:hover::before{transform:scaleX(1);}
+
+.card-icon{font-size:2rem;margin-bottom:1rem;display:block;}
+.card-type-badge{font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:1px;display:inline-block;margin-bottom:.9rem;}
+.problem-card.security .card-type-badge{background:rgba(255,59,110,.1);color:var(--accent2);}
+.problem-card.debug .card-type-badge{background:rgba(200,255,0,.1);color:var(--accent1);}
+.problem-card.perf .card-type-badge{background:rgba(0,212,255,.1);color:var(--accent3);}
+
+.card-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;line-height:1.2;margin-bottom:.6rem;}
+.card-summary{font-size:.72rem;color:var(--text-dim);line-height:1.75;margin-bottom:1.1rem;flex:1;}
+
+/* Mini pipeline */
+.card-pipeline{display:flex;gap:0;margin-bottom:1.25rem;overflow-x:auto;}
+.pipe-step{font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .5rem;background:var(--bg);border:1px solid var(--border);white-space:nowrap;position:relative;}
+.pipe-step:not(:last-child)::after{content:'→';position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-size:.55rem;color:var(--text-dim);z-index:1;}
+.pipe-step:not(:first-child){border-left:none;}
+.pipe-step.solved{border-color:var(--accent1);color:var(--accent1);}
+
+.card-outcome{font-size:.62rem;color:var(--text-dim);border-top:1px solid var(--border);padding-top:.9rem;margin-top:auto;}
+.outcome-label{font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem;}
+.problem-card.security .outcome-label{color:var(--accent2);}
+.problem-card.debug .outcome-label{color:var(--accent1);}
+.problem-card.perf .outcome-label{color:var(--accent3);}
+
+.card-btn{background:none;border:1px solid var(--border);padding:.5rem 1rem;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);transition:all .3s;margin-top:1rem;width:100%;}
+.problem-card.security:hover .card-btn{border-color:var(--accent2);color:var(--accent2);}
+.problem-card.debug:hover .card-btn{border-color:var(--accent1);color:var(--accent1);}
+.problem-card.perf:hover .card-btn{border-color:var(--accent3);color:var(--accent3);}
+
+/* Hidden */
+.problem-card.hidden{display:none;}
+.no-results{padding:5rem 2rem;text-align:center;color:var(--text-dim);font-size:.8rem;display:none;}
+.no-results.visible{display:block;}
+
+/* DETAIL OVERLAY */
+.detail-overlay{display:none;position:fixed;inset:0;z-index:500;background:var(--bg);overflow-y:auto;animation:overlayIn .35s ease;}
+.detail-overlay.open{display:block;}
+@keyframes overlayIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.read-progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--border);z-index:600;}
+.read-progress-fill{height:100%;background:var(--accent2);width:0%;transition:width .1s;}
+.overlay-nav{position:sticky;top:0;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1rem 3rem;display:flex;align-items:center;justify-content:space-between;z-index:10;}
+.overlay-back{display:inline-flex;align-items:center;gap:.5rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;transition:color .2s;}
+.overlay-back:hover{color:var(--accent2);}
+.overlay-nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;text-decoration:none;color:var(--text);}
+.overlay-nav-brand span{color:var(--accent1);}
+.detail-content{max-width:900px;margin:0 auto;padding:4rem 3rem 6rem;}
+
+/* Detail header */
+.detail-header{margin-bottom:3rem;}
+.detail-badge-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.detail-badge{font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;padding:.22rem .65rem;border-radius:1px;}
+.detail-icon-large{font-size:3rem;margin-bottom:1rem;display:block;}
+.detail-title{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin-bottom:.75rem;}
+.detail-lead{font-size:.88rem;color:var(--text-dim);line-height:1.85;padding:1.25rem;border-left:3px solid var(--accent2);background:var(--surface);}
+
+/* Step-by-step pipeline in detail */
+.step-pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin:2.5rem 0;}
+.step-block{background:var(--surface);border:1px solid var(--border);padding:1.25rem;text-align:center;position:relative;}
+.step-block::after{content:'→';position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(--text-dim);z-index:1;}
+.step-block:last-child::after{display:none;}
+.step-num{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:var(--accent2);line-height:1;margin-bottom:.35rem;}
+.step-label{font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);}
+
+/* Detail body */
+.detail-body{font-size:.84rem;line-height:1.9;color:var(--text-dim);}
+.detail-body h2{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:700;color:var(--text);margin:2.5rem 0 .9rem;line-height:1.1;}
+.detail-body h3{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:var(--text);margin:1.75rem 0 .65rem;letter-spacing:.03em;text-transform:uppercase;}
+.detail-body p{margin-bottom:1.1rem;}
+.detail-body strong{color:var(--text);font-weight:600;}
+.detail-body ul,.detail-body ol{padding-left:1.5rem;margin-bottom:1.1rem;}
+.detail-body li{margin-bottom:.45rem;}
+.detail-body li::marker{color:var(--accent2);}
+.detail-body code{background:var(--surface2);border:1px solid var(--border);padding:.15rem .45rem;border-radius:2px;font-size:.78rem;color:var(--accent2);font-family:'DM Mono',monospace;}
+.detail-body pre{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent2);padding:1.5rem;margin:1.5rem 0;overflow-x:auto;border-radius:2px;}
+.detail-body pre code{background:none;border:none;padding:0;color:var(--text);font-size:.76rem;line-height:1.7;}
+.detail-body blockquote{border-left:3px solid var(--accent3);padding:.9rem 1.4rem;margin:1.5rem 0;background:var(--surface);color:var(--text);font-style:italic;}
+
+.lesson-box{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent1);padding:1.25rem;margin:1.5rem 0;}
+.lesson-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent1);margin-bottom:.5rem;}
+
+.highlight-box{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:2rem 0;}
+.highlight-item{background:var(--surface);padding:1.25rem;border:1px solid var(--border);text-align:center;}
+.highlight-num{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;color:var(--accent2);line-height:1;}
+.highlight-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-top:.3rem;}
+
+.detail-footer{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
+.detail-tags{display:flex;flex-wrap:wrap;gap:.4rem;}
+.detail-tag{font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;padding:.25rem .65rem;border:1px solid var(--border);border-radius:2px;color:var(--text-dim);}
+
+/* FOOTER */
+footer{background:var(--surface2);border-top:1px solid var(--border);padding:2.5rem 3rem;}
+.footer-inner{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem;}
+.footer-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;}
+.footer-brand span{color:var(--accent1);}
+.footer-copy{font-size:.62rem;color:var(--text-dim);margin-top:.2rem;}
+.social-links{display:flex;gap:.5rem;justify-content:center;}
+.social-link{width:40px;height:40px;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text-dim);transition:all .3s;position:relative;overflow:hidden;}
+.social-link::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+.social-link.linkedin::before{background:#0077b5;}
+.social-link.github::before{background:#333;}
+.social-link:hover::before{opacity:1;}
+.social-link:hover{border-color:transparent;color:white;transform:translateY(-3px);}
+.social-link svg{width:15px;height:15px;position:relative;z-index:1;fill:currentColor;}
+.footer-right{text-align:right;font-size:.62rem;color:var(--text-dim);line-height:1.85;}
+.footer-right a{color:var(--accent1);text-decoration:none;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+
+@media(max-width:1100px){.problems-grid{grid-template-columns:repeat(2,1fr);}.step-pipeline{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:768px){
+  nav,.ps-hero,.filter-bar,.page-body,footer{padding-left:1.1rem;padding-right:1.1rem;}
+  .nav-links,.nav-status{display:none;}
+  .hamburger{display:flex;}
+  .ps-hero{padding-top:120px;padding-bottom:50px;}
+  .hero-title{font-size:clamp(2.5rem,12vw,5rem);}
+  .hero-terminal{display:none;}
+  .problems-grid{grid-template-columns:1fr;}
+  .step-pipeline{grid-template-columns:repeat(2,1fr);}
+  .highlight-box{grid-template-columns:repeat(2,1fr);}
+  .overlay-nav{padding:1rem 1.25rem;}
+  .detail-content{padding:2rem 1.25rem 4rem;}
+  .footer-inner{grid-template-columns:1fr;text-align:center;gap:1.25rem;}
+}
+@media(max-width:480px){.step-pipeline{grid-template-columns:1fr;}.highlight-box{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="read-progress"><div class="read-progress-fill" id="progressFill"></div></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Yuvaraj<span>.</span>Pandian</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="works.html">Works</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="study.html">Study</a></li>
+    <li><a href="problem-solving.html" class="active">Problem-Solving</a></li>
+    <li><a href="tech-stack.html">Tech Stack</a></li>
+    <li><a href="currently-building.html">Building</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>Eager to Contribute</div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a><a href="works.html">Works</a><a href="experience.html">Experience</a>
+  <a href="study.html">Study</a><a href="problem-solving.html">Problem-Solving</a>
+  <a href="tech-stack.html">Tech Stack</a><a href="currently-building.html">Building</a>
+  <a href="blog.html">Blog</a><a href="index.html#contact">Contact</a>
+  <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
+</div>
+
+<!-- HERO -->
+<div class="ps-hero">
+  <div class="hero-scanlines"></div>
+  <div class="hero-terminal">
+    <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-cmd">git log --bugs --fixed</span></div>
+    <div class="terminal-output">✓ SQL injection patched — auth module</div>
+    <div class="terminal-output">✓ IDOR vulnerability closed — /api/orders</div>
+    <div class="terminal-output">✓ Selenium flakiness resolved — checkout</div>
+    <div class="terminal-output">✓ Data leak prevented — user endpoint</div>
+    <div class="terminal-output">✓ Race condition fixed — concurrent tests</div>
+    <div class="terminal-line" style="margin-top:.5rem;"><span class="terminal-prompt">$</span><span class="terminal-cursor"></span></div>
+  </div>
+
+  <a href="index.html" class="back-link reveal">← Back to Portfolio</a>
+  <div class="hero-eyebrow reveal">Debug Log</div>
+  <h1 class="hero-title reveal">
+    <div>Problem</div>
+    <div class="italic">Solving<span class="dot">.</span></div>
+  </h1>
+  <p class="hero-desc reveal reveal-delay-1">
+    Real bugs. Real consequences. Real fixes. A documented record of how I think when things break — the analysis, the dead ends, and the solutions that actually held.
+  </p>
+  <div class="ps-stats reveal reveal-delay-2">
+    <div class="ps-stat"><div class="ps-stat-num">5</div><div class="ps-stat-label">Cases Documented</div></div>
+    <div class="ps-stat"><div class="ps-stat-num c2">23+</div><div class="ps-stat-label">Bugs Fixed</div></div>
+    <div class="ps-stat"><div class="ps-stat-num c3">100%</div><div class="ps-stat-label">Resolution Rate</div></div>
+  </div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All Cases <span class="filter-count">5</span></button>
+  <button class="filter-btn" data-filter="security">Security <span class="filter-count">2</span></button>
+  <button class="filter-btn" data-filter="debug">Debugging <span class="filter-count">2</span></button>
+  <button class="filter-btn" data-filter="perf">Performance <span class="filter-count">1</span></button>
+</div>
+
+<!-- PROBLEM CARDS -->
+<div class="page-body">
+  <div class="problems-grid" id="problemsGrid">
+
+    <!-- Card 1 -->
+    <div class="problem-card security reveal" data-cat="security" data-problem="p1">
+      <span class="card-icon">🔐</span>
+      <span class="card-type-badge">Security · SQL Injection</span>
+      <div class="card-title">Unsanitized Input Opened the Entire Product Database</div>
+      <p class="card-summary">A raw SQL query in the product search endpoint accepted user input directly — meaning anyone who knew the pattern could dump the entire catalogue, or worse, the user table.</p>
+      <div class="card-pipeline">
+        <div class="pipe-step">Problem</div>
+        <div class="pipe-step">Analysis</div>
+        <div class="pipe-step">Approach</div>
+        <div class="pipe-step">Fix</div>
+        <div class="pipe-step solved">✓ Resolved</div>
+      </div>
+      <div class="card-outcome"><div class="outcome-label">Outcome</div>Parameterised queries across all endpoints. Zero injection surface.</div>
+      <button class="card-btn" data-problem="p1">Read Full Breakdown →</button>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="problem-card security reveal reveal-delay-1" data-cat="security" data-problem="p2">
+      <span class="card-icon">🛡️</span>
+      <span class="card-type-badge">Security · IDOR</span>
+      <div class="card-title">Any Authenticated User Could Access Any Order</div>
+      <p class="card-summary">The order detail API accepted a numeric ID without checking if the requesting user actually owned the resource. Sequential enumeration exposed every transaction on the platform.</p>
+      <div class="card-pipeline">
+        <div class="pipe-step">Problem</div>
+        <div class="pipe-step">Analysis</div>
+        <div class="pipe-step">Approach</div>
+        <div class="pipe-step">Fix</div>
+        <div class="pipe-step solved">✓ Resolved</div>
+      </div>
+      <div class="card-outcome"><div class="outcome-label">Outcome</div>Ownership validation on all resource endpoints. IDOR eliminated.</div>
+      <button class="card-btn" data-problem="p2">Read Full Breakdown →</button>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="problem-card debug reveal reveal-delay-2" data-cat="debug" data-problem="p3">
+      <span class="card-icon">🐛</span>
+      <span class="card-type-badge">Debugging · Flaky Tests</span>
+      <div class="card-title">Selenium Tests Passing Locally, Failing in CI — Randomly</div>
+      <p class="card-summary">The automation suite ran clean on every developer machine but failed intermittently in the CI pipeline — sometimes 3 tests, sometimes 12, never the same ones twice.</p>
+      <div class="card-pipeline">
+        <div class="pipe-step">Problem</div>
+        <div class="pipe-step">Analysis</div>
+        <div class="pipe-step">Approach</div>
+        <div class="pipe-step">Fix</div>
+        <div class="pipe-step solved">✓ Resolved</div>
+      </div>
+      <div class="card-outcome"><div class="outcome-label">Outcome</div>Explicit waits + headless config. 100% stable CI runs since.</div>
+      <button class="card-btn" data-problem="p3">Read Full Breakdown →</button>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="problem-card debug reveal" data-cat="debug" data-problem="p4">
+      <span class="card-icon">🔍</span>
+      <span class="card-type-badge">Debugging · Data Leak</span>
+      <div class="card-title">API Returning Sensitive Fields Not Requested By the Client</div>
+      <p class="card-summary">The user profile API was serializing entire entity objects — including email, phone, and hashed passwords — regardless of what the frontend actually requested. A silent data exposure hiding in plain sight.</p>
+      <div class="card-pipeline">
+        <div class="pipe-step">Problem</div>
+        <div class="pipe-step">Analysis</div>
+        <div class="pipe-step">Approach</div>
+        <div class="pipe-step">Fix</div>
+        <div class="pipe-step solved">✓ Resolved</div>
+      </div>
+      <div class="card-outcome"><div class="outcome-label">Outcome</div>DTO projection layer. API returns only explicitly declared fields.</div>
+      <button class="card-btn" data-problem="p4">Read Full Breakdown →</button>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="problem-card perf reveal reveal-delay-1" data-cat="perf" data-problem="p5">
+      <span class="card-icon">⚡</span>
+      <span class="card-type-badge">Performance · N+1 Query</span>
+      <div class="card-title">Product Listing Page Taking 8+ Seconds to Load</div>
+      <p class="card-summary">The catalogue page was fast in development (30 products) and catastrophically slow in staging (2,000 products). An N+1 query pattern hiding behind lazy loading was executing a separate DB call per product.</p>
+      <div class="card-pipeline">
+        <div class="pipe-step">Problem</div>
+        <div class="pipe-step">Analysis</div>
+        <div class="pipe-step">Approach</div>
+        <div class="pipe-step">Fix</div>
+        <div class="pipe-step solved">✓ Resolved</div>
+      </div>
+      <div class="card-outcome"><div class="outcome-label">Outcome</div>JOIN query + pagination. 8.2s → 340ms. 96% faster.</div>
+      <button class="card-btn" data-problem="p5">Read Full Breakdown →</button>
+    </div>
+
+  </div>
+  <div class="no-results" id="noResults"><div style="font-size:2.5rem;margin-bottom:1rem;opacity:.4">🔍</div>No cases in this category.</div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div><div class="footer-brand">Yuvaraj<span>.</span>Pandian</div><div class="footer-copy">© 2026 All rights reserved.</div></div>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/yuvaraj-pandian24" target="_blank" rel="noopener" class="social-link linkedin"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a href="https://github.com/yuvarajpandiyan24" target="_blank" rel="noopener" class="social-link github"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+    <div class="footer-right">by <a href="index.html">Yuvaraj Pandian</a></div>
+  </div>
+</footer>
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay">
+  <div class="overlay-nav">
+    <button class="overlay-back" id="overlayBack">← Back to Problem-Solving</button>
+    <a href="index.html" class="overlay-nav-brand">Yuvaraj<span>.</span>Pandian</a>
+  </div>
+  <div class="detail-content" id="detailContent"></div>
+</div>
+
+<script>
+const PROBLEMS = {
+  p1:{
+    icon:'🔐',type:'Security · SQL Injection',typeClass:'security',
+    title:'Unsanitized Input Opened the Entire Product Database',
+    lead:'A single unparameterized query in the product search endpoint was the difference between a working eCommerce platform and an open database. The fix took 4 hours. Finding it took 3 days.',
+    tags:['SQL Injection','Prepared Statements','OWASP A03','Java','Security Audit'],
+    steps:['Problem','Analysis','Approach','Solution','Outcome'],
+    body:`
+      <h2>The Problem</h2>
+      <p>During a security audit of the Tradesala platform, Burp Suite flagged the product search endpoint as potentially injectable. Manual testing confirmed it: a crafted search query could manipulate the underlying SQL and — in the worst case — return data from unrelated tables.</p>
+      <pre><code>// Vulnerable — user input concatenated directly into SQL
+String query = "SELECT * FROM products WHERE name LIKE '%" + userInput + "%'";
+Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery(query);</code></pre>
+      <p>The injection surface was small but the blast radius was large. The products table joined to categories, sellers, and pricing — a determined attacker with <code>UNION SELECT</code> knowledge could navigate the schema.</p>
+
+      <h2>Analysis</h2>
+      <p>Root cause was clear: string concatenation into SQL. But the audit revealed this wasn't isolated to one endpoint — the pattern appeared in 6 places across the codebase, all written before the team had established a code review process for security.</p>
+      <div class="highlight-box">
+        <div class="highlight-item"><div class="highlight-num">6</div><div class="highlight-label">Vulnerable Endpoints</div></div>
+        <div class="highlight-item"><div class="highlight-num">3</div><div class="highlight-label">Days to Audit</div></div>
+        <div class="highlight-item"><div class="highlight-num">4h</div><div class="highlight-label">Fix Time</div></div>
+      </div>
+
+      <h2>Approach</h2>
+      <p>Rather than patch-and-move-on, the fix needed to be systematic. A single fix that leaves 5 other instances unaddressed is not a fix — it's a false sense of security. The approach was to audit every database-touching method in the codebase before writing a single line of remediation.</p>
+
+      <h2>Solution</h2>
+      <p>All 6 vulnerable queries were replaced with prepared statements using <code>PreparedStatement</code> and parameterized inputs:</p>
+      <pre><code>// Fixed — parameterized query, no injection surface
+String query = "SELECT * FROM products WHERE name LIKE ?";
+PreparedStatement pstmt = conn.prepareStatement(query);
+pstmt.setString(1, "%" + userInput + "%");
+ResultSet rs = pstmt.executeQuery();</code></pre>
+      <p>Additionally, a code review checklist item was added: <em>"Does this method accept user input? If yes, is it parameterized?"</em> Every PR touching database queries now gets this check.</p>
+
+      <div class="lesson-box">
+        <div class="lesson-title">💡 Lesson Learned</div>
+        SQL injection is solved technology. There is no legitimate reason for raw string concatenation in SQL queries in 2026. The real failure mode was <strong>lack of a code review process</strong> that caught security patterns — not lack of knowledge.
+      </div>
+
+      <h2>Outcome</h2>
+      <p>All 6 endpoints patched. Security re-test confirmed zero injection surface across the full audit scope. The platform passed its OWASP Top 10 compliance check for A03 (Injection) on the next assessment cycle.</p>
+    `
+  },
+  p2:{
+    icon:'🛡️',type:'Security · IDOR',typeClass:'security',
+    title:'Any Authenticated User Could Access Any Order',
+    lead:'Broken Object-Level Authorization is the most common API vulnerability. It is also the most embarrassing — because the fix is almost always just one line: check that the user owns the resource they are requesting.',
+    tags:['IDOR','BOLA','Access Control','OWASP A01','API Security','Java'],
+    steps:['Problem','Analysis','Approach','Solution','Outcome'],
+    body:`
+      <h2>The Problem</h2>
+      <p>The order detail endpoint accepted a numeric order ID and returned the full order — without checking whether the authenticated user was the one who placed it. A user logged in as User A could request <code>/api/orders/10001</code> and receive User B's complete order, including delivery address and payment method details.</p>
+      <pre><code>// Vulnerable — no ownership check
+@GetMapping("/api/orders/{orderId}")
+public ResponseEntity&lt;Order&gt; getOrder(@PathVariable Long orderId) {
+  Order order = orderService.findById(orderId); // No auth check
+  return ResponseEntity.ok(order);
+}</code></pre>
+      <p>Sequential order IDs made enumeration trivial. A script looping from 10000 to 11000 would return 1,000 real customer orders.</p>
+
+      <h2>Analysis</h2>
+      <p>This is textbook IDOR (Insecure Direct Object Reference) — OWASP's #1 API vulnerability for good reason. The root cause was that authentication was implemented (users must be logged in) but authorization was not (logged-in users can access anything).</p>
+      <p>The two are different problems. Authentication answers "who are you?" Authorization answers "what are you allowed to do?" The codebase had only answered the first question.</p>
+
+      <h2>Solution</h2>
+      <pre><code>// Fixed — ownership validation before returning data
+@GetMapping("/api/orders/{orderId}")
+public ResponseEntity&lt;Order&gt; getOrder(
+    @PathVariable Long orderId,
+    @AuthenticationPrincipal UserDetails currentUser) {
+
+  Order order = orderService.findById(orderId);
+  
+  if (order == null || !order.getUserId().equals(currentUser.getId())) {
+    return ResponseEntity.status(403).build(); // Forbidden
+  }
+  return ResponseEntity.ok(order);
+}</code></pre>
+      <p>The fix was extended to all resource endpoints: orders, addresses, payment methods, and wishlists. A shared <code>@PreAuthorize</code> annotation pattern was introduced for resource ownership checks.</p>
+
+      <div class="lesson-box">
+        <div class="lesson-title">💡 Lesson Learned</div>
+        Always ask: <strong>"Does this endpoint verify that the requester owns or has permission to access the requested resource?"</strong> Authentication is not authorization. They must both exist independently.
+      </div>
+
+      <h2>Outcome</h2>
+      <p>IDOR eliminated across all resource endpoints. The audit script that previously returned 100% of tested orders now returns 403 for every cross-user request. OWASP A01 (Broken Access Control) passed on re-test.</p>
+    `
+  },
+  p3:{
+    icon:'🐛',type:'Debugging · Flaky Tests',typeClass:'debug',
+    title:'Selenium Tests Passing Locally, Failing in CI — Randomly',
+    lead:'Non-deterministic test failures are the most demoralizing category of bug. They erode trust in the test suite itself. When developers stop believing test failures mean real problems, the whole QA process collapses.',
+    tags:['Selenium','TestNG','CI/CD','Flaky Tests','WebDriverWait','Headless Chrome'],
+    steps:['Problem','Analysis','Approach','Solution','Outcome'],
+    body:`
+      <h2>The Problem</h2>
+      <p>The Selenium automation suite (40+ test cases) ran perfectly on every developer machine. In the GitHub Actions CI pipeline, it failed on every run — but never consistently. Sometimes the checkout flow tests failed. Sometimes the search tests. Occasionally 15+ tests failed at once. Never reproducible on request.</p>
+
+      <h2>Analysis — Three Hypotheses</h2>
+      <p>When test failures are random, the usual suspects are: timing issues, environment differences, or test isolation failures. I worked through them in order:</p>
+      <ul>
+        <li><strong>Hypothesis 1 — Timing:</strong> CI machines are slower than dev machines. Implicit waits set to 3s locally may not be enough in CI. <em>Likely contributor.</em></li>
+        <li><strong>Hypothesis 2 — Headless browser:</strong> CI runs Chrome in headless mode. Some element interactions behave differently without a display — particularly hover states and scroll-triggered visibility. <em>Confirmed contributor.</em></li>
+        <li><strong>Hypothesis 3 — Test isolation:</strong> Tests sharing state (logged-in session, cart contents) could fail when execution order varied. <em>Minor contributor.</em></li>
+      </ul>
+
+      <h2>Solution</h2>
+      <pre><code>// Before — implicit wait, headless not configured
+WebDriver driver = new ChromeDriver();
+driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
+// After — explicit waits + headless config
+ChromeOptions options = new ChromeOptions();
+options.addArguments("--headless", "--no-sandbox", 
+                     "--disable-dev-shm-usage", "--window-size=1920,1080");
+WebDriver driver = new ChromeDriver(options);
+
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+wait.until(ExpectedConditions.elementToBeClickable(By.id("add-to-cart")));
+</code></pre>
+      <p>Implicit waits were removed entirely and replaced with explicit <code>WebDriverWait</code> conditions on every interaction. Test isolation was enforced by resetting cart and login state in <code>@BeforeMethod</code>.</p>
+
+      <div class="lesson-box">
+        <div class="lesson-title">💡 Lesson Learned</div>
+        <strong>Implicit waits are a shortcut that creates long-term pain.</strong> Explicit waits are more verbose but express the actual intent: "wait until this specific condition is true." The difference matters most in slow or variable environments — exactly where you need tests to be reliable.
+      </div>
+
+      <h2>Outcome</h2>
+      <p>CI pipeline has run 100% stable since the fix. 40+ test cases, zero flaky failures across 30+ consecutive runs. The team now trusts that a CI failure means a real regression.</p>
+    `
+  },
+  p4:{
+    icon:'🔍',type:'Debugging · Data Leak',typeClass:'debug',
+    title:'API Returning Sensitive Fields Not Requested By the Client',
+    lead:'Silent data over-exposure is dangerous precisely because it is silent. No errors. No warnings. The API works perfectly — and quietly hands out information it should never have disclosed.',
+    tags:['API Design','DTO','Data Privacy','OWASP A02','Java','Serialization'],
+    steps:['Problem','Analysis','Approach','Solution','Outcome'],
+    body:`
+      <h2>The Problem</h2>
+      <p>During API testing with Postman, a user profile request returned far more than expected. The JSON response included <code>email</code>, <code>phone</code>, <code>passwordHash</code>, <code>createdAt</code>, and <code>lastLoginIp</code> — fields the frontend had no use for and which should never cross a network boundary.</p>
+      <p>The root cause: the API was serializing the entire <code>User</code> entity object directly to JSON, with no control over which fields were included.</p>
+
+      <h2>Analysis</h2>
+      <p>Entity classes in the codebase were annotated with JPA and Hibernate annotations, and also served as API response objects. This violates separation of concerns — the persistence model and the API contract are two different things with different lifecycles and different audiences.</p>
+
+      <div class="highlight-box">
+        <div class="highlight-item"><div class="highlight-num">7</div><div class="highlight-label">Sensitive Fields Exposed</div></div>
+        <div class="highlight-item"><div class="highlight-num">0</div><div class="highlight-label">Errors Thrown</div></div>
+        <div class="highlight-item"><div class="highlight-num">∞</div><div class="highlight-label">Requests Affected</div></div>
+      </div>
+
+      <h2>Solution</h2>
+      <p>Introduced a DTO (Data Transfer Object) layer — separate classes that represent the API contract, not the database schema. The controller maps entity → DTO before serialization.</p>
+      <pre><code>// DTO — only fields the client needs
+public class UserProfileDTO {
+  private String firstName;
+  private String lastName;
+  private String displayEmail; // masked version only
+  // No passwordHash. No lastLoginIp. No phone.
+}
+
+// Controller — maps entity to DTO
+@GetMapping("/api/users/{id}/profile")
+public ResponseEntity&lt;UserProfileDTO&gt; getProfile(@PathVariable Long id) {
+  User user = userService.findById(id);
+  UserProfileDTO dto = userMapper.toProfileDTO(user);
+  return ResponseEntity.ok(dto);
+}</code></pre>
+
+      <div class="lesson-box">
+        <div class="lesson-title">💡 Lesson Learned</div>
+        <strong>Never use entity objects as API response objects.</strong> The database schema and the API contract evolve independently and serve different audiences. A DTO layer is not overhead — it is the correct architecture for any API that handles sensitive data.
+      </div>
+
+      <h2>Outcome</h2>
+      <p>DTO layer implemented across all user-facing API endpoints. API responses now contain only explicitly declared fields. OWASP A02 (Cryptographic Failures / Sensitive Data Exposure) passed on re-test.</p>
+    `
+  },
+  p5:{
+    icon:'⚡',type:'Performance · N+1 Query',typeClass:'perf',
+    title:'Product Listing Page Taking 8+ Seconds to Load',
+    lead:'The N+1 query problem is one of the oldest bugs in server-side web development. It is seductive because it hides perfectly in development, only revealing itself under real data volumes — exactly when you cannot afford slow pages.',
+    tags:['N+1 Query','MySQL','JOIN','Pagination','Query Optimization','Java'],
+    steps:['Problem','Analysis','Approach','Solution','Outcome'],
+    body:`
+      <h2>The Problem</h2>
+      <p>The product catalogue page loaded in under 500ms in development (30 seed products). In the staging environment with 2,000 real products, it took 8.2 seconds. Users were abandoning the page before it rendered.</p>
+
+      <h2>Analysis — Finding the N+1</h2>
+      <p>MySQL query logging was enabled. The request for one page of 20 products was generating <strong>2,021 SQL queries</strong>: 1 query to fetch product IDs, then 1 query per product to fetch its category, and 1 query per product to fetch its primary image URL.</p>
+      <pre><code>-- What was happening (pseudocode):
+SELECT id FROM products LIMIT 20;               -- 1 query
+SELECT * FROM categories WHERE id = 5;          -- 1 query per product
+SELECT * FROM product_images WHERE product_id = 101;  -- 1 query per product
+-- Total for 20 products: 1 + 20 + 20 = 41 queries
+-- Total for 2000 products: 1 + 2000 + 2000 = 4001 queries</code></pre>
+
+      <div class="highlight-box">
+        <div class="highlight-item"><div class="highlight-num">4001</div><div class="highlight-label">Queries Per Request</div></div>
+        <div class="highlight-item"><div class="highlight-num">8.2s</div><div class="highlight-label">Load Time Before</div></div>
+        <div class="highlight-item"><div class="highlight-num">340ms</div><div class="highlight-label">Load Time After</div></div>
+      </div>
+
+      <h2>Solution</h2>
+      <p>Replaced the N+1 pattern with a single JOIN query that fetches all required data in one round trip, combined with server-side pagination:</p>
+      <pre><code>-- Fixed: single query with JOIN + pagination
+SELECT 
+  p.id, p.name, p.price, p.stock,
+  c.name AS category_name,
+  pi.url AS primary_image
+FROM products p
+LEFT JOIN categories c ON p.category_id = c.id
+LEFT JOIN product_images pi ON pi.product_id = p.id 
+  AND pi.is_primary = true
+WHERE p.is_active = true
+ORDER BY p.created_at DESC
+LIMIT 20 OFFSET ?;</code></pre>
+      <p>The Java service layer was refactored to use this query directly, eliminating the lazy-loading pattern that was causing the N+1. A composite index on <code>(product_id, is_primary)</code> was added to the images table.</p>
+
+      <div class="lesson-box">
+        <div class="lesson-title">💡 Lesson Learned</div>
+        <strong>Always test with production-scale data.</strong> N+1 problems are invisible at development scale and catastrophic at production scale. The fix requires 3 lines of SQL. Finding it requires knowing to look at query counts, not just response times.
+      </div>
+
+      <h2>Outcome</h2>
+      <p>Page load time dropped from 8.2 seconds to 340ms — a 96% improvement. Database query count per request dropped from 4,001 to 1. The fix scaled: tested with 10,000 products and response time remained under 400ms.</p>
+    `
+  }
+};
+
+/* Cursor */
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+if(window.matchMedia('(hover: hover)').matches){
+  document.addEventListener('mousemove',e=>{cursor.style.left=(e.clientX-5)+'px';cursor.style.top=(e.clientY-5)+'px';ring.style.left=(e.clientX-18)+'px';ring.style.top=(e.clientY-18)+'px';});
+  document.querySelectorAll('a,button,.problem-card').forEach(el=>{el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2)';ring.style.transform='scale(1.5)';});el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';ring.style.transform='scale(1)';});});
+}
+/* Hamburger */
+const hamburger=document.getElementById('hamburger'),mobileMenu=document.getElementById('mobileMenu');
+hamburger.addEventListener('click',()=>{hamburger.classList.toggle('open');mobileMenu.classList.toggle('open');document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':'';});
+document.querySelectorAll('.mobile-menu a').forEach(l=>l.addEventListener('click',()=>{hamburger.classList.remove('open');mobileMenu.classList.remove('open');document.body.style.overflow='';}));
+/* Reveal */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+/* Filter */
+function applyFilter(f){
+  document.querySelectorAll('.problem-card').forEach(c=>c.classList.toggle('hidden',f!=='all'&&c.dataset.cat!==f));
+  document.getElementById('noResults').classList.toggle('visible',document.querySelectorAll('.problem-card:not(.hidden)').length===0);
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter===f));
+}
+document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>applyFilter(btn.dataset.filter)));
+/* Overlay */
+const overlay=document.getElementById('detailOverlay'),detailContent=document.getElementById('detailContent'),progFill=document.getElementById('progressFill');
+function buildDetail(p){
+  const stepsHTML=p.steps.map((s,i)=>`<div class="step-block"><div class="step-num">${String(i+1).padStart(2,'0')}</div><div class="step-label">${s}</div></div>`).join('');
+  const tagsHTML=p.tags.map(t=>`<span class="detail-tag">${t}</span>`).join('');
+  const badgeStyle=p.typeClass==='security'?'background:rgba(255,59,110,.1);color:var(--accent2)':p.typeClass==='debug'?'background:rgba(200,255,0,.1);color:var(--accent1)':'background:rgba(0,212,255,.1);color:var(--accent3)';
+  return`<div class="detail-header"><span class="detail-icon-large">${p.icon}</span><div class="detail-badge-row"><span class="detail-badge" style="${badgeStyle}">${p.type}</span></div><h1 class="detail-title">${p.title}</h1><div class="detail-lead">${p.lead}</div></div><div class="step-pipeline">${stepsHTML}</div><div class="detail-body">${p.body}</div><div class="detail-footer"><div class="detail-tags">${tagsHTML}</div></div>`;
+}
+function openDetail(id){const p=PROBLEMS[id];if(!p)return;detailContent.innerHTML=buildDetail(p);overlay.classList.add('open');document.body.style.overflow='hidden';overlay.scrollTop=0;progFill.style.width='0%';history.pushState({problem:id},'','#'+id);}
+function closeDetail(){overlay.classList.remove('open');document.body.style.overflow='';history.pushState({},'',window.location.pathname);}
+document.querySelectorAll('.card-btn').forEach(btn=>btn.addEventListener('click',()=>openDetail(btn.dataset.problem)));
+document.querySelectorAll('.problem-card').forEach(card=>card.querySelector('.card-btn')?card.addEventListener('click',e=>{if(!e.target.classList.contains('card-btn'))openDetail(card.dataset.problem);}):null);
+document.getElementById('overlayBack').addEventListener('click',closeDetail);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail();});
+window.addEventListener('popstate',e=>{if(!e.state||!e.state.problem)closeDetail();});
+overlay.addEventListener('scroll',()=>{const s=overlay.scrollHeight-overlay.clientHeight;progFill.style.width=s>0?(overlay.scrollTop/s*100)+'%':'0%';});
+if(window.location.hash){const h=window.location.hash.slice(1);if(PROBLEMS[h])setTimeout(()=>openDetail(h),300);}
+</script>
+</body>
+</html>
