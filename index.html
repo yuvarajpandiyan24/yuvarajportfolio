@@ -510,9 +510,9 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
     <li><a href="works.html">Works</a></li>
     <li><a href="experience.html">Experience</a></li>
     <li><a href="study.html">Study</a></li>
-    <li><a href="problemsolving.html">Problem Solving</a></li>
-    <li><a href="techstack.html">Tech Stack</a></li>
-    <li><a href="currentlybuilding.html">Under Development</a></li>
+    <li><a href="problem-solving.html">Problem-Solving</a></li>
+    <li><a href="tech-stack.html">Tech Stack</a></li>
+    <li><a href="currently-building.html">Building</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -525,9 +525,9 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
   <a href="works.html">Works</a>
   <a href="experience.html">Experience</a>
   <a href="study.html">Study</a>
-  <a href="problemsolving.html">Problem Solving</a>
-  <a href="techstack.html">Tech Stack</a>
-  <a href="currentlybuilding.html">Under Development</a>
+  <a href="problem-solving.html">Problem-Solving</a>
+  <a href="tech-stack.html">Tech Stack</a>
+  <a href="currently-building.html">Building</a>
   <a href="blog.html">Blog</a>
   <a href="#contact">Contact</a>
   <div class="mobile-menu-footer">Eager to Contribute &amp; Grow ●</div>
@@ -860,7 +860,7 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
       <p class="contact-text">Whether you need a software engineer, a quality assurance specialist, or a technical content partner — I'd love to hear about your project.</p>
       <div class="contact-details">
         <div class="contact-detail"><div class="contact-detail-icon">📍</div><div><div class="contact-detail-label">Location</div><div class="contact-detail-value">Chennai, Tamil Nadu</div></div></div>
-        <div class="contact-detail"><div class="contact-detail-icon">📬</div><div><div class="contact-detail-label">Email</div><div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="91e8e4e7f0e3f0fbe1f0fff5f8f0ffa3a5a2d1f6fcf0f8fdbff2fefc">[email&#160;protected]</a></div></div></div>
+        <div class="contact-detail"><div class="contact-detail-icon">📬</div><div><div class="contact-detail-label">Email</div><div class="contact-detail-value">yuvarajpandian243@gmail.com</div></div></div>
         <div class="contact-detail"><div class="contact-detail-icon">🕐</div><div><div class="contact-detail-label">Response Time</div><div class="contact-detail-value">Within 24 hours</div></div></div>
       </div>
     </div>
@@ -908,7 +908,7 @@ footer { background: var(--surface2); border-top: 1px solid var(--border); paddi
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursorRing');
 if (window.matchMedia('(hover: hover)').matches) {
@@ -927,7 +927,7 @@ hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('open'); mobileMenu.classList.toggle('open');
   document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
 });
-document.querySelectorAll('.mobile-nav-link').forEach(link => {
+document.querySelectorAll('.mobile-menu a').forEach(link => {
   link.addEventListener('click', () => { hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow = ''; });
 });
 const observer = new IntersectionObserver(entries => {
@@ -954,4 +954,12 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const btn = document.getElementById('submitBtn');
   if (!firstName || !email || !message) {
     btn.textContent = 'Please fill required fields ✗'; btn.style.background = 'var(--accent2)';
-    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background =
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 2500);
+    return;
+  }
+  btn.textContent = 'Message Sent! ✓'; btn.style.background = 'var(--accent3)';
+  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+});
+</script>
+</body>
+</html>
