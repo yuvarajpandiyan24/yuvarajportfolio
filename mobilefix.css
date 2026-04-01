@@ -1,0 +1,574 @@
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS FIX
+   Drop this <link> AFTER all existing <style> tags on every page:
+   <link rel="stylesheet" href="mobile-fix.css">
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── 1. GLOBAL OVERFLOW GUARD ──────────────────────────────── */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+/* ─── 2. CURSOR — disable on touch devices ──────────────────── */
+@media (hover: none) {
+  body { cursor: auto !important; }
+  a, button { cursor: pointer !important; }
+  .cursor, .cursor-ring { display: none !important; }
+}
+
+/* ─── 3. NAV — fix the duplicate/conflicting nav blocks ─────── */
+
+/* Base nav height and layout (consistent across all pages) */
+nav {
+  height: 60px !important;
+  padding: 0 2.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Centred nav-links: prevent horizontal overflow */
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0;
+  list-style: none;
+  white-space: nowrap;
+}
+
+.nav-links a {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.65rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Hide nav-links + status on tablets */
+@media (max-width: 1200px) {
+  .nav-status { display: none !important; }
+}
+
+@media (max-width: 960px) {
+  .nav-links { display: none !important; }
+  .hamburger { display: flex !important; }
+}
+
+/* Mobile nav padding */
+@media (max-width: 768px) {
+  nav { padding: 0 1.1rem !important; }
+}
+
+/* ─── 4. HERO SECTIONS — reduce oversized padding ───────────── */
+@media (max-width: 768px) {
+  .blog-hero,
+  .contact-hero,
+  .exp-hero,
+  .study-hero,
+  .ps-hero,
+  .ts-hero,
+  .cb-hero,
+  .works-hero {
+    padding-top: 90px !important;
+    padding-bottom: 50px !important;
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+  }
+
+  /* Home section */
+  #home {
+    padding: 90px 1.1rem 50px !important;
+  }
+
+  /* Decorative floating elements that break layout */
+  .hero-decoration,
+  .hero-float,
+  .hero-terminal,
+  .hero-orb,
+  .hero-deco,
+  .hero-timeline-deco,
+  .hero-timeline-dot {
+    display: none !important;
+  }
+}
+
+/* ─── 5. FILTER BAR — fix sticky overflow on mobile ─────────── */
+@media (max-width: 768px) {
+  .filter-bar,
+  .tab-bar {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    top: 60px !important;
+  }
+
+  .filter-btn,
+  .tab-btn {
+    padding: 0.85rem 0.9rem !important;
+    font-size: 0.58rem !important;
+  }
+}
+
+/* ─── 6. SECTION BODY PADDING ────────────────────────────────── */
+@media (max-width: 768px) {
+  .blog-body,
+  .page-body,
+  .works-body,
+  section {
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+  }
+
+  section {
+    padding-top: 60px !important;
+    padding-bottom: 40px !important;
+  }
+}
+
+/* ─── 7. GRIDS — collapse to single column on mobile ─────────── */
+@media (max-width: 768px) {
+
+  /* Blog body (posts + sidebar) */
+  .blog-body {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Blog post grid on index page */
+  .blog-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .blog-card.featured {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    min-height: 260px !important;
+  }
+
+  .blog-card.featured .blog-image-area { display: none !important; }
+  .blog-card.featured .blog-content-area { width: 100% !important; }
+
+  .blog-more-strip {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Works grid */
+  .works-grid,
+  .works-grid.two-col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Problems grid */
+  .problems-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Features grid (Under Development) */
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Skills body */
+  .skills-body {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tech stack grid */
+  .tech-grid,
+  .tech-grid.five {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Daily tools grid */
+  .daily-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Learning strip */
+  .learning-strip {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Education grids */
+  .edu-grid,
+  .cert-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Certification section intro */
+  .cert-section-intro {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Subject groups */
+  .subject-groups {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* FAQ grid */
+  .faq-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Contact main grid */
+  .contact-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Contact layout (index page) */
+  .contact-layout {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  /* Form row (2-col → 1-col) */
+  .form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Type selector row */
+  .type-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Submit row */
+  .form-submit-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Experience layout */
+  .exp-layout {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .exp-sidebar { position: static !important; display: block !important; }
+
+  /* Experience timeline */
+  .exp-item {
+    grid-template-columns: 1fr !important;
+    padding: 1.1rem !important;
+    gap: 0.6rem !important;
+  }
+
+  .exp-badges {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+  }
+
+  .exp-date  { grid-column: 1 !important; grid-row: 2 !important; }
+  .exp-content { grid-column: 1 !important; grid-row: 3 !important; }
+
+  /* Education layout */
+  .edu-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .edu-sidebar { display: none !important; }
+
+  /* Timeline entries */
+  .timeline-wrap {
+    grid-template-columns: 1fr !important;
+  }
+
+  .timeline-rail { display: none !important; }
+
+  /* Study grid */
+  .study-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Cert list */
+  .cert-list {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Course intro */
+  .course-intro {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Step pipeline */
+  .step-pipeline {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Role / degree header areas */
+  .role-header-area,
+  .degree-header-area,
+  .project-hero-area {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Next up grid */
+  .next-up-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer inner */
+  .footer-inner {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    gap: 1.25rem !important;
+  }
+
+  .footer-right { display: none !important; }
+
+  .social-links { justify-content: center !important; }
+
+  /* Location strip */
+  .location-strip {
+    grid-template-columns: 1fr !important;
+  }
+
+  .loc-divider { display: none !important; }
+
+  /* Hero contact stats */
+  .contact-quick-stats {
+    flex-wrap: wrap !important;
+  }
+
+  /* Blog stat strip */
+  .blog-stats {
+    flex-wrap: wrap !important;
+  }
+
+  /* Discipline stats */
+  .discipline-stats {
+    flex-wrap: wrap !important;
+  }
+
+  /* CB stats / PS stats / TS stats / exp stats */
+  .cb-stats,
+  .ps-stats,
+  .ts-stats,
+  .exp-stats,
+  .study-stats {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* ─── 8. TYPOGRAPHY SCALING ──────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Hero titles */
+  .hero-name,
+  .hero-title,
+  .works-hero-title,
+  .blog-hero-title {
+    font-size: clamp(2.4rem, 12vw, 4.5rem) !important;
+    line-height: 0.92 !important;
+  }
+
+  /* Article / role / project titles */
+  .article-title,
+  .role-title-large,
+  .degree-title-large,
+  .project-title-large,
+  .detail-title,
+  .form-panel-title {
+    font-size: clamp(1.6rem, 6vw, 2.4rem) !important;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: clamp(1.8rem, 8vw, 2.8rem) !important;
+  }
+}
+
+/* ─── 9. POST CARD INNER — hide arrow box on mobile ─────────── */
+@media (max-width: 768px) {
+  .post-card-inner {
+    grid-template-columns: 1fr !important;
+  }
+
+  .post-arrow-box { display: none !important; }
+}
+
+/* ─── 10. OVERLAY PANELS — full-width on mobile ──────────────── */
+@media (max-width: 768px) {
+  .article-nav,
+  .overlay-nav {
+    padding: 0.85rem 1.1rem !important;
+  }
+
+  .article-content,
+  .role-detail,
+  .degree-detail,
+  .project-detail,
+  .detail-content {
+    padding: 2rem 1.1rem 4rem !important;
+  }
+}
+
+/* ─── 11. MOBILE MENU — ensure full coverage ─────────────────── */
+.mobile-menu {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 290 !important;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu.open {
+  display: flex !important;
+}
+
+/* ─── 12. SIDEBAR — make sticky inside overlay work ──────────── */
+@media (max-width: 1100px) {
+  .sidebar {
+    position: static !important;
+  }
+}
+
+/* ─── 13. SPECIFIC SMALL FIXES ───────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Cert grid 2-col on small screens */
+  .cert-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* CTA strip */
+  .cta-strip {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  /* Devlog entries */
+  .devlog-entry {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Social row in contact page */
+  .social-row {
+    flex-wrap: wrap !important;
+  }
+
+  /* Work type selector */
+  .type-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Project nav row */
+  .project-nav-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Hero CTA buttons */
+  .hero-cta {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .btn-primary {
+    text-align: center !important;
+  }
+
+  /* Newsletter widget */
+  .newsletter-widget {
+    padding: 1.25rem !important;
+  }
+}
+
+/* ─── 14. VERY SMALL SCREENS (< 480px) ───────────────────────── */
+@media (max-width: 480px) {
+
+  nav { padding: 0 0.85rem !important; }
+
+  .blog-hero,
+  .contact-hero,
+  .exp-hero,
+  .study-hero,
+  .ps-hero,
+  .ts-hero,
+  .cb-hero,
+  .works-hero,
+  #home {
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
+  }
+
+  .blog-body,
+  .page-body,
+  .works-body,
+  section,
+  footer {
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
+  }
+
+  .tech-grid,
+  .tech-grid.five {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .highlight-box {
+    grid-template-columns: 1fr !important;
+  }
+
+  .step-pipeline {
+    grid-template-columns: 1fr !important;
+  }
+
+  .type-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cert-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── 15. PREVENT TEXT OVERFLOW ─────────────────────────────── */
+.post-title,
+.work-title,
+.blog-title,
+.entry-role,
+.cert-name,
+.feature-title,
+.mini-title,
+.popular-title,
+.about-widget-name {
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* ─── 16. IMAGES & MEDIA ─────────────────────────────────────── */
+img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* ─── 17. TOUCH TARGET MINIMUMS ─────────────────────────────── */
+@media (max-width: 768px) {
+  .filter-btn,
+  .tab-btn,
+  .filter-count,
+  .newsletter-btn,
+  .form-submit,
+  .cta-btn,
+  .btn-primary,
+  .entry-cta,
+  .card-btn,
+  .edu-cta,
+  .work-btn {
+    min-height: 44px !important;
+  }
+}
