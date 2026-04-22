@@ -918,6 +918,11 @@ document.getElementById('cfSubmitBtn').addEventListener('click', async () => {
     const data = await res.json().catch(() => ({}));
 
     if (res.ok) {
+      // ── Save to admin inbox ──
+      if (typeof submitToAdmin === 'function') {
+        submitToAdmin((fname + ' ' + lname).trim(), email, subject, message);
+      }
+      // ── End admin save ──
       btn.textContent = 'Message Sent! ✓';
       btn.className = 'form-submit success';
       showNote('✅', 'Thanks ' + fname + '! I\'ll reply to ' + email + ' within 24 hours.');
@@ -942,5 +947,6 @@ document.getElementById('cfSubmitBtn').addEventListener('click', async () => {
   }
 });
 </script>
+   <script src="yuvaraj-portfolio-bridge.js"></script>
 </body>
 </html>
