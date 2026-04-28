@@ -1016,6 +1016,42 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
   }
 });
 </script>
+   <!-- Add this to your portfolio's index.html, before </body> -->
+<script>
+(function(){
+  var P='ypa_';
+  // Read blog posts from admin panel
+  function getAdminData(key){
+    try{return JSON.parse(localStorage.getItem(P+key)||'[]');}catch{return [];}
+  }
+  // Submit contact form to admin inbox
+  window.submitToAdmin=function(name,email,subject,msg){
+    var items=getAdminData('contact');
+    items.push({id:'id_'+Date.now(),name:name,email:email,
+      subject:subject,msg:msg,read:false,
+      createdAt:new Date().toISOString()});
+    localStorage.setItem(P+'contact',JSON.stringify(items));
+    // Also fire storage event
+    window.dispatchEvent(new StorageEvent('storage',
+      {key:P+'contact',storageArea:localStorage}));
+    return true;
+  };
+  // Expose published blog posts
+  window.getAdminBlogs=function(){
+    return getAdminData('blog').filter(function(b){
+      return b.status==='published';
+    }).sort(function(a,b){
+      return new Date(b.createdAt)-new Date(a.createdAt);
+    });
+  };
+  // Expose all sections
+  window.getAdminSection=function(key){
+    return getAdminData(key);
+  };
+  window.adminDataReady=true;
+  window.dispatchEvent(new Event('adminReady'));
+})();
+</script>
    <script src="yuvaraj-portfolio-bridge.js"></script>
 </body>
 </html>
